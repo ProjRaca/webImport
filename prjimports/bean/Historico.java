@@ -3,7 +3,7 @@
  * Data: 01/08/2022
  */
 
-package com.racape.prjimports.bean;
+package connections.bean;
 
 public class Historico {
     

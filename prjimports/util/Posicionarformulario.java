@@ -4,7 +4,7 @@
  */
 
         
-package com.racape.prjimports.util;
+package connections.util;
 
 import javax.swing.JDesktopPane;
 import javax.swing.JInternalFrame;

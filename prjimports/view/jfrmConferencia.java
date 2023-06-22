@@ -3,13 +3,14 @@
  * Data: 28/07/2022
  */
 
-package com.racape.prjimports.view;
+package connections.view;
 
 import com.racape.prjimports.bean.Contas;
-import com.racape.prjimports.dao.ContasDao;
+import connections.dao.ContasDao;
 import com.racape.prjimports.bean.Movimentacao;
-import com.racape.prjimports.dao.MovimentacaoDao;
-import static com.racape.prjimports.dao.MovimentacaoDao.TransferirMovimentacao;
+import connections.dao.MovimentacaoDao;
+
+import static connections.dao.MovimentacaoDao.TransferirMovimentacao;
 
 import java.util.List;
 import java.util.logging.Level;

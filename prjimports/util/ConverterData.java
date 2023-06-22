@@ -2,7 +2,7 @@
  * @author pedrom
  * Data: 05-09-2022
  */
-package com.racape.prjimports.util;
+package connections.util;
 
 public class ConverterData {
    

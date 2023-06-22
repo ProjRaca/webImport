@@ -2,7 +2,7 @@
  * @author pedrom
  * Data: 27/07/2022
  */
-package com.racape.prjimports.bean;
+package connections.bean;
 
 import java.math.BigDecimal;
 import java.util.Date;

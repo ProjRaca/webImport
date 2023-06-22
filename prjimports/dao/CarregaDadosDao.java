@@ -1,9 +1,4 @@
-/*************************
-    * Data: 19/07/2022
-    * Pedrom - Método para inserir as informações no banco de dados 
-**************************/
-
-package com.racape.prjimports.dao;
+package connections.dao;
 
 import com.racape.prjimports.bean.ModeloDados;
 

@@ -3,7 +3,7 @@
  * Data: 27/07/2022
  */
 
-package com.racape.prjimports.dao;
+package connections.dao;
 
 import com.racape.prjimports.bean.Historico;
 import connections.minhaConnectionMysql;

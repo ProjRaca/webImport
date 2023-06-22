@@ -3,7 +3,7 @@
  * Data: 05/08/2022
  */
 
-package com.racape.prjimports.dao;
+package connections.dao;
 
 import com.racape.prjimports.bean.Contas;
 import connections.minhaConnectionMysql;

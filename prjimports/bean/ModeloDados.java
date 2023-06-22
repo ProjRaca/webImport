@@ -3,7 +3,7 @@
  * Data: 08/07/2022
  */
 
-package com.racape.prjimports.bean;
+package connections.bean;
 
 import lombok.Builder;
 import lombok.Data;
