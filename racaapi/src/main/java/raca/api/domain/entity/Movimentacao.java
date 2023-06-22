@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -31,11 +32,11 @@ public class Movimentacao {
     private String tipoparceiro;
     private String historico;
     private BigDecimal valor;
-    private Date vencimento;
-    private Date competencia;
+    private LocalDate vencimento;
+    private LocalDate competencia;
     private String status;
     private String ultimousuario;
-    private Date ultimaalteracao;
+    private LocalDate ultimaalteracao;
     private String agencia;
     private String agenciadv;
     private String contacorrente;

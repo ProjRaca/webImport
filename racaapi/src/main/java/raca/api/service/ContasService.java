@@ -8,4 +8,8 @@ public interface ContasService {
 
     List<String> getHistorico();
 
+    Contas findByCpfFuncionarioAndHistorico(String cpffuncionario, String historico);
+
+    List<Contas> findByCpfFuncionario(String id);
+
 }

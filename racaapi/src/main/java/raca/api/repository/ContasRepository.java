@@ -15,5 +15,8 @@ public interface ContasRepository extends JpaRepository<Contas, Integer> {
     @Query(value = " select DISTINCT(c.descricao) from raca.contas c ", nativeQuery = true)
     List<String> getHistorico();
 
+    @Query(value = " select * from raca.contas c where c.cpffuncionario = ':cpffuncionario' and c.descricao = ':descricao' ", nativeQuery = true)
+    Contas findByCpfFuncionarioAndHistorico(@Param("cpffuncionario") String cpffuncionario, @Param("descricao") String descricao);
+
 
 }

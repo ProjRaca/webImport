@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import raca.api.domain.entity.Movimentacao;
 
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class MovimentacaoDTO {
 
     private String historicoDescricao;
     @NotNull(message = "{campo.codigo-vencimento.obrigatorio}")
-    private Date vencimento;
+    private LocalDate vencimento;
     @NotNull(message = "{campo.codigo-competencia.obrigatorio}")
     private Date competencia;
     private List<Movimentacao> listMovimentacao;
