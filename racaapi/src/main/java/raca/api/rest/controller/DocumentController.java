@@ -22,22 +22,8 @@ import java.util.List;
 @Api("Api Documentos")
 public class DocumentController {
 
-    private final DocumentService documentService;
+   // private final DocumentService documentService;
 
-    @PostMapping("/upload-xls")
-    @ResponseStatus(HttpStatus.CREATED)
-    @ApiOperation("Enviar um novo documento")
-    @ApiResponses({
-            @ApiResponse(code = 201, message = "Documento salvo com sucesso"),
-            @ApiResponse(code = 400, message = "Erro de validação")
-    })
-    public List<Movimentacao> uploadPDF(@RequestParam("xls_file") MultipartFile file) {
-        if (file.isEmpty()) {
-            return new ArrayList<>();
-        }
-        List<Movimentacao> list = documentService.criar(file);
-       return list;
-    }
 
     @GetMapping("/filter")
     @ResponseStatus(HttpStatus.CREATED)
@@ -47,8 +33,8 @@ public class DocumentController {
             @ApiResponse(code = 400, message = "Erro de validação")
     })
     public List<Documento> getFilterDocument(@RequestBody FilterDocumentDTO dto) {
-        List<Documento> list = documentService.getFilterDocument();
-        return list;
+        //List<Documento> list = documentService.getFilterDocument(dto);
+        return null;
     }
 
 

@@ -6,7 +6,7 @@ import raca.api.rest.dto.MovimentacaoDTO;
 
 import java.util.List;
 
-public interface MovimentacaoService {
+public interface CarregaDadosService {
     List<Movimentacao> getAllMovimentacao();
 
     List<Movimentacao> processMovement(MovimentacaoDTO movimentacao) ;

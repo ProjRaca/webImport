@@ -54,7 +54,7 @@ public class UsuarioController {
         }
     }
 
-    @GetMapping("/id")
+    @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation("Retorna um usuário pelo Id")
     @ApiResponses({

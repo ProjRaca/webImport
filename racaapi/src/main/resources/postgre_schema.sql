@@ -53,3 +53,9 @@ CREATE TABLE raca.documento (
     datavalidade DATE,
     documento BYTEA
 );
+
+CREATE TABLE raca.RESPONSAVEL (
+  id SERIAL PRIMARY KEY,
+  cpfcnpj VARCHAR(20) NOT NULL,
+  descricao VARCHAR(255)
+);

@@ -7,11 +7,13 @@ import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import raca.api.domain.entity.Movimentacao;
 import raca.api.rest.dto.MovimentacaoDTO;
 import raca.api.service.MovimentacaoService;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -46,6 +48,20 @@ public class MovimentacaoController {
         return list;
     }
 
+    @PostMapping("/upload-xls")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation("Enviar um novo documento")
+    @ApiResponses({
+            @ApiResponse(code = 201, message = "Documento salvo com sucesso"),
+            @ApiResponse(code = 400, message = "Erro de validação")
+    })
+    public List<Movimentacao> uploadPDF(@RequestParam("xls_file") MultipartFile file) {
+        if (file.isEmpty()) {
+            return new ArrayList<>();
+        }
+        List<Movimentacao> list = movimentacaoService.criar(file);
+        return list;
+    }
 
 
 }
