@@ -15,6 +15,7 @@ import raca.api.rest.dto.ResponsavelDTO;
 import raca.api.service.ResponsavelService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -22,7 +23,7 @@ import java.util.List;
 @Api("Api Responsável")
 public class ResponsavelController {
 
-    private ResponsavelService responsavelService;
+    private final ResponsavelService responsavelService;
 
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.CREATED)
@@ -43,7 +44,12 @@ public class ResponsavelController {
             @ApiResponse(code = 400, message = "Erro de validação")
     })
     public Responsavel getRsponsavelId(@PathVariable Integer id) {
-        return responsavelService.getRsponsavelId(id).get();
+        Optional<Responsavel> rsponsavelId = responsavelService.getRsponsavelId(id);
+        if(rsponsavelId.isPresent())
+            return rsponsavelId.get();
+        else
+            return new Responsavel();
+
     }
 
     @PostMapping("/salvar")
