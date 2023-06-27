@@ -1,0 +1,40 @@
+<button mat-button [matMenuTriggerFor]="aboveMenu">Manutenção</button>
+<mat-menu #aboveMenu="matMenu" yPosition="above">
+  <button mat-menu-item (click)="modalService.open('modalImportacao')">Importações</button>
+  <button mat-menu-item routerLink="/conferencia">Conferência</button>
+</mat-menu>
+
+<button mat-button routerLink="/usuario" >Usuarios</button>
+<button mat-button routerLink="/responsavel" >Responsáveis</button>
+<button mat-button routerLink="/documentos" >Documentos</button>
+<div class="spacer"></div>
+
+<div>
+<modal id="modalImportacao" >
+  <mat-card>
+      <mat-card-header style="background-color: #1976d2;">
+        <label style="color: white; text-align: center;">Importação de Arquivo Excel</label>
+      </mat-card-header>
+      <div class="content" style="padding: 24px 24px;">
+      <mat-card-content>
+        <p>
+          <mat-form-field appearance="fill">
+            <mat-label>Selecione o arquivo</mat-label>
+            <input matInput >
+            <mat-icon matSuffix>file_open</mat-icon>
+          </mat-form-field>
+        </p>
+      </mat-card-content>
+      </div>
+      <div style="text-align: right; margin-bottom: 10px;">
+        <mat-card-footer>
+          <button mat-raised-button (click)="modalService.close();" style="margin-right:50px !important;" >Cancelar</button>
+          <button mat-raised-button color="primary" style="margin-right:50px !important;" >Importar</button>
+        </mat-card-footer>
+      </div>
+
+
+  </mat-card>
+</modal>
+
+</div>

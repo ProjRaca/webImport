@@ -1,0 +1,100 @@
+.content {
+  padding-right: 1rem;
+  padding-left: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 80% !important;
+  max-height: 80% !important;
+  width: 80% !important;
+  height: 80% !important;
+}
+
+.mat-card{
+  /* max-width: 90%;
+  max-height: 90%;
+  width: 80%;
+  height: 80%; */
+}
+
+.container mat-form-field + mat-form-field {
+  margin-left: 8px;
+  padding-top: 10px;
+}
+
+.header {
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+}
+
+.form-fields {
+  display: inline-table;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.example-container mat-form-field + mat-form-field {
+  margin-left: 8px;
+}
+
+.example-container mat-form-field {
+  width: 220px;
+}
+
+.example-container form {
+  margin-bottom: 20px;
+}
+
+.example-container form > * {
+  margin: 12px 0;
+}
+
+.example-container .mat-radio-button {
+  margin: 0 12px;
+  margin-top: auto;
+}
+
+.example-form-fields {
+  display: flex;
+  align-items: flex-start;
+}
+
+.button {
+  margin-top: 1.2%;
+  margin-left: 3%;
+}
+
+.table {
+  width: 100%;
+  min-width: auto;
+}
+
+.divider {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.label{
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.mat-card{
+  margin-top: 20px;
+}
+
+.input{
+  width: 41% !important;
+}
+
+.input-nome{
+  width: 87% !important;
+  min-width: auto;
+}
+
+.modal-custom {
+
+  will-change: auto;
+}
