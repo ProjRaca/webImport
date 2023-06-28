@@ -23,7 +23,7 @@ public class Responsavel {
     @NotEmpty(message = "{campo.cpfcnpj.obrigatorio}")
     private String cpfcnpj;
     @Column
-    @NotEmpty(message = "{campo.descricao.obrigatorio}")
-    private String descricao;
+    @NotEmpty(message = "{campo.nome.obrigatorio}")
+    private String nome;
 
 }

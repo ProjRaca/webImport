@@ -6,14 +6,13 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import raca.api.domain.entity.Documento;
 import raca.api.domain.entity.Responsavel;
-import raca.api.domain.entity.Usuario;
-import raca.api.rest.dto.FilterDocumentDTO;
 import raca.api.rest.dto.ResponsavelDTO;
 import raca.api.service.ResponsavelService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,6 +62,31 @@ public class ResponsavelController {
         responsavelService.salvarResponsavel(responsavelDTO);
     }
 
+    @PostMapping("/update")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation("Retorna um responsável pelo Id")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Responsável alterado com sucesso"),
+            @ApiResponse(code = 400, message = "Erro de validação")
+    })
+    public Responsavel update(@RequestBody ResponsavelDTO responsavelDTO) {
+        return responsavelService.editarResponsavel(responsavelDTO);
+    }
+
+    @GetMapping("/nome/{nome}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ApiOperation("Retorna uma lista de responsáveis pelo nome")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Responsável consultado com sucesso"),
+            @ApiResponse(code = 400, message = "Erro de validação")
+    })
+    public ResponseEntity<List<Responsavel>> encontrarPorNome(@PathVariable String nome) {
+        List<Responsavel> listResponsavel = responsavelService.encontrarPorNome(nome);
+        if(!listResponsavel.isEmpty())
+            return ResponseEntity.ok(listResponsavel);
+        else
+            return ResponseEntity.ok(new ArrayList<>());
+    }
 
 
 }

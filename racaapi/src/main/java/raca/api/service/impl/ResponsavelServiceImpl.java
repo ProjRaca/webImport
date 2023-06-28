@@ -31,7 +31,7 @@ public class ResponsavelServiceImpl implements ResponsavelService {
     public void salvarResponsavel(ResponsavelDTO responsavel) {
         Responsavel resp = new Responsavel();
         resp.setCpfcnpj(responsavel.getCpfcnpj());
-        resp.setDescricao(responsavel.getDescricao());
+        resp.setNome(responsavel.getNome());
         responsavelRepository.save(resp);
     }
 
@@ -41,7 +41,19 @@ public class ResponsavelServiceImpl implements ResponsavelService {
     }
 
     @Override
-    public Responsavel editarResponsavel(Responsavel responsavel) {
-        return responsavelRepository.save(responsavel);
+    @Transactional
+    public Responsavel editarResponsavel(ResponsavelDTO responsavel) {
+        Responsavel resp = new Responsavel();
+        resp.setId(Integer.valueOf(responsavel.getId()));
+        resp.setCpfcnpj(responsavel.getCpfcnpj());
+        resp.setNome(responsavel.getNome());
+        return responsavelRepository.save(resp);
     }
+
+    @Override
+    public List<Responsavel> encontrarPorNome(String nome) {
+        return responsavelRepository.encontrarPorNome(nome);
+    }
+
+
 }

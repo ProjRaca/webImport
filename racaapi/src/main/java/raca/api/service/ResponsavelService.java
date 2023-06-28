@@ -14,6 +14,8 @@ public interface ResponsavelService {
 
     void salvarResponsavel(ResponsavelDTO responsavel);
     void excluirResponsavel(Responsavel responsavel);
-    Responsavel editarResponsavel(Responsavel responsavel);
+    Responsavel editarResponsavel(ResponsavelDTO responsavel);
+
+    List<Responsavel> encontrarPorNome(String nome);
 
 }
