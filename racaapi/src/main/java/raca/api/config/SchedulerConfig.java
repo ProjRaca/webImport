@@ -14,7 +14,7 @@ public class SchedulerConfig {
     public SchedulerMovimento processaMovimentacao() {
         return new SchedulerMovimento();
     }
-    @Scheduled(fixedRate = 5000) // Executa a cada 5 segundos
+    @Scheduled(fixedRate = 500000) // Executa a cada 5 segundos
     public void scheduledTask() {
         processaMovimentacao().run();
     }

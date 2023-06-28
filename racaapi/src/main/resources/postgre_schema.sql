@@ -38,7 +38,7 @@ CREATE TABLE raca.tblmovimentacao (
 );
 
 ALTER TABLE raca.usuario
-ADD COLUMN descricao VARCHAR(120),
+ADD COLUMN nome VARCHAR(120),
 ADD COLUMN endereco VARCHAR(255),
 ADD COLUMN bairro VARCHAR(100),
 ADD COLUMN municipio VARCHAR(100),
@@ -57,5 +57,5 @@ CREATE TABLE raca.documento (
 CREATE TABLE raca.RESPONSAVEL (
   id SERIAL PRIMARY KEY,
   cpfcnpj VARCHAR(20) NOT NULL,
-  descricao VARCHAR(255)
+  nome VARCHAR(255)
 );
