@@ -1,0 +1,18 @@
+
+<div style="background-color: #1976d2; height:30px; width: auto;">
+
+  <h1 mat-dialog-title style="color: white; text-align: center;">Importação do arquivo excel</h1>
+</div>
+<legend style="border-color: black;border: 4px!important">
+  <div mat-dialog-content>
+    <label>Selecione o arquivo:</label>
+
+  </div>
+  <div style="align-items: end; position: relative;">
+    <mat-dialog-actions>
+      <button mat-button mat-dialog-close>Cancel</button>
+      <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Importar dados</button>
+    </mat-dialog-actions>
+  </div>
+</legend>
+
