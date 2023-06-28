@@ -7,9 +7,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ConferenciaComponent implements OnInit {
 
+  displayedColumns: string[] = ['Matrícula', 'Colaborador', 'Cpf','Conta Débito','Valor','Histórico', 'Parceiro','Marca','Ações'];
+
   constructor() { }
 
   ngOnInit() {
   }
+
+  pesquisar(){}
 
 }

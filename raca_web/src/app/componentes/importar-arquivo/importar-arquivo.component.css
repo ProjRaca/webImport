@@ -1,0 +1,14 @@
+.container mat-form-field + mat-form-field {
+  margin-left: 3%;
+}
+
+.container mat-form-field {
+  width: 220px;
+  min-width: auto;
+}
+
+.form-fields {
+  display: inline-flex;
+  align-items: flex-start;
+  min-width: 100%;
+}

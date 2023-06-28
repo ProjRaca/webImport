@@ -12,6 +12,7 @@ import {MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/mater
 import {MatIconModule} from '@angular/material/icon';
 import {MatInputModule} from '@angular/material/input';
 import {MatDividerModule} from '@angular/material/divider';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 import { MenuComponent } from './componentes/menu/menu.component';
 import { ModalComponent } from './componentes/modal/modal.component';
@@ -25,6 +26,12 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { ResponsavelComponent } from './componentes/responsavel/responsavel.component';
 import { ConferenciaComponent } from './componentes/conferencia/conferencia.component';
 import { DocumentosComponent } from './componentes/documentos/documentos.component';
+import { ImportarArquivoComponent } from './componentes/importar-arquivo/importar-arquivo.component';
+import { LoginComponent } from './layout/login/login.component';
+import { PrincipalComponent } from './layout/principal/principal.component';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { UsuarioAutenticadoGuard } from './service/guard/usuario-autenticado.guard';
+import { UsuarioNaoAutenticadoGuard } from './service/guard/usuario-nao-autenticado.guard';
 
 
 @NgModule({
@@ -35,7 +42,11 @@ import { DocumentosComponent } from './componentes/documentos/documentos.compone
       UsuarioComponent,
       ResponsavelComponent,
       ConferenciaComponent,
-      DocumentosComponent
+      DocumentosComponent,
+      ImportarArquivoComponent,
+      LoginComponent,
+      PrincipalComponent,
+
    ],
   imports: [
     BrowserModule,
@@ -57,10 +68,12 @@ import { DocumentosComponent } from './componentes/documentos/documentos.compone
     MatIconModule,
     MatTableModule,
     MatPaginatorModule,
-
+    MatSnackBarModule,
   ],
   providers: [
-    {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline'}}
+    {provide: [MAT_FORM_FIELD_DEFAULT_OPTIONS, HTTP_INTERCEPTORS], useValue: {appearance: 'outline'},
+      multi: true
+  }
   ],
   bootstrap: [AppComponent]
 })

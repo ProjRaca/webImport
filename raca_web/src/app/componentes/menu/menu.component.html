@@ -1,6 +1,6 @@
 <button mat-button [matMenuTriggerFor]="aboveMenu">Manutenção</button>
 <mat-menu #aboveMenu="matMenu" yPosition="above">
-  <button mat-menu-item (click)="modalService.open('modalImportacao')">Importações</button>
+  <button mat-menu-item routerLink="/importarArquivo">Importações</button>
   <button mat-menu-item routerLink="/conferencia">Conferência</button>
 </mat-menu>
 

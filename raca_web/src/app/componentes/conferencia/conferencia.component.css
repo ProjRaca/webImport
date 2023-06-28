@@ -1,0 +1,38 @@
+.container mat-form-field + mat-form-field {
+  margin-left: 3%;
+}
+
+.container mat-form-field {
+  width: 220px;
+  min-width: auto;
+}
+
+.form-fields {
+  display: inline;
+  align-items: flex-start;
+  min-width: 100%;
+}
+
+.button {
+  margin-top: 1%;
+  margin-left: 1%;
+  width: 10em !important;
+}
+
+.button-large {
+  margin-top: 1%;
+  margin-left: 30%;
+  width: 13em !important;
+
+}
+
+.divider {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.table {
+  width: 100%;
+  min-width: auto;
+}
+
