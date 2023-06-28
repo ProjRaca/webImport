@@ -29,7 +29,7 @@ public class MovimentacaoDTO {
     @NotNull(message = "{campo.codigo-vencimento.obrigatorio}")
     private LocalDate vencimento;
     @NotNull(message = "{campo.codigo-competencia.obrigatorio}")
-    private Date competencia;
+    private LocalDate competencia;
     private List<Movimentacao> listMovimentacao;
 
 }

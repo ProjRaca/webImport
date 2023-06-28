@@ -43,11 +43,17 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
                     movimentacaoList.getCpffuncionario(), movimentacao.getHistorico());
 
             movimentacaoList.setCodigofilial(movimentacao.getCodigofilial());
+            movimentacaoList.setCompetencia(movimentacao.getCompetencia());
             movimentacaoList.setHistorico(movimentacao.getHistorico());
             movimentacaoList.setVencimento(movimentacao.getVencimento());
+            movimentacaoList.setStatus("P");
 
             return movimentacaoList; // Retornar o objeto movimentacaoList após as modificações
         }).collect(Collectors.toList());
+
+
+
+
     }
     public List<Movimentacao> criar(MultipartFile file){
 
