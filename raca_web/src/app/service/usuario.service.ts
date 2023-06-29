@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Login } from '../entity/login.entity';
-import { Observable, of, tap } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { Login } from '../entity/login.entity';
+
+
 const apiUrlUsuario = environment.apiUrl + "Usuario";
 @Injectable({
   providedIn: 'root'
@@ -41,20 +44,23 @@ export class UsuarioService {
 
   // get obterUsuarioLogado(): Login {
   //   return localStorage.getItem('usuario')
-  //     ? JSON.parse(atob(localStorage.getItem('usuario')))
+  //    // ? JSON.parse(atob(localStorage.getItem('usuario')))
+  //    ? localStorage.getItem('usuario')
   //     : null;
   // }
 
   // get obterIdUsuarioLogado(): string {
   //   return localStorage.getItem('usuario')
-  //     ? (JSON.parse(atob(localStorage.getItem('usuario'))) as Login).id
-  //     : null;
+  //     //? (JSON.parse(atob(localStorage.getItem('usuario'))) as Login).id
+  //     ? localStorage.getItem('usuario')
+  //     : '';
   // }
 
   // get obterTokenUsuario(): string {
   //   return localStorage.getItem('token')
-  //     ? JSON.parse(atob(localStorage.getItem('token')))
-  //     : null;
+  //     //? JSON.parse(atob(localStorage.getItem('token')))
+  //     ? localStorage.getItem('token')
+  //     : '';
   // }
 
   get logado(): boolean {
