@@ -39,5 +39,9 @@ public class Usuario {
     private String tipo;
     @Column
     private String status;
+    @Column
+    private String nome;
+    @Column
+    private String email;
 
 }

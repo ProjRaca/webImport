@@ -48,12 +48,10 @@ CREATE TABLE raca.tblmovimentacao (
 );
 
 ALTER TABLE raca.usuario
-ADD COLUMN nome VARCHAR(120),
 ADD COLUMN endereco VARCHAR(255),
 ADD COLUMN bairro VARCHAR(100),
 ADD COLUMN municipio VARCHAR(100),
-ADD COLUMN tipo VARCHAR(50),
-ADD COLUMN status VARCHAR(20);
+ADD COLUMN tipo VARCHAR(50);
 
 CREATE TABLE raca.documento (
     id SERIAL PRIMARY KEY,
