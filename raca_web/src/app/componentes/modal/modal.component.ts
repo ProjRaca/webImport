@@ -68,17 +68,14 @@ export class ModalComponent implements OnInit, OnDestroy {
   }
 
   getMiddleCss(): string {
-    console.log('definiu como middle')
     return "modal-body-midlle"
   }
 
   getSmallCss(): string {
-    console.log('definiu como small')
     return "modal-body-small"
   }
 
   getCssClass(): string {
-    console.log('retornou o getCssClass')
     return this.setSize(this.sizeType);
   }
 }

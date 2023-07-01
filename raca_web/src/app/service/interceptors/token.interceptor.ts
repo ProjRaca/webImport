@@ -1,19 +1,22 @@
+import { UsuarioService } from 'src/app/service/usuario.service';
 import { Injectable } from '@angular/core';
 import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
-  HttpErrorResponse
-} from '@angular/common/http';
-import { Observable, catchError, throwError } from 'rxjs';
-import { UsuarioService } from '../usuario.service';
+  HttpErrorResponse} from '@angular/common/http';
+import { Observable, catchError, throwError} from 'rxjs';
 import { environment } from 'src/environments/environment';
+
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
 
-  constructor(private usuarioService : UsuarioService) {}
+  constructor(private usuarioService: UsuarioService) {}
+  // intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  //   throw new Error('Method not implemented.');
+  // }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 

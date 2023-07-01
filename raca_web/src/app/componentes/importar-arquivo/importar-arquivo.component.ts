@@ -1,4 +1,8 @@
+import { HttpEventType, HttpResponse } from '@angular/common/http';
+import { MovimentacaoService } from './../../service/movimentacao-service.service';
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs/internal/Observable';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-importar-arquivo',
@@ -7,24 +11,73 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ImportarArquivoComponent implements OnInit {
 
-  title = 'File-Upload-Save';
-  selectedFiles!: FileList;
-  test_selectedFiles!: FileList;
-  private currentFileUpload = new File([], 'send')
-  progress: { percentage: number } = { percentage: 0 };
-  selectedFile = null;
-  changeImage = false;
+  selectedFiles?: FileList;
+  currentFile?: File;
+  progress = 0;
+  message = '';
+
+  fileInfos?: Observable<any>;
 
 
-  constructor() { }
+  constructor(private formBuilder: FormBuilder,
+    private movimentacao: MovimentacaoService) { }
 
-  ngOnInit(): void {
+    formImport =  this.formBuilder.group({
+      file: ['']
+    });
+
+    ngOnInit(): void {
   }
 
-  handleImport(event: any) {
-    this.selectedFiles = event.target.files;
+  selectFile(event: any): void {
+    this.selectedFiles = event.target.files[0];
+    if (event.target.files.length > 0 && this.formImport != undefined ) {
+      this.currentFile = event.target.files[0];
+
+    }
+  }
+
+  upload(): void {
+    this.progress = 0;
+
+    if (this.selectedFiles) {
+       const file = this.currentFile;
+
+        const formData = new FormData();
+        formData.append('file', file ? file : '' );
+
+        this.movimentacao.upload(formData).subscribe({
+          next: (event: any) => {
+            if (event.type === HttpEventType.UploadProgress) {
+              this.progress = Math.round((100 * event.loaded) / event.total);
+            } else if (event instanceof HttpResponse) {
+              this.message = event.body.message;
+              this.fileInfos = this.movimentacao.getFiles();
+            }
+          },
+          error: (err: any) => {
+            console.log(err);
+            this.progress = 0;
+
+            if (err.error && err.error.message) {
+              this.message = err.error.message;
+            } else {
+              this.message = 'Não foi possível realizar upload do arquivo!';
+            }
+
+            this.currentFile = undefined;
+          },
+        });
+      // }
+
+      this.selectedFiles = undefined;
+    }
+  }
+
+  //handleImport(event: any) {
+   // this.selectedFiles = event.target.files;
    // this.test_selectedFiles = (<HTMLInputElement>event.target).files;
-  }
+  //}
 
   // upload() {
   //   this.progress.percentage = 0;

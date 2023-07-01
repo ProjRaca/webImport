@@ -1,18 +1,18 @@
 <div class="example-container" style="border: 3px;width: 100em;">
 
-  <form >
+
     <h1>Usuários</h1>
     <div class="example-form-fields">
       <mat-form-field >
         <mat-label>Infome o nome</mat-label>
-        <input matInput placeholder="Informe o nome">
+        <input matInput placeholder="Informe o nome" [(ngModel)]="nomePesquisa">
       </mat-form-field>
 
       <button class="button" mat-raised-button color="primary" (click)="pesquisar()">Pesquisar</button>
     </div>
-  </form>
+
   <mat-divider class="divider"></mat-divider>
-  <button mat-raised-button style="margin-bottom: 20px;" (click)="modalService.open('modalUsuario')">
+  <button mat-raised-button style="margin-bottom: 20px;" (click)="openModalNovo()">
     <mat-icon matSuffix>person</mat-icon>&nbsp;Novo</button><br>
   <label class="label"><i> Listagem de Usuários</i></label>
   <!-- <div class="mat-card"> -->
@@ -38,8 +38,10 @@
         </ng-container>
         <ng-container matColumnDef="Ações">
           <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
-          <td mat-cell *matCellDef="let element">
-            <mat-icon>search</mat-icon>
+          <td mat-cell *matCellDef="let item" >
+            <button mat-icon-button (click)="detalhes(item.id)" title="Exibir detalhes de usuário">
+            <mat-icon >search</mat-icon>
+          </button>
           </td>
         </ng-container>
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -50,41 +52,50 @@
 <!-- </div> -->
 </div>
 <div>
-  <modal id="modalUsuario" class="modal-custom" [sizeType]="getSizeModal()">
+  <modal id="modalUsuario" class="modal-custom" [sizeType]="getSizeModal()" >
     <mat-card>
+      <form [formGroup]="formulario">
         <mat-card-header style="background-color: #1976d2; height: 40px;">
-          <label style="color: white; text-align: center;margin-top: 1%;">Cadastro de Usuário</label>
+          <label style="color: white; text-align: center;margin-top: 1%;" *ngIf="!exibirDetalhes">Cadastro de Usuário</label>
+          <label style="color: white; text-align: center;margin-top: 1%;" *ngIf="exibirDetalhes">Detalhes de Usuário</label>
         </mat-card-header>
         <div class="content" style="padding: 24px 24px;">
         <mat-card-content>
           <p>
             <mat-form-field  class="input-nome" appearance="fill">
               <mat-label>Nome</mat-label>
-              <input  matInput >
+              <input  matInput formControlName="nome">
               <mat-icon matSuffix>person</mat-icon>
             </mat-form-field>
            </p>
            <p>
              <mat-form-field class="input" appearance="fill">
                <mat-label>Email</mat-label>
-               <input type="email" matInput >
+               <input type="email" matInput formControlName="email">
                <mat-icon matSuffix>mail</mat-icon>
+               <mat-hint></mat-hint>
+               <mat-error *ngIf="formulario.get('email')?.errors && !formulario.hasError('required')">
+                Por favor informe um e-mail válido
+              </mat-error>
+              <mat-error *ngIf="formulario.hasError('required')">
+                Email é <strong>obrigatório</strong>
+              </mat-error>
              </mat-form-field>
               <mat-form-field  class="input" appearance="fill" style="margin-left: 5%;">
                 <mat-label>Login</mat-label>
-                <input  matInput >
+                <input  matInput formControlName="login" >
                 <mat-icon matSuffix>person</mat-icon>
               </mat-form-field>
            </p>
            <p>
             <mat-form-field  class="input" appearance="fill" >
               <mat-label>Senha</mat-label>
-              <input type="password" matInput >
+              <input type="password" matInput formControlName="senha">
               <mat-icon matSuffix>key</mat-icon>
             </mat-form-field>
-            <mat-form-field class="input" appearance="fill" style="margin-left: 5%;">
+            <mat-form-field  class="input" appearance="fill" style="margin-left: 5%;">
               <mat-label>Confirmar Senha</mat-label>
-              <input type="password"  matInput >
+              <input type="password"  matInput formControlName="confimaSenha">
               <mat-icon matSuffix>key</mat-icon>
             </mat-form-field>
           </p>
@@ -93,9 +104,10 @@
         <div style="text-align: right; margin-bottom: 2%;">
           <mat-card-footer>
             <button mat-raised-button (click)="modalService.close();" style="margin-right:3% !important;" >Cancelar</button>
-            <button mat-raised-button color="primary" style="margin-right:3% !important;" >Salvar</button>
+            <button mat-raised-button (click)="save()" color="primary" style="margin-right:3% !important;"   *ngIf="!exibirDetalhes" >Salvar</button>
           </mat-card-footer>
         </div>
+      </form>
     </mat-card>
   </modal>
 
