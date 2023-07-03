@@ -28,7 +28,7 @@ public class Usuario {
     @Column
     private boolean admin;
     @Column
-    private String descricao;
+    private String nome;
     @Column
     private String endereco;
     @Column
