@@ -14,13 +14,13 @@ import raca.api.repository.MovimentacaoRepository;
 import raca.api.rest.dto.MovimentacaoDTO;
 import raca.api.service.ContasService;
 import raca.api.service.MovimentacaoService;
+import raca.api.util.StatusImportacao;
 
 import java.io.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -36,28 +36,26 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
     }
 
     @Override
-    public List<Movimentacao> processMovement(MovimentacaoDTO movimentacao) {
+    public MovimentacaoDTO processMovement(MovimentacaoDTO movimentacao) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        return movimentacao.getListMovimentacao().stream().map(movimentacaoList -> {
-            Contas byCpfFuncionarioAndHistorico = contasService.findByCpfFuncionarioAndHistorico(
-                    movimentacaoList.getCpffuncionario(), movimentacao.getHistorico());
+        List<Movimentacao> movimentacaos = movimentacao.getListMovimentacao().stream().map(moviment -> {
+                Contas byCpfFuncionarioAndHistorico = contasService.findByCpfFuncionarioAndHistorico(
+                        moviment.getCpffuncionario(), movimentacao.getHistorico());
+                moviment.setCodigofilial(movimentacao.getCodigofilial());
+                moviment.setCompetencia(movimentacao.getCompetencia());
+                moviment.setHistorico(movimentacao.getHistorico());
+                moviment.setVencimento(movimentacao.getVencimento());
+                moviment.setStatus("P");
+                movimentacaoRepository.save(moviment);
 
-            movimentacaoList.setCodigofilial(movimentacao.getCodigofilial());
-            movimentacaoList.setCompetencia(movimentacao.getCompetencia());
-            movimentacaoList.setHistorico(movimentacao.getHistorico());
-            movimentacaoList.setVencimento(movimentacao.getVencimento());
-            movimentacaoList.setStatus("P");
-
-            return movimentacaoList; // Retornar o objeto movimentacaoList após as modificações
+            return moviment; // Retornar o objeto moviment após as modificações
         }).collect(Collectors.toList());
-
-
-
-
+        movimentacao.setListMovimentacao(movimentacaos);
+        return movimentacao;
     }
-    public List<Movimentacao> criar(MultipartFile file){
+    public List<MovimentacaoDTO> criar(MultipartFile file){
 
-        List<Movimentacao> dados = new ArrayList<>();
+        List<MovimentacaoDTO> dados = new ArrayList<>();
         try {
             FileInputStream caminho = convert(file);
             HSSFWorkbook arquivo = new HSSFWorkbook(caminho);
@@ -65,11 +63,10 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
             List<Row> linhas = (List<Row>) toList(planilha.iterator());
             linhas.forEach(row ->{
 
-                //percorrendo as celulas e pegando o conteúdo
                 List<Cell> celula = (List<Cell>) toList(row.cellIterator());
-                Movimentacao mov = getMovimentacao(celula);
+                MovimentacaoDTO mov = new MovimentacaoDTO();
+                mov.setListMovimentacao(Arrays.asList(getMovimentacao(celula)));
                 dados.add(mov);
-                movimentacaoRepository.save(mov);
 
             });
             return dados;
@@ -108,11 +105,45 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
         movimentacao.setContacorrentedv(celula.get(6).getStringCellValue());
         String valor = String.valueOf(celula.get(7).getNumericCellValue());
         movimentacao.setValor(new BigDecimal(valor));
-        int status = (int) celula.get(8).getNumericCellValue();
-        movimentacao.setStatus(String.valueOf(status));
+        movimentacao.setStatus(StatusImportacao.A.getTipo());
         movimentacao.setCnpjempresa(celula.get(9).getStringCellValue());
-
         return movimentacao;
+    }
+
+    public MovimentacaoDTO exprtandoMovement(MovimentacaoDTO movimentacao) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+        List<Movimentacao> movimentacaos = movimentacao.getListMovimentacao().stream().map(moviment -> {
+            if(moviment.getStatus().equals(StatusImportacao.P.getTipo())
+                && validaMovimentacaoBD(moviment)){
+               Optional<Contas> byCpfFuncionarioAndHistorico = Optional.of(contasService.findByCpfFuncionarioAndHistorico(
+                        moviment.getCpffuncionario(), movimentacao.getHistorico()));
+                moviment.setCodigofilial(movimentacao.getCodigofilial());
+                moviment.setCompetencia(movimentacao.getCompetencia());
+                moviment.setHistorico(movimentacao.getHistorico());
+                moviment.setVencimento(movimentacao.getVencimento());
+                moviment.setStatus("E");
+                if(byCpfFuncionarioAndHistorico.isPresent()){
+                    moviment.setContacorrente(byCpfFuncionarioAndHistorico.get().getIdconta());
+                    moviment.setIdfuncionario(byCpfFuncionarioAndHistorico.get().getMatriculafuncionario());
+                    moviment.setTipoparceiro(byCpfFuncionarioAndHistorico.get().getTipoparceiro());
+
+                }
+                movimentacaoRepository.save(moviment);
+            }
+            return moviment; // Retornar o objeto movimentacaoList após as modificações
+        }).collect(Collectors.toList());
+        movimentacao.setListMovimentacao(movimentacaos);
+        return movimentacao;
+    }
+
+    private boolean validaMovimentacaoBD(Movimentacao mov){
+        List<Movimentacao> movimentacaos = buscarMovimentacoes(mov.getCpffuncionario(), mov.getHistorico(), mov.getCompetencia(), mov.getCnpjempresa());
+        return (movimentacaos.isEmpty());
+    }
+
+    public List<Movimentacao> buscarMovimentacoes(String cpfFuncionario, String historico, LocalDate competencia, String cnpjEmpresa) {
+        return movimentacaoRepository.findByCpfFuncionarioAndHistoricoAndCompetenciaAndCnpjEmpresaAndStatus(cpfFuncionario, historico, competencia, cnpjEmpresa);
     }
 
 }

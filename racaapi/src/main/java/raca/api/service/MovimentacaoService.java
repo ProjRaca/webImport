@@ -4,13 +4,16 @@ import org.springframework.web.multipart.MultipartFile;
 import raca.api.domain.entity.Movimentacao;
 import raca.api.rest.dto.MovimentacaoDTO;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface MovimentacaoService {
     List<Movimentacao> getAllMovimentacao();
 
-    List<Movimentacao> processMovement(MovimentacaoDTO movimentacao) ;
+    MovimentacaoDTO processMovement(MovimentacaoDTO movimentacao) ;
 
-    List<Movimentacao> criar(MultipartFile local);
+    List<MovimentacaoDTO> criar(MultipartFile local);
+
+    List<Movimentacao> buscarMovimentacoes(String cpfFuncionario, String historico, LocalDate competencia, String cnpjEmpresa);
 
 }
