@@ -1,12 +1,12 @@
-import { Login } from 'src/app/entity/login.entity';
 import {Component, OnInit} from '@angular/core';
-import { EmailValidator, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import {FloatLabelType} from '@angular/material/form-field';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Usuario } from 'src/app/entity/usuario.entity';
 import { Sizes } from 'src/app/enums/sizes.enum';
 import { ModalService } from 'src/app/service/modalService.service';
 import { UsuarioService } from 'src/app/service/usuario.service';
+import { ScackBarCustomComponent } from '../scack-bar-custom/scack-bar-custom.component';
 
 @Component({
   selector: 'app-usuario',
@@ -14,7 +14,7 @@ import { UsuarioService } from 'src/app/service/usuario.service';
   styleUrls: ['./usuario.component.css'],
 
 })
-export class UsuarioComponent implements OnInit {
+export class UsuarioComponent extends ScackBarCustomComponent implements OnInit {
 
   displayedColumns: string[] = ['id','Login', 'Nome', 'Email','Ações'];
   hideRequiredControl = new FormControl(false);
@@ -27,11 +27,12 @@ export class UsuarioComponent implements OnInit {
   nomePesquisa: string = ''
 
 
-  constructor(
-    private formBuilder: FormBuilder,
+  constructor( private formBuilder: FormBuilder,
     protected modalService: ModalService,
     private usuarioService: UsuarioService,
-    private snackBar: MatSnackBar ) {}
+     snackBar: MatSnackBar ) {
+      super(snackBar);
+    }
 
     ngOnInit(): void {
     this.usuarios = this.getAll()
@@ -61,9 +62,7 @@ export class UsuarioComponent implements OnInit {
   getAll(): Usuario[]{
       this.usuarioService.findAll().then( response => {
         if (!response.ok) {
-          this.snackBar.open('Falha na autenticação', 'Usuário ou senha incorretos.', {
-            duration: 3000
-          });
+          this.exibirMensagemErro('Falha na autenticação','Usuário ou senha incorretos.');
         }
         this.usuarios = response.body;
 
@@ -74,9 +73,7 @@ export class UsuarioComponent implements OnInit {
   detalhes(id: any){
     this.usuarioService.findById(id).then( response => {
       if (!response.ok) {
-        this.snackBar.open('Ocorreu um erro na requisição', 'Verifique os dados informados.', {
-          duration: 3000
-        });
+        this.exibirMensagemErro('Ocorreu um erro na requisição','Verifique os dados informados.');
       }
       this.usuarioDetalhes = response.body;
       this.exibirDetalhes = true;
@@ -96,7 +93,7 @@ export class UsuarioComponent implements OnInit {
 
   save(){
     if(this.formulario.status == 'INVALID') return;
-    console.log('Formulario', this.formulario)
+
     let usuarioInclusao = {
       nome: this.formulario?.value.nome,
       email: this.formulario?.value.email,
@@ -106,15 +103,11 @@ export class UsuarioComponent implements OnInit {
     }
     this.usuarioService.save(usuarioInclusao).then( response => {
       if (!response.ok) {
-        this.snackBar.open('Ocorreu um problema ao tentar salvar o usuário', 'Verifique os dados informados.', {
-          duration: 3000
-        });
+        this.exibirMensagemErro('Ocorreu um problema ao tentar salvar o usuário','Verifique os dados informados.');
       }
       usuarioInclusao = response
       this.modalService.close();
-      this.snackBar.open('Registro Incluído com Sucesso','', {
-        duration: 5000
-      });
+      this.exibirMensagemSucesso('Registro Incluído com Sucesso','')
     })
   }
 }

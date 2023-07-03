@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
-let baseUrl = environment.apiUrl+'/movimentacao'
+let apiUrlMovimentacao = environment.apiUrl+'/movimentacao'
 @Injectable({
   providedIn: 'root'
 })
@@ -12,28 +12,35 @@ export class MovimentacaoService {
 
   constructor(private http: HttpClient) { }
 
-  upload(file: FormData): Observable<HttpEvent<any>> {
+ getHeader(): any{
+    let httpOptionsToken = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer '+localStorage.getItem('token'))
+                                .set('Content-Type', 'application/json')
+    };
+    return httpOptionsToken;
+  }
 
-    const head:HttpHeaders = new HttpHeaders().set('Authorization', 'Bearer '+localStorage.getItem('token'))
-                                .set('Content-Type', 'multipart/form-data')
-                                .set('isUpload', 'true')
+  async upload(file: FormData):Promise<any> {
 
+    const headpHeaders = new HttpHeaders().set('isUpload', 'true')
 
-
-    var body = {
-      'xls_file': file
-    }
-    //let formData = new FormData().append('file', file);
-
-    const req = new HttpRequest('POST', `${baseUrl}/upload-xls?xls_file`, body, {
+    const req = new HttpRequest('POST', `${apiUrlMovimentacao}/upload-xls?xls_file`,file,  {
       reportProgress: true,
       responseType: 'json',
-      headers: head
+      headers: headpHeaders
     });
-    return this.http.request(req);
+    return await this.http.request(req).toPromise();
   }
 
   getFiles(): Observable<any> {
-    return this.http.get(`${baseUrl}/files`);
+    return this.http.get(`${apiUrlMovimentacao}/files`);
   }
+
+  async getAll():Promise<any> {
+
+  const req = new HttpRequest('GET',`${apiUrlMovimentacao}/all`);
+  return await this.http.request(req).toPromise();
+ }
+
+ //TODO criar endpoint para atualizar dados da tela de conferencia
 }

@@ -16,14 +16,9 @@ export class UsuarioService {
     private router: Router,
     private http: HttpClient) { }
 
-    httpOptions = {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-    };
-
     async logar(usuario: Login):Promise<any> {
-      const req = new HttpRequest('POST',`${apiUrlUsuario}/auth`,{"login": usuario.login, "senha": usuario.senha},this.httpOptions);
+      const req = new HttpRequest('POST',`${apiUrlUsuario}/auth`,{"login": usuario.login, "senha": usuario.senha},this.getHeader());
       const data = await this.http.request(req).toPromise();
-      console.log(data);
       return data;
     }
 
@@ -43,38 +38,30 @@ export class UsuarioService {
   }
 
   async findAll():Promise<any> {
-     let httpOptionsToken = this.getHeader();
-
-    const req = new HttpRequest('GET',`${apiUrlUsuario}/all`,httpOptionsToken);
+      const req = new HttpRequest('GET',`${apiUrlUsuario}/all`, this.getHeader());
     return await this.http.request(req).toPromise();
 
   }
 
   async findById(id: number):Promise<any> {
-    let httpOptionsToken = this.getHeader();
-    const req = new HttpRequest('GET',`${apiUrlUsuario}/${id}`,httpOptionsToken);
+    const req = new HttpRequest('GET',`${apiUrlUsuario}/${id}`, this.getHeader());
     return await this.http.request(req).toPromise();
-
-
   }
 
   getHeader(): any{
     let httpOptionsToken = {
-      headers: new HttpHeaders().set('Authorization', 'Bearer '+localStorage.getItem('token'))
-                                .set('Content-Type', 'application/json')
+      headers: new HttpHeaders().set('Content-Type', 'application/json')
     };
     return httpOptionsToken;
   }
 
   async save(usuario: Usuario):Promise<any>{
-    let httpOptions = this.getHeader();
-    const req = new HttpRequest('POST',`${apiUrlUsuario}`,usuario,httpOptions);
+    const req = new HttpRequest('POST',`${apiUrlUsuario}`,usuario, this.getHeader());
     return await this.http.request(req).toPromise();
   }
 
   async findbyNane(nome: string):Promise<any>{
-    let httpOptions = this.getHeader();
-    const req = new HttpRequest('GET',`${apiUrlUsuario}/find?nome=${nome}`,httpOptions);
+    const req = new HttpRequest('GET',`${apiUrlUsuario}/find?nome=${nome}`, this.getHeader());
     return await this.http.request(req).toPromise();
   }
 }

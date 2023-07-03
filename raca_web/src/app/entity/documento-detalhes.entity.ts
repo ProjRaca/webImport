@@ -1,13 +1,13 @@
 import { HistoricoEnum } from "../enums/historicoEnum.enum";
 
 export  interface DocumentoDetalhes {
-  id: number;
+  id?: number;
   matricula: string;
   colaborador: string;
   cpf: string;
   conta_debito: string;
-  valor: number;
-  historico: HistoricoEnum;
+  valor: string;
+  historico: string;
   parceiro: string;
   marca: string;
 }

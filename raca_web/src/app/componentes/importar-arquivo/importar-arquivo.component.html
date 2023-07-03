@@ -9,12 +9,7 @@
       <div class="content" style="padding: 24px 24px;">
       <mat-card-content>
         <p>
-          <!-- <mat-form-field appearance="fill">
-            <mat-label>Selecione o arquivo</mat-label>
-            <button mat-raised-button (click)="openBottomSheet()">Open file</button>
-            <mat-icon matSuffix>file_open</mat-icon>
-          </mat-form-field> -->
-          <input type="file" name="file" class="custom-file-input" id="inputGroupFile" required (change)="selectFile($event)"
+           <input type="file" name="file" class="custom-file-input" id="inputGroupFile" required (change)="selectFile($event)"
           accept="application/vnd.ms-excel">
       <label class="custom-file-label" for="inputGroupFile"></label>
         </p>
@@ -30,30 +25,4 @@
 
   </mat-card>
   </form>
-  <div *ngIf="message" class="alert alert-secondary" role="alert">
-    {{ message }}
-  </div>
-  <div *ngIf="currentFile" class="progress my-3">
-    <div
-      class="progress-bar progress-bar-info"
-      role="progressbar"
-      attr.aria-valuenow="{{ progress }}"
-      aria-valuemin="0"
-      aria-valuemax="100"
-      [ngStyle]="{ width: progress + '%' }"
-    >
-      {{ progress }}%
-    </div>
-  </div>
-
-
-
-  <!-- <div class="card mt-3">
-    <div class="card-header">List of Files</div>
-    <ul class="list-group list-group-flush">
-      <li *ngFor="let file of fileInfos | async" class="list-group-item">
-        <a href="{{ file.url }}">{{ file.name }}</a>
-      </li>
-    </ul>
-  </div> -->
-</div>
+ </div>

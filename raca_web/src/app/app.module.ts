@@ -34,6 +34,13 @@ import { UsuarioAutenticadoGuard } from './service/guard/usuario-autenticado.gua
 import { UsuarioNaoAutenticadoGuard } from './service/guard/usuario-nao-autenticado.guard';
 import { MovimentacaoService } from './service/movimentacao-service.service';
 import { UsuarioService } from './service/usuario.service';
+import { CpfPipe } from './pipes/cpf.pipe';
+import { CnpjPipe } from './pipes/cnpj.pipe';
+import { MatriculaPipe } from './pipes/matricula.pipe';
+import { MatSortModule } from '@angular/material/sort';
+import { TokenInterceptor } from './service/interceptors/token.interceptor';
+import { httpInterceptorProviders } from './service/interceptors';
+import { ScackBarCustomComponent } from './componentes/scack-bar-custom/scack-bar-custom.component';
 
 
 @NgModule({
@@ -48,7 +55,10 @@ import { UsuarioService } from './service/usuario.service';
       ImportarArquivoComponent,
       LoginComponent,
       PrincipalComponent,
-
+      CpfPipe,
+      CnpjPipe,
+      MatriculaPipe,
+      ScackBarCustomComponent
    ],
   imports: [
     BrowserModule,
@@ -71,9 +81,10 @@ import { UsuarioService } from './service/usuario.service';
     MatTableModule,
     MatPaginatorModule,
     MatSnackBarModule,
-    HttpClientModule
+    HttpClientModule,
+    MatSortModule
   ],
-  providers: [
+  providers: [ httpInterceptorProviders,
     {provide: [MAT_FORM_FIELD_DEFAULT_OPTIONS, HTTP_INTERCEPTORS], useValue: {appearance: 'outline'},
       multi: true
   }, MovimentacaoService, UsuarioService
