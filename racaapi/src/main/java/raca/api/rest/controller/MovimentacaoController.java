@@ -44,9 +44,8 @@ public class MovimentacaoController {
             @ApiResponse(code = 200, message = "Listagem atualizada com sucesso"),
             @ApiResponse(code = 400, message = "Erro de validação")
     })
-    public List<Movimentacao> processMovement(@RequestBody @Valid MovimentacaoDTO movimentacaoDto) {
-        List<Movimentacao> list = movimentacaoService.processMovement(movimentacaoDto);
-        return list;
+    public MovimentacaoDTO processMovement(@RequestBody @Valid MovimentacaoDTO movimentacaoDto) {
+        return movimentacaoService.processMovement(movimentacaoDto);
     }
 
     @PostMapping("/upload-xls")
@@ -56,11 +55,11 @@ public class MovimentacaoController {
             @ApiResponse(code = 201, message = "Documento salvo com sucesso"),
             @ApiResponse(code = 400, message = "Erro de validação")
     })
-    public List<Movimentacao> uploadPDF(@RequestParam("xls_file") MultipartFile file) {
+    public List<MovimentacaoDTO> uploadPDF(@RequestParam("xls_file") MultipartFile file) {
         if (file.isEmpty()) {
             return new ArrayList<>();
         }
-        List<Movimentacao> list = movimentacaoService.criar(file);
+        List<MovimentacaoDTO> list = movimentacaoService.criar(file);
         return list;
     }
 

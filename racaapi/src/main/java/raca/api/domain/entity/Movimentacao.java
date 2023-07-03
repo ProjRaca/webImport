@@ -35,13 +35,12 @@ public class Movimentacao {
     private LocalDate vencimento;
     private LocalDate competencia;
     private String status;
-    private String ultimousuario;
-    private LocalDate ultimaalteracao;
     private String agencia;
     private String agenciadv;
     private String contacorrente;
     private String contacorrentedv;
-
+    private String ultimousuario;
+    private LocalDate ultimaalteracao;
 
     
 }

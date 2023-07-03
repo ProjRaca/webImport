@@ -40,7 +40,7 @@ public class Usuario {
     @Column
     private String status;
     @Column
-    private String nome;
+    private String nota;
     @Column
     private String email;
 
