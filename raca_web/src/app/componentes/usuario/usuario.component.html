@@ -64,14 +64,14 @@
           <p>
             <mat-form-field  class="input-nome" appearance="fill">
               <mat-label>Nome</mat-label>
-              <input  matInput formControlName="nome">
+              <input  matInput formControlName="nome" [readonly]="exibirDetalhes">
               <mat-icon matSuffix>person</mat-icon>
             </mat-form-field>
            </p>
            <p>
              <mat-form-field class="input" appearance="fill">
                <mat-label>Email</mat-label>
-               <input type="email" matInput formControlName="email">
+               <input type="email" matInput formControlName="email" [readonly]="exibirDetalhes">
                <mat-icon matSuffix>mail</mat-icon>
                <mat-hint></mat-hint>
                <mat-error *ngIf="formulario.get('email')?.errors && !formulario.hasError('required')">
@@ -83,19 +83,19 @@
              </mat-form-field>
               <mat-form-field  class="input" appearance="fill" style="margin-left: 5%;">
                 <mat-label>Login</mat-label>
-                <input  matInput formControlName="login" >
+                <input  matInput formControlName="login" [readonly]="exibirDetalhes">
                 <mat-icon matSuffix>person</mat-icon>
               </mat-form-field>
            </p>
            <p>
-            <mat-form-field  class="input" appearance="fill" >
+            <mat-form-field  class="input" appearance="fill" *ngIf="!exibirDetalhes" >
               <mat-label>Senha</mat-label>
-              <input type="password" matInput formControlName="senha">
+              <input type="password" matInput formControlName="senha" [readonly]="exibirDetalhes">
               <mat-icon matSuffix>key</mat-icon>
             </mat-form-field>
-            <mat-form-field  class="input" appearance="fill" style="margin-left: 5%;">
+            <mat-form-field  class="input" appearance="fill" style="margin-left: 5%;" *ngIf="!exibirDetalhes">
               <mat-label>Confirmar Senha</mat-label>
-              <input type="password"  matInput formControlName="confimaSenha">
+              <input type="password"  matInput formControlName="confimaSenha" [readonly]="exibirDetalhes">
               <mat-icon matSuffix>key</mat-icon>
             </mat-form-field>
           </p>

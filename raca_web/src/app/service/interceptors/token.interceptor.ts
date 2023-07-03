@@ -52,8 +52,7 @@ export class TokenInterceptor implements HttpInterceptor {
         const elapsed = Date.now() - started;
         const msg = `${request.method} "${request.urlWithParams}"
            ${ok} in ${elapsed} ms.`;
-        console.log(msg);
-      })
+     })
     );
 
 

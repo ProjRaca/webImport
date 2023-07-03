@@ -51,9 +51,7 @@ export class UsuarioComponent extends ScackBarCustomComponent implements OnInit 
 
   pesquisar(){
     if (this.nomePesquisa.length == 0) return
-    console.log(this.nomePesquisa)
-
-  }
+   }
 
   getSizeModal(): string{
     return Sizes.Middle.toString();
@@ -82,7 +80,6 @@ export class UsuarioComponent extends ScackBarCustomComponent implements OnInit 
       this.formulario.get('nome')?.setValue(this.usuarioDetalhes.nome)
       this.formulario.get('email')?.setValue(this.usuarioDetalhes.email)
       this.modalService.open('modalUsuario');
-      console.log(this.usuarioDetalhes);
     });
   }
 
