@@ -29,9 +29,11 @@ import { DocumentosComponent } from './componentes/documentos/documentos.compone
 import { ImportarArquivoComponent } from './componentes/importar-arquivo/importar-arquivo.component';
 import { LoginComponent } from './layout/login/login.component';
 import { PrincipalComponent } from './layout/principal/principal.component';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { UsuarioAutenticadoGuard } from './service/guard/usuario-autenticado.guard';
 import { UsuarioNaoAutenticadoGuard } from './service/guard/usuario-nao-autenticado.guard';
+import { MovimentacaoService } from './service/movimentacao-service.service';
+import { UsuarioService } from './service/usuario.service';
 
 
 @NgModule({
@@ -69,11 +71,12 @@ import { UsuarioNaoAutenticadoGuard } from './service/guard/usuario-nao-autentic
     MatTableModule,
     MatPaginatorModule,
     MatSnackBarModule,
+    HttpClientModule
   ],
   providers: [
     {provide: [MAT_FORM_FIELD_DEFAULT_OPTIONS, HTTP_INTERCEPTORS], useValue: {appearance: 'outline'},
       multi: true
-  }
+  }, MovimentacaoService, UsuarioService
   ],
   bootstrap: [AppComponent]
 })

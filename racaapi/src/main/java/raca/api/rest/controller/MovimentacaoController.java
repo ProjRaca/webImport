@@ -16,6 +16,7 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
+@CrossOrigin("http://localhost:4200")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/movimentacao")
