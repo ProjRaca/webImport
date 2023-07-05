@@ -22,7 +22,7 @@ import javax.sql.DataSource;
 @EnableJpaRepositories(
         entityManagerFactoryRef = "mysqlEntityManagerFactory",
         transactionManagerRef = "mysqlTransactionManager",
-        basePackages = "br.com.devlog.springboot.db.mysql.repository")
+        basePackages = "raca.api.repository.oracle")
         */
 public class OracleDataSourceConfig {
     /*
@@ -39,8 +39,8 @@ public class OracleDataSourceConfig {
     public LocalContainerEntityManagerFactoryBean mysqlEntityManagerFactory(EntityManagerFactoryBuilder builder,
                                                                             @Qualifier("oracleDataSource") DataSource dataSource) {
         return builder.dataSource(dataSource)
-                .packages("br.com.devlog.springboot.db.mysql.model")
-                .persistenceUnit("mysqlPU")
+                .packages("raca.api.domain.entity.oracle")
+                .persistenceUnit("oraclePU")
                 .build();
     }
     @Primary
