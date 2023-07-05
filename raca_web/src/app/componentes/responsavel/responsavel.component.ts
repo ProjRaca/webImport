@@ -23,9 +23,7 @@ export class ResponsavelComponent implements OnInit {
   ngOnInit() {
   }
 
-  pesquisar(){
-    console.log('pesquisar!');
-  }
+  pesquisar(){}
 
   getSizeModal(): string{
     return Sizes.Middle.toString();

@@ -8,6 +8,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { ScackBarCustomComponent } from '../scack-bar-custom/scack-bar-custom.component';
+import { EmpresaEnum } from 'src/app/enums/empresaEnum.enum';
 
 @Component({
   selector: 'app-conferencia',
@@ -19,7 +20,7 @@ export class ConferenciaComponent extends ScackBarCustomComponent implements  Af
 
   displayedColumns: string[] = ['Matrícula', 'Colaborador', 'Cpf','Conta Débito','Valor','Histórico', 'Parceiro','Marca','Ações'];
 
-
+  empresas = EmpresaEnum;
   dataSource = new MatTableDataSource<DocumentoDetalhes>;
   dataSourceSize: number = 0
   pageEvent!: PageEvent;
@@ -33,6 +34,7 @@ export class ConferenciaComponent extends ScackBarCustomComponent implements  Af
     snackBar: MatSnackBar) {
       super(snackBar);
       this.paginator = paginador
+      console.log(this.empresas);
      }
 
 
@@ -64,7 +66,6 @@ export class ConferenciaComponent extends ScackBarCustomComponent implements  Af
       const lista = this.convertToDocumentoList(response.body);
       this.dataSource = new MatTableDataSource<DocumentoDetalhes>(lista);
       this.dataSource.paginator = this.paginator;
-      console.log(this.dataSource.data)
     })
   }
 
