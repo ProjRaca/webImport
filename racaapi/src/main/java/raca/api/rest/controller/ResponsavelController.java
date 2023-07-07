@@ -89,7 +89,7 @@ public class ResponsavelController {
             return ResponseEntity.ok(new ArrayList<>());
     }
 
-    @DeleteMapping("/responsaveis/{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiOperation("Exclui um responsável pelo ID")
     @ApiResponses({
