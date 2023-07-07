@@ -89,5 +89,23 @@ public class ResponsavelController {
             return ResponseEntity.ok(new ArrayList<>());
     }
 
+    @DeleteMapping("/responsaveis/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiOperation("Exclui um responsável pelo ID")
+    @ApiResponses({
+            @ApiResponse(code = 204, message = "Responsável excluído com sucesso"),
+            @ApiResponse(code = 404, message = "Responsável não encontrado")
+    })
+    public ResponseEntity<Void> excluirResponsavel(@PathVariable Integer id) {
+        Optional<Responsavel> responsavelOptional = responsavelService.getRsponsavelId(id);
+
+        if (responsavelOptional.isPresent()) {
+            responsavelService.delete(id);
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
 }

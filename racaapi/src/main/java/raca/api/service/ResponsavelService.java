@@ -18,4 +18,6 @@ public interface ResponsavelService {
 
     List<Responsavel> encontrarPorNome(String nome);
 
+    void delete(Integer id);
+
 }

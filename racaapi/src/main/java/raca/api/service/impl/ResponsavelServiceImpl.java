@@ -15,7 +15,7 @@ import java.util.Optional;
 @Service
 public class ResponsavelServiceImpl implements ResponsavelService {
 
-    private final ResponsavelRepository responsavelRepository;
+    private final ResponsavelRepository responsavelRepository = null;
     @Override
     public List<Responsavel> getAllResponsavel() {
         return responsavelRepository.findAll();
@@ -53,6 +53,11 @@ public class ResponsavelServiceImpl implements ResponsavelService {
     @Override
     public List<Responsavel> encontrarPorNome(String nome) {
         return responsavelRepository.encontrarPorNome(nome);
+    }
+
+    @Override
+    public void delete(Integer id) {
+        responsavelRepository.deleteById(id);
     }
 
 
