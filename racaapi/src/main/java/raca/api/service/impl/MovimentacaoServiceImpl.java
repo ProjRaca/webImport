@@ -42,6 +42,7 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
                 Contas byCpfFuncionarioAndHistorico = contasService.findByCpfFuncionarioAndHistorico(
                         moviment.getCpffuncionario(), movimentacao.getHistorico());
                 moviment.setCodigofilial(movimentacao.getCodigofilial());
+                moviment.setNota(movimentacao.getNota());
                 moviment.setCompetencia(movimentacao.getCompetencia());
                 moviment.setHistorico(movimentacao.getHistorico());
                 moviment.setHistoricodescricao(movimentacao.getHistoricoDescricao());

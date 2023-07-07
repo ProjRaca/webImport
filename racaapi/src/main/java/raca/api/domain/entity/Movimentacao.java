@@ -61,5 +61,7 @@ public class Movimentacao {
     @Column
     private String historicodescricao;
 
-    
+    @Column
+    private String nota;
 }
+

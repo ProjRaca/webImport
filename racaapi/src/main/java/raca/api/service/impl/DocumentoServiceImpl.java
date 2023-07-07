@@ -36,8 +36,14 @@ public class DocumentoServiceImpl implements DocumentService {
 
     @Override
     public Documento salvar(DocumentoDTO doc) {
-        Documento documento = new Documento();
-        documento.setDocumento(doc.getDocumento());
-        return  documentRepository.save(documento);
+
+        return  documentRepository.save(getDocument(doc));
     }
+
+    private Documento getDocument(DocumentoDTO doc){
+        Documento documento = getDocument(doc);
+        documento.setDocumento(doc.getDocumento());
+        return documento;
+    }
+
 }
