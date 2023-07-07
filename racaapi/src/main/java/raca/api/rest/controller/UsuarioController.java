@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -34,10 +35,15 @@ public class UsuarioController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Usuario salvar(@RequestBody @Valid Usuario usuario ){
+    public ResponseEntity<Usuario> salvar(@RequestBody @Valid Usuario usuario ){
         String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
         usuario.setSenha(senhaCriptografada);
-        return usuarioService.salvar(usuario);
+        Usuario salvar = usuarioService.salvar(usuario);
+        if(salvar != null)
+            return ResponseEntity.ok(salvar);
+        else
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+
     }
 
     @PostMapping("/auth")

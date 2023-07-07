@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ResponsavelRepository extends JpaRepository<Responsavel, Integer> {
 
-    @Query(value = "select * from raca.responsavel r where r.nome like '%:nome%'", nativeQuery = true)
+    @Query(value = "select * from raca.responsavel r where r.nome like '%' || :nome || '%'", nativeQuery = true)
     List<Responsavel> encontrarPorNome(@Param("nome") String nome );
 
 }
