@@ -65,7 +65,7 @@ public class MovimentacaoController {
         return ResponseEntity.ok(dto);
     }
 
-    @PostMapping("/exportando")
+    @PostMapping("/exportar")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation("Atualiza a Lista de movimentações no BD Oracle")
     @ApiResponses({
