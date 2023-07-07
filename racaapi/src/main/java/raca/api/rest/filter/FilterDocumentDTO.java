@@ -1,4 +1,4 @@
-package raca.api.rest.dto;
+package raca.api.rest.filter;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

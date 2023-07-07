@@ -20,6 +20,7 @@ import raca.api.security.jwt.JwtService;
 import raca.api.service.impl.UsuarioServiceImpl;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin("http://localhost:4200")
@@ -82,6 +83,21 @@ public class UsuarioController {
     })
     public List<Usuario> getAll() {
         return usuarioService.getAllUsuarios();
+    }
+
+    @GetMapping("/nome/{nome}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ApiOperation("Retorna uma lista de responsáveis pelo nome")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Responsável consultado com sucesso"),
+            @ApiResponse(code = 400, message = "Erro de validação")
+    })
+    public ResponseEntity<List<Usuario>> encontrarPorNome(@PathVariable String nome) {
+        List<Usuario> listResponsavel = usuarioService.encontrarPorNome(nome);
+        if(!listResponsavel.isEmpty())
+            return ResponseEntity.ok(listResponsavel);
+        else
+            return ResponseEntity.ok(new ArrayList<>());
     }
 
 }

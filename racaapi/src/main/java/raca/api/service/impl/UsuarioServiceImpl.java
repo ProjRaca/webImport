@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import raca.api.domain.entity.Responsavel;
 import raca.api.domain.entity.Usuario;
 import raca.api.exception.SenhaInvalidaException;
 import raca.api.repository.UsuarioRepository;
@@ -73,6 +74,8 @@ public class UsuarioServiceImpl implements UserDetailsService {
         repository.deleteById(id);
     }
 
-
+    public List<Usuario> encontrarPorNome(String nome) {
+        return repository.encontrarPorNome(nome);
+    }
 
 }

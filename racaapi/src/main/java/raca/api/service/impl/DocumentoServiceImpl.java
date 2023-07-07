@@ -2,11 +2,10 @@ package raca.api.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 import raca.api.domain.entity.Documento;
 import raca.api.domain.entity.Movimentacao;
 import raca.api.repository.DocumentRepository;
-import raca.api.rest.dto.FilterDocumentDTO;
+import raca.api.rest.filter.FilterDocumentDTO;
 import raca.api.service.DocumentService;
 
 import java.util.Iterator;

@@ -7,13 +7,9 @@ import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import raca.api.domain.entity.Documento;
-import raca.api.domain.entity.Movimentacao;
-import raca.api.rest.dto.FilterDocumentDTO;
-import raca.api.service.DocumentService;
+import raca.api.rest.filter.FilterDocumentDTO;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin("http://localhost:4200")
