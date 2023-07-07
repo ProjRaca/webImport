@@ -13,7 +13,7 @@ CREATE TABLE raca.usuario(
 );
 
 
-CREATE TABLE raca.tblcontas (
+CREATE TABLE raca.contas (
     ID SERIAL PRIMARY KEY,
   matriculafuncionario INTEGER NOT NULL,
   nomefuncionario VARCHAR(60) NOT NULL,
