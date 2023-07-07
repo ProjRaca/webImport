@@ -15,7 +15,7 @@ import java.util.Optional;
 @Service
 public class ResponsavelServiceImpl implements ResponsavelService {
 
-    private final ResponsavelRepository responsavelRepository = null;
+    private final ResponsavelRepository responsavelRepository;
     @Override
     public List<Responsavel> getAllResponsavel() {
         return responsavelRepository.findAll();
