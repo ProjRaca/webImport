@@ -65,5 +65,15 @@ public class MovimentacaoController {
         return ResponseEntity.ok(dto);
     }
 
+    @PostMapping("/exportando")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation("Atualiza a Lista de movimentações no BD Oracle")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Listagem atualizada com sucesso"),
+            @ApiResponse(code = 400, message = "Erro de validação")
+    })
+    public MovimentacaoDTO exprtandoMovement(@RequestBody @Valid MovimentacaoDTO movimentacaoDto) {
+        return movimentacaoService.exprtandoMovement(movimentacaoDto);
+    }
 
 }

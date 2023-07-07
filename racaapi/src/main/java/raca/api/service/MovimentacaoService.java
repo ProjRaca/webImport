@@ -14,6 +14,8 @@ public interface MovimentacaoService {
 
     MovimentacaoDTO criar(MultipartFile local);
 
+    MovimentacaoDTO exprtandoMovement(MovimentacaoDTO movimentacao);
+
     List<Movimentacao> buscarMovimentacoes(String cpfFuncionario, String historico, LocalDate competencia, String cnpjEmpresa);
 
 }
