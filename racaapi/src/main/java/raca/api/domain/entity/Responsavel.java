@@ -26,4 +26,10 @@ public class Responsavel {
     @NotEmpty(message = "{campo.nome.obrigatorio}")
     private String nome;
 
+    @Column
+    private String email;
+
+    @Column
+    private String telefone;
+
 }

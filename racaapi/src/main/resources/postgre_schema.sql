@@ -67,3 +67,7 @@ CREATE TABLE raca.RESPONSAVEL (
   cpfcnpj VARCHAR(20) NOT NULL,
   nome VARCHAR(255)
 );
+
+ALTER TABLE raca.responsavel
+ADD COLUMN email VARCHAR(120),
+ADD COLUMN telfone VARCHAR(20);
