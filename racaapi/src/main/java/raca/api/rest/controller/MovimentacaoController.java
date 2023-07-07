@@ -6,9 +6,11 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import raca.api.domain.entity.Movimentacao;
+import raca.api.domain.entity.Usuario;
 import raca.api.rest.dto.MovimentacaoDTO;
 import raca.api.service.MovimentacaoService;
 
@@ -26,7 +28,7 @@ public class MovimentacaoController {
     private final MovimentacaoService movimentacaoService;
 
     @GetMapping("/all")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.ACCEPTED)
     @ApiOperation("Lista todas as movimentações do BD")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Listagem exibida com sucesso"),
@@ -55,12 +57,12 @@ public class MovimentacaoController {
             @ApiResponse(code = 201, message = "Documento salvo com sucesso"),
             @ApiResponse(code = 400, message = "Erro de validação")
     })
-    public List<MovimentacaoDTO> uploadPDF(@RequestParam("xls_file") MultipartFile file) {
-        if (file.isEmpty()) {
-            return new ArrayList<>();
+    public ResponseEntity<MovimentacaoDTO> uploadPDF(@RequestParam("xls_file") MultipartFile file) {
+        MovimentacaoDTO dto = movimentacaoService.criar(file);
+        if (dto == null) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         }
-        List<MovimentacaoDTO> list = movimentacaoService.criar(file);
-        return list;
+        return ResponseEntity.ok(dto);
     }
 
 

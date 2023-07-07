@@ -54,9 +54,10 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
         movimentacao.setListMovimentacao(movimentacaos);
         return movimentacao;
     }
-    public List<MovimentacaoDTO> criar(MultipartFile file){
+    public MovimentacaoDTO criar(MultipartFile file){
 
-        List<MovimentacaoDTO> dados = new ArrayList<>();
+        MovimentacaoDTO dados = new MovimentacaoDTO();
+        List<Movimentacao> listMov = new ArrayList<>();
         try {
             FileInputStream caminho = convert(file);
             HSSFWorkbook arquivo = new HSSFWorkbook(caminho);
@@ -66,10 +67,10 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
 
                 List<Cell> celula = (List<Cell>) toList(row.cellIterator());
                 MovimentacaoDTO mov = new MovimentacaoDTO();
-                mov.setListMovimentacao(Arrays.asList(getMovimentacao(celula)));
-                dados.add(mov);
+                listMov.add(getMovimentacao(celula));
 
             });
+            dados.setListMovimentacao(listMov);
             return dados;
         } catch (IOException e) {
 

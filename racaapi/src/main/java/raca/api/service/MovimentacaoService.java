@@ -12,7 +12,7 @@ public interface MovimentacaoService {
 
     MovimentacaoDTO processMovement(MovimentacaoDTO movimentacao) ;
 
-    List<MovimentacaoDTO> criar(MultipartFile local);
+    MovimentacaoDTO criar(MultipartFile local);
 
     List<Movimentacao> buscarMovimentacoes(String cpfFuncionario, String historico, LocalDate competencia, String cnpjEmpresa);
 

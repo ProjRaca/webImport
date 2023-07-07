@@ -36,7 +36,7 @@ public class UsuarioController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Usuario> salvar(@RequestBody @Valid Usuario usuario ){
+        public ResponseEntity<Usuario> salvar(@RequestBody @Valid Usuario usuario ){
         String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
         usuario.setSenha(senhaCriptografada);
         Usuario salvar = usuarioService.salvar(usuario);
