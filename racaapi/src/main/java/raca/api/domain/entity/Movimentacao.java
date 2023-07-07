@@ -42,5 +42,7 @@ public class Movimentacao {
     private String ultimousuario;
     private LocalDate ultimaalteracao;
 
+    private String historicodescricao;
+
     
 }

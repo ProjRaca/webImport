@@ -44,6 +44,7 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
                 moviment.setCodigofilial(movimentacao.getCodigofilial());
                 moviment.setCompetencia(movimentacao.getCompetencia());
                 moviment.setHistorico(movimentacao.getHistorico());
+                moviment.setHistoricodescricao(movimentacao.getHistoricoDescricao());
                 moviment.setVencimento(movimentacao.getVencimento());
                 moviment.setStatus("P");
                 movimentacaoRepository.save(moviment);
