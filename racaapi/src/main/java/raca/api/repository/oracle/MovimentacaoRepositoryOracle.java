@@ -1,14 +1,9 @@
 package raca.api.repository.oracle;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import raca.api.domain.entity.oracle.Movimentacao;
-
-
-import java.time.LocalDate;
-import java.util.List;
-
-public interface MovimentacaoRepository extends JpaRepository<Movimentacao, Integer > {
+public interface MovimentacaoRepositoryOracle {
+}
+/*
+public interface MovimentacaoRepositoryOracle extends JpaRepository<Movimentacao, Integer > {
 
     @Query(value = "SELECT * FROM Movimentacao m WHERE m.cpffuncionario = ?1 " +
             "AND m.historico = ?2 " +
@@ -18,3 +13,4 @@ public interface MovimentacaoRepository extends JpaRepository<Movimentacao, Inte
     List<Movimentacao> findByCpfFuncionarioAndHistoricoAndCompetenciaAndCnpjEmpresaAndStatus(String cpfFuncionario, String historico, LocalDate competencia, String cnpjEmpresa);
 
 }
+*/

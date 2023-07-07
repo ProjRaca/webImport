@@ -16,8 +16,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table( name = "movimentacao")
-public class Movimentacao {
+@Table( name = "movimentacaoOracle")
+public class MovimentacaoOracle {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
