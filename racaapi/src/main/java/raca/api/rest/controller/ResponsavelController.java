@@ -12,6 +12,7 @@ import raca.api.domain.entity.Responsavel;
 import raca.api.rest.dto.ResponsavelDTO;
 import raca.api.service.ResponsavelService;
 
+import javax.persistence.PostUpdate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -52,9 +53,9 @@ public class ResponsavelController {
 
     }
 
-    @PostMapping("/salvar")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @ApiOperation("Retorna um responsável pelo Id")
+    @ApiOperation("Cria um novo responsável")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Responsável salvo com sucesso"),
             @ApiResponse(code = 400, message = "Erro de validação")
@@ -63,8 +64,8 @@ public class ResponsavelController {
         responsavelService.salvarResponsavel(responsavelDTO);
     }
 
-    @PostMapping("/update")
-    @ResponseStatus(HttpStatus.CREATED)
+    @PostUpdate
+    @ResponseStatus(HttpStatus.ACCEPTED)
     @ApiOperation("Retorna um responsável pelo Id")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Responsável alterado com sucesso"),
