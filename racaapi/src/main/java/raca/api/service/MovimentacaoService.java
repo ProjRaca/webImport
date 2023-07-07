@@ -18,4 +18,5 @@ public interface MovimentacaoService {
 
     List<Movimentacao> buscarMovimentacoes(String cpfFuncionario, String historico, LocalDate competencia, String cnpjEmpresa);
 
+
 }

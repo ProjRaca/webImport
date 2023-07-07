@@ -1,34 +1,25 @@
-package raca.api.domain.entity;
+package raca.api.rest.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table( name = "documento")
-public class Documento {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class DocumentoDTO {
     private Integer id;
-    @Column
     private String filial;
 
-    @Column
     private String emissor;
-    @Column
-    private LocalDate datadocumentesc;
-    @Column
-    private LocalDate datavalidade;
-    @Column
-    private byte[] documento;
 
+    private LocalDate datadocumentesc;
+
+    private LocalDate datavalidade;
+
+    private byte[] documento;
 
 }

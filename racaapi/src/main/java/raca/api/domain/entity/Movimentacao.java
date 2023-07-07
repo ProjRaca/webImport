@@ -24,24 +24,41 @@ public class Movimentacao {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idmovimentacao")
     private int idmovimentacao;
+    @Column
     private String codigofilial;
+    @Column
     private String cnpjempresa;
+    @Column
     private int idfuncionario;
+    @Column
     private String nomefuncionario;
+    @Column
     private String cpffuncionario;
+    @Column
     private String tipoparceiro;
+    @Column
     private String historico;
+    @Column
     private BigDecimal valor;
+    @Column
     private LocalDate vencimento;
+    @Column
     private LocalDate competencia;
+    @Column
     private String status;
+    @Column
     private String agencia;
+    @Column
     private String agenciadv;
+    @Column
     private String contacorrente;
+    @Column
     private String contacorrentedv;
+    @Column
     private String ultimousuario;
+    @Column
     private LocalDate ultimaalteracao;
-
+    @Column
     private String historicodescricao;
 
     

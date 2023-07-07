@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import raca.api.domain.entity.Documento;
 import raca.api.domain.entity.Movimentacao;
 import raca.api.repository.DocumentRepository;
+import raca.api.rest.dto.DocumentoDTO;
 import raca.api.rest.filter.FilterDocumentDTO;
 import raca.api.service.DocumentService;
 
@@ -31,5 +32,12 @@ public class DocumentoServiceImpl implements DocumentService {
         //return documentRepository.findDocumentsByFilter(filter);
         return null;
 
+    }
+
+    @Override
+    public Documento salvar(DocumentoDTO doc) {
+        Documento documento = new Documento();
+        documento.setDocumento(doc.getDocumento());
+        return  documentRepository.save(documento);
     }
 }
