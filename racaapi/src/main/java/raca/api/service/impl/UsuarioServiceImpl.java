@@ -30,6 +30,7 @@ public class UsuarioServiceImpl implements UserDetailsService {
     @Transactional
     public Usuario salvar(Usuario usuario){
         if(!repository.findByLogin(usuario.getLogin()).isPresent()){
+            usuario.setStatus("A");
             return repository.save(usuario);
         }
         return null;
