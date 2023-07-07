@@ -24,12 +24,12 @@ CREATE TABLE raca.contas (
   descricao VARCHAR(45) NOT NULL
 );
 
-CREATE TABLE raca.tblhistorico (
+CREATE TABLE raca.historico (
   idhistorico SERIAL PRIMARY KEY,
   descricao VARCHAR(45) NOT NULL
 );
 
-CREATE TABLE raca.tblmovimentacao (
+CREATE TABLE raca.movimentacao (
   idmovimentacao SERIAL PRIMARY KEY,
   codigofilial VARCHAR(1) DEFAULT NULL,
   cnpjempresa VARCHAR(14) DEFAULT NULL,
