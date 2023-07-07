@@ -32,6 +32,13 @@ public class ResponsavelServiceImpl implements ResponsavelService {
         Responsavel resp = new Responsavel();
         resp.setCpfcnpj(responsavel.getCpfcnpj());
         resp.setNome(responsavel.getNome());
+        if(responsavel.getTelefone() != null ){
+            resp.setTelefone(responsavel.getTelefone());
+        }
+        if(responsavel.getEmail() != null ){
+            resp.setEmail(responsavel.getEmail());
+        }
+
         responsavelRepository.save(resp);
     }
 
@@ -47,6 +54,12 @@ public class ResponsavelServiceImpl implements ResponsavelService {
         resp.setId(Integer.valueOf(responsavel.getId()));
         resp.setCpfcnpj(responsavel.getCpfcnpj());
         resp.setNome(responsavel.getNome());
+        if(responsavel.getTelefone() != null ){
+            resp.setTelefone(responsavel.getTelefone());
+        }
+        if(responsavel.getEmail() != null ){
+            resp.setEmail(responsavel.getEmail());
+        }
         return responsavelRepository.save(resp);
     }
 

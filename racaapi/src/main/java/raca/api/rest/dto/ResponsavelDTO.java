@@ -9,4 +9,8 @@ public class ResponsavelDTO {
     private String id;
     private String cpfcnpj;
     private String nome;
+
+    private String email;
+
+    private String telefone;
 }
