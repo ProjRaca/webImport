@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import raca.api.domain.entity.Documento;
 import raca.api.domain.entity.Movimentacao;
 import raca.api.repository.DocumentRepository;
+import raca.api.repository.DocumentoDAO;
 import raca.api.rest.dto.DocumentoDTO;
 import raca.api.rest.filter.FilterDocumentDTO;
 import raca.api.service.DocumentService;
@@ -19,6 +20,8 @@ public class DocumentoServiceImpl implements DocumentService {
 
     private final DocumentRepository documentRepository;
 
+    private final raca.api.repository.DocumentoDAO documentoDAO;
+
     @Override
     public List<?> toList(Iterator<?> iterator) {
         return null;
@@ -32,10 +35,12 @@ public class DocumentoServiceImpl implements DocumentService {
 
     @Override
     public List<DocumentoDTO> getFilterDocument(FilterDocumentDTO filter) {
-        List<Documento> documentsByFilter =
+       /* List<Documento> documentsByFilter =
                 documentRepository.findDocumentsByFilter(filter.getFilial(), filter.getEmissor(),
-                        filter.getDatadocumentesc(), filter.getDatavalidade());
-        return getDocumentoDTOS(documentsByFilter);
+                         filter.getDatadocumentesc(), filter.getDatavalidade());*/
+        List<Documento> documentos = documentoDAO.buscarPorFiltros(filter.getFilial(), filter.getEmissor(),
+                filter.getDatadocumentesc(), filter.getDatavalidade());
+        return getDocumentoDTOS(documentos);
     }
 
     private static List<DocumentoDTO> getDocumentoDTOS(List<Documento> documentsByFilter) {

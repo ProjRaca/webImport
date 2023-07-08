@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -17,9 +18,9 @@ public class FilterDocumentDTO {
     private String filial;
 
     private String emissor;
-    private LocalDate datadocumentesc;
+    private Date datadocumentesc;
 
-    private LocalDate datavalidade;
+    private Date datavalidade;
     private Integer iddocpai;
 
 }
