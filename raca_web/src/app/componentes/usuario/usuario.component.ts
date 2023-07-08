@@ -105,6 +105,7 @@ export class UsuarioComponent extends ScackBarCustomComponent implements OnInit 
       usuarioInclusao = response
       this.modalService.close();
       this.exibirMensagemSucesso('Registro Incluído com Sucesso','')
+      this.getAll()
     })
   }
 }

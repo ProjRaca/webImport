@@ -30,17 +30,18 @@ import { ImportarArquivoComponent } from './componentes/importar-arquivo/importa
 import { LoginComponent } from './layout/login/login.component';
 import { PrincipalComponent } from './layout/principal/principal.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { UsuarioAutenticadoGuard } from './service/guard/usuario-autenticado.guard';
-import { UsuarioNaoAutenticadoGuard } from './service/guard/usuario-nao-autenticado.guard';
 import { MovimentacaoService } from './service/movimentacao-service.service';
 import { UsuarioService } from './service/usuario.service';
 import { CpfPipe } from './pipes/cpf.pipe';
 import { CnpjPipe } from './pipes/cnpj.pipe';
 import { MatriculaPipe } from './pipes/matricula.pipe';
 import { MatSortModule } from '@angular/material/sort';
-import { TokenInterceptor } from './service/interceptors/token.interceptor';
 import { httpInterceptorProviders } from './service/interceptors';
 import { ScackBarCustomComponent } from './componentes/scack-bar-custom/scack-bar-custom.component';
+import { CpfECnpjPipe } from './pipes/cpf_cnpj.pipe';
+import { NgxMaskModule } from 'ngx-mask';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 
 @NgModule({
@@ -57,6 +58,7 @@ import { ScackBarCustomComponent } from './componentes/scack-bar-custom/scack-ba
       PrincipalComponent,
       CpfPipe,
       CnpjPipe,
+      CpfECnpjPipe,
       MatriculaPipe,
       ScackBarCustomComponent
    ],
@@ -82,7 +84,10 @@ import { ScackBarCustomComponent } from './componentes/scack-bar-custom/scack-ba
     MatPaginatorModule,
     MatSnackBarModule,
     HttpClientModule,
-    MatSortModule
+    MatSortModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    NgxMaskModule.forRoot()
   ],
   providers: [ httpInterceptorProviders,
     {provide: [MAT_FORM_FIELD_DEFAULT_OPTIONS, HTTP_INTERCEPTORS], useValue: {appearance: 'outline'},

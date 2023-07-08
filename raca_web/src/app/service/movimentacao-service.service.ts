@@ -2,6 +2,7 @@ import { HttpEvent, HttpRequest, HttpClient, HttpHeaders } from '@angular/common
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { MovimentacaoDTO } from '../entity/movimentacaoDTO.entity';
 
 let apiUrlMovimentacao = environment.apiUrl+'/movimentacao'
 @Injectable({
@@ -21,9 +22,7 @@ export class MovimentacaoService {
   }
 
   async upload(file: FormData):Promise<any> {
-
     const headpHeaders = new HttpHeaders().set('isUpload', 'true')
-
     const req = new HttpRequest('POST', `${apiUrlMovimentacao}/upload-xls?xls_file`,file,  {
       reportProgress: true,
       responseType: 'json',
@@ -37,10 +36,17 @@ export class MovimentacaoService {
   }
 
   async getAll():Promise<any> {
-
   const req = new HttpRequest('GET',`${apiUrlMovimentacao}/all`);
   return await this.http.request(req).toPromise();
  }
 
- //TODO criar endpoint para atualizar dados da tela de conferencia
+  async atualizar(movimentacaoDTO: MovimentacaoDTO):Promise<any> {
+    const req = new HttpRequest('POST', `${apiUrlMovimentacao}/atualizar`,movimentacaoDTO);
+    return await this.http.request(req).toPromise();
+  }
+
+  async transferirMovimentacao(movimentacaoDTO: MovimentacaoDTO):Promise<any> {
+    const req = new HttpRequest('POST', `${apiUrlMovimentacao}/exportar`,movimentacaoDTO);
+    return await this.http.request(req).toPromise();
+  }
 }

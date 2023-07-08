@@ -1,36 +1,48 @@
 <div class="container" style="border: 3px;width: 100em;">
-  <form >
+  <form [formGroup]="formulario">
     <h1>Conferência</h1>
     <div class="form-fields">
       <p>
-      <mat-form-field  class="input" >
-        <mat-label>Competência</mat-label>
-        <input matInput>
+      <mat-form-field  class="input" [formGroup]="formulario">
+        <input matInput  formControlName="competencia"  placeholder="Competência" mask="00/00/0000" (blur)="preencherNota()">
+
       </mat-form-field>
 
       <mat-form-field  class="input">
         <mat-label>Nota</mat-label>
-        <input  matInput >
+        <input  matInput formControlName="nota" mask="00/0000" readonly="true">
       </mat-form-field>
 
       <mat-form-field  class="input" >
         <mat-label>Vencimento</mat-label>
-        <input matInput>
+        <input matInput formControlName="vencimento" mask="00/00/0000">
       </mat-form-field>
     </p>
     <p>
       <mat-form-field  class="input">
         <mat-label>Empresa</mat-label>
-        <input  matInput >
+        <mat-select formControlName="empresaSelectedValue" name="empresa">
+          <mat-option *ngFor="let empresa of listaEmpresa" [value]="empresa.id">
+            {{empresa.value}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field  class="input" >
+        <mat-label>Histórico</mat-label>
+        <mat-select formControlName="historicoSelectedValue" name="food">
+          <mat-option *ngFor="let historico of listaHistorico" [value]="historico">
+            {{historico}}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
 
       <mat-form-field  class="input" >
-        <mat-label>Historico</mat-label>
-        <input matInput>
+        <mat-label>Descricao do Histórico</mat-label>
+        <input matInput formControlName="descricaoHistorico">
       </mat-form-field>
-      <button class="button" mat-raised-button color="primary" (click)="pesquisar()">Atualizar</button>
+      <button class="button" mat-raised-button color="primary" (click)="atualizar()">Atualizar</button>
 
-      <button class="button-large" mat-raised-button color="primary" (click)="pesquisar()">Transferir Movimentação</button>
+      <button class="button-large" mat-raised-button color="primary" (click)="transferir()">Transferir Movimentação</button>
     </p>
    <br>
     </div>
@@ -38,10 +50,10 @@
 
   <mat-divider class="divider"></mat-divider>
   <div>
-  <!-- <mat-card title="Detalhes">
+  <mat-card>
     <mat-card-header><h4>Detalhes</h4></mat-card-header>
-    <mat-card-content> -->
-      <table   class="table" mat-table matSort [dataSource]="dataSource.data">
+    <mat-card-content>
+      <table   class="table" mat-table matSort [dataSource]="dataSource">
         <ng-container matColumnDef="Matrícula">
           <th mat-header-cell *matHeaderCellDef>Matrícula</th>
           <td mat-cell *matCellDef="let item"> {{item.matricula | matricula}} </td>
@@ -74,21 +86,19 @@
           <th mat-header-cell *matHeaderCellDef>Marca</th>
           <td mat-cell *matCellDef="let item"> {{item.marca}} </td>
          </ng-container>
-         <ng-container matColumnDef="Ações">
+         <!-- <ng-container matColumnDef="Ações">
           <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
           <td mat-cell *matCellDef="let element">
             <mat-icon class="icon">search</mat-icon>
             <mat-icon class="icon">edit_square</mat-icon>
             <mat-icon class="icon">delete_forever</mat-icon>
           </td>
-        </ng-container>
+        </ng-container> -->
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 
       </table>
-      <mat-paginator #paginator [pageSize]="5" [length]="dataSourceSize" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons (page)="pageEvent = $event">
-    </mat-paginator>
-    <!-- </mat-card-content>
-  </mat-card> -->
+    </mat-card-content>
+  </mat-card>
 </div>
   </div>

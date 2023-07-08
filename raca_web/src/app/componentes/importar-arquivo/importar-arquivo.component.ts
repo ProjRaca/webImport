@@ -49,7 +49,7 @@ export class ImportarArquivoComponent extends ScackBarCustomComponent {
             this.exibirMensagemErro('Ocorreu um problema ao tentar fazer upload do arquivo','');
           }else{
             this.exibirMensagemSucesso('Importação do arquivo realizada com sucesso!','')
-            localStorage.setItem('importados', JSON.stringify( response.body));
+            localStorage.setItem('importados', JSON.stringify( response.body.listMovimentacao));
             localStorage.setItem('cargaArquivo', '1');
             this.router.navigateByUrl('/conferencia');
           }
