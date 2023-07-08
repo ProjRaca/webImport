@@ -29,7 +29,7 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
 
     private final MovimentacaoRepository movimentacaoRepository;
     private final ContasService contasRepository;
-    private ContasService contasService;
+    private final ContasService contasService;
     @Override
     public List<Movimentacao> getAllMovimentacao() {
         return movimentacaoRepository.findAll();
