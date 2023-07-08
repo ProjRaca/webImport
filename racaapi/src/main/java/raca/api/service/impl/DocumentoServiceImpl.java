@@ -48,6 +48,8 @@ public class DocumentoServiceImpl implements DocumentService {
                     documentoDTO.setDatadocumentesc(document.getDatadocumentesc());
                     documentoDTO.setDatavalidade(document.getDatavalidade());
                     documentoDTO.setDocumento(document.getDocumento());
+                    documentoDTO.setTipodocumento(document.getTipodocumento());
+                    documentoDTO.setIddocpai(document.getIddocpai());
                     return documentoDTO;
                 })
                 .collect(Collectors.toList());
@@ -76,16 +78,21 @@ public class DocumentoServiceImpl implements DocumentService {
         documento.setDatavalidade(doc.getDatavalidade());
         documento.setDatadocumentesc(doc.getDatadocumentesc());
         documento.setDocumento(doc.getDocumento());
+        documento.setTipodocumento(doc.getTipodocumento());
+        documento.setIddocpai(doc.getIddocpai());
         return documento;
     }
 
     private DocumentoDTO getDocumentDTO(Documento doc){
         DocumentoDTO documento = new DocumentoDTO();
+        documento.setId(documento.getId());
         documento.setFilial(doc.getFilial());
         documento.setEmissor(doc.getEmissor());
         documento.setDatavalidade(doc.getDatavalidade());
         documento.setDatadocumentesc(doc.getDatadocumentesc());
         documento.setDocumento(doc.getDocumento());
+        documento.setTipodocumento(doc.getTipodocumento());
+        documento.setIddocpai(doc.getIddocpai());
         return documento;
     }
 
