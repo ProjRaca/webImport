@@ -11,6 +11,8 @@ import raca.api.service.DocumentService;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Service
 public class DocumentoServiceImpl implements DocumentService {
@@ -23,25 +25,66 @@ public class DocumentoServiceImpl implements DocumentService {
     }
 
     @Override
-    public List<Movimentacao> getAllMovimentacao() {
-        return null;
+    public List<DocumentoDTO> getAllMDocumentos() {
+        List<Documento> all = documentRepository.findAll();
+        return getDocumentoDTOS(all);
     }
 
     @Override
-    public List<Documento> getFilterDocument(FilterDocumentDTO filter) {
-        //return documentRepository.findDocumentsByFilter(filter);
-        return null;
+    public List<DocumentoDTO> getFilterDocument(FilterDocumentDTO filter) {
+        List<Documento> documentsByFilter =
+                documentRepository.findDocumentsByFilter(filter.getFilial(), filter.getEmissor(),
+                        filter.getDatadocumentesc(), filter.getDatavalidade());
+        return getDocumentoDTOS(documentsByFilter);
+    }
 
+    private static List<DocumentoDTO> getDocumentoDTOS(List<Documento> documentsByFilter) {
+        return documentsByFilter.stream()
+                .map(document -> {
+                    DocumentoDTO documentoDTO = new DocumentoDTO();
+                    documentoDTO.setId(document.getId());
+                    documentoDTO.setFilial(document.getFilial());
+                    documentoDTO.setEmissor(document.getEmissor());
+                    documentoDTO.setDatadocumentesc(document.getDatadocumentesc());
+                    documentoDTO.setDatavalidade(document.getDatavalidade());
+                    documentoDTO.setDocumento(document.getDocumento());
+                    return documentoDTO;
+                })
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Documento salvar(DocumentoDTO doc) {
+    public DocumentoDTO salvar(DocumentoDTO doc) {
+        Documento save = documentRepository.save(getDocument(doc));
+        return getDocumentDTO(save);
+    }
 
-        return  documentRepository.save(getDocument(doc));
+    @Override
+    public DocumentoDTO update(DocumentoDTO doc) {
+        return salvar(doc);
+    }
+
+    @Override
+    public void excluir(Integer id) {
+          documentRepository.deleteById(id);
     }
 
     private Documento getDocument(DocumentoDTO doc){
-        Documento documento = getDocument(doc);
+        Documento documento = new Documento();
+        documento.setFilial(doc.getFilial());
+        documento.setEmissor(doc.getEmissor());
+        documento.setDatavalidade(doc.getDatavalidade());
+        documento.setDatadocumentesc(doc.getDatadocumentesc());
+        documento.setDocumento(doc.getDocumento());
+        return documento;
+    }
+
+    private DocumentoDTO getDocumentDTO(Documento doc){
+        DocumentoDTO documento = new DocumentoDTO();
+        documento.setFilial(doc.getFilial());
+        documento.setEmissor(doc.getEmissor());
+        documento.setDatavalidade(doc.getDatavalidade());
+        documento.setDatadocumentesc(doc.getDatadocumentesc());
         documento.setDocumento(doc.getDocumento());
         return documento;
     }

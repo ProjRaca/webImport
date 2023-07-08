@@ -20,9 +20,6 @@ public class FilterDocumentDTO {
     private LocalDate datadocumentesc;
 
     private LocalDate datavalidade;
-
-    private byte[] documento;
-
-    private Integer idDocPai;
+    private Integer iddocpai;
 
 }

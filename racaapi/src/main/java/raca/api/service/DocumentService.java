@@ -11,9 +11,14 @@ import java.util.List;
 public interface DocumentService {
     List<?> toList(Iterator<?> iterator);
 
-    List<Movimentacao> getAllMovimentacao();
+    List<DocumentoDTO> getAllMDocumentos();
 
-    List<Documento> getFilterDocument(FilterDocumentDTO filter);
+    List<DocumentoDTO> getFilterDocument(FilterDocumentDTO filter);
 
-    Documento salvar(DocumentoDTO doc);
+    DocumentoDTO salvar(DocumentoDTO doc);
+
+    DocumentoDTO update(DocumentoDTO doc);
+
+    void excluir(Integer id);
+
 }

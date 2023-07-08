@@ -20,6 +20,10 @@ public class DocumentoDTO {
 
     private LocalDate datavalidade;
 
+    private String tipodocumento;
+
     private byte[] documento;
+
+    private Integer iddocpai;
 
 }
