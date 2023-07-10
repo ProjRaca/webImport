@@ -42,6 +42,7 @@ import { CpfECnpjPipe } from './pipes/cpf_cnpj.pipe';
 import { NgxMaskModule } from 'ngx-mask';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { DialogDeleteComponent } from './componentes/dialogDelete/dialog-delete.component';
 
 
 @NgModule({
@@ -60,7 +61,8 @@ import { MatNativeDateModule } from '@angular/material/core';
       CnpjPipe,
       CpfECnpjPipe,
       MatriculaPipe,
-      ScackBarCustomComponent
+      ScackBarCustomComponent,
+      DialogDeleteComponent
    ],
   imports: [
     BrowserModule,

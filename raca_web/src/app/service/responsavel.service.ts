@@ -28,4 +28,14 @@ export class ResponsavelService {
     const req = new HttpRequest('POST',`${apiUrl}`,Responsavel);
     return await this.http.request(req).toPromise();
   }
+
+  async findById(id: string):Promise<any> {
+    const req = new HttpRequest('GET',`${apiUrl}/${id}`);
+    return await this.http.request(req).toPromise();
+  }
+
+  async deleteById(id: string):Promise<any> {
+    const req = new HttpRequest('DELETE',`${apiUrl}/${id}`);
+    return await this.http.request(req).toPromise();
+  }
 }
