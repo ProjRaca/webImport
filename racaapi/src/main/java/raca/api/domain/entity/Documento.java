@@ -27,8 +27,14 @@ public class Documento {
     private LocalDate datadocumentesc;
     @Column
     private LocalDate datavalidade;
+
+    @Column
+    private String tipodocumento;
+
     @Column
     private byte[] documento;
+
+    private Integer iddocpai;
 
 
 }

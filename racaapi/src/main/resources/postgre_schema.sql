@@ -406,3 +406,6 @@ INSERT INTO raca.contas
 VALUES(43,'EDVALDO MIRANDA DE SOUZA','01065919409',202,'L',202044,'13º SALARIO');
 
 ALTER TABLE raca.movimentacao ADD COLUMN historicodescricao VARCHAR(120);
+
+ALTER TABLE raca.documento ADD COLUMN tipodocumento varchar(60);
+ALTER TABLE raca.documento ADD COLUMN iddocpai integer;

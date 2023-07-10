@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import raca.api.domain.entity.Documento;
-import raca.api.domain.entity.Usuario;
 import raca.api.rest.dto.DocumentoDTO;
 import raca.api.rest.filter.FilterDocumentDTO;
 import raca.api.service.DocumentService;
@@ -24,32 +23,52 @@ import java.util.List;
 @Api("Api Documentos")
 public class DocumentController {
 
-   private final DocumentService documentService;
-
+    private final DocumentService documentService;
 
     @GetMapping("/filter")
-    @ResponseStatus(HttpStatus.CREATED)
-    @ApiOperation("Lista todas as movimentações do BD")
+    @ApiOperation("Lista todos os documentos filtrados")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Listagem exibida com sucesso"),
             @ApiResponse(code = 400, message = "Erro de validação")
     })
     public List<DocumentoDTO> getFilterDocument(@RequestBody FilterDocumentDTO dto) {
-        //List<Documento> list = documentService.getFilterDocument(dto);
-        return null;
+        return documentService.getFilterDocument(dto);
+    }
+
+    @GetMapping
+    @ApiOperation("Lista todos os documentos")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Listagem exibida com sucesso"),
+            @ApiResponse(code = 400, message = "Erro de validação")
+    })
+    public List<DocumentoDTO> getAllDocuments() {
+        return documentService.getAllMDocumentos();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Documento> salvar(@RequestBody @Valid DocumentoDTO dto ){
-        Documento salvar = documentService.salvar(dto);
-        if(salvar != null)
-            return ResponseEntity.ok(salvar);
-        else
+    public ResponseEntity<DocumentoDTO> salvar(@RequestBody @Valid DocumentoDTO dto){
+        DocumentoDTO savedDocumento = documentService.salvar(dto);
+        if (savedDocumento != null) {
+            return ResponseEntity.ok(savedDocumento);
+        } else {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
-
+        }
     }
 
+    @PutMapping
+    public ResponseEntity<DocumentoDTO> update(@RequestBody @Valid DocumentoDTO dto){
+        DocumentoDTO updatedDocumento = documentService.update(dto);
+        if (updatedDocumento != null) {
+            return ResponseEntity.ok(updatedDocumento);
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        }
+    }
 
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluir(@PathVariable Integer id){
+        documentService.excluir(id);
+        return ResponseEntity.noContent().build();
+    }
 }
