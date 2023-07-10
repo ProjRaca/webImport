@@ -1,4 +1,4 @@
-package raca.api.domain.entity;
+package raca.api.domain.entity.postgres;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

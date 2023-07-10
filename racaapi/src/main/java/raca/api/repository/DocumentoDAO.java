@@ -5,6 +5,8 @@ import raca.api.domain.entity.Documento;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -26,11 +28,11 @@ public class DocumentoDAO {
             jpql += " AND d.emissor like '%' || :emissor || '%'";
         }
         if (datadocumentesc != null) {
-            jpql += " AND p.datadocumentesc = :datadocumentesc ";
+            jpql += " AND d.datadocumentesc = :datadocumentesc ";
         }
 
         if (datavalidade != null) {
-            jpql += " AND p.datavalidade = :datavalidade ";
+            jpql += " AND d.datavalidade = :datavalidade ";
         }
 
         TypedQuery<Documento> query = em.createQuery(jpql, Documento.class);
@@ -48,5 +50,10 @@ public class DocumentoDAO {
         }
         return query.getResultList();
     }
+    public LocalDate convertToLocalDate(Date date) {
+        return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+
 
 }

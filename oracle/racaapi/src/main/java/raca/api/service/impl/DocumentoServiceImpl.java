@@ -2,10 +2,8 @@ package raca.api.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import raca.api.domain.entity.Documento;
-import raca.api.domain.entity.Movimentacao;
-import raca.api.repository.DocumentRepository;
-import raca.api.repository.DocumentoDAO;
+import raca.api.domain.entity.postgres.Documento;
+import raca.api.repository.postgres.DocumentRepository;
 import raca.api.rest.dto.DocumentoDTO;
 import raca.api.rest.filter.FilterDocumentDTO;
 import raca.api.service.DocumentService;
@@ -22,7 +20,7 @@ public class DocumentoServiceImpl implements DocumentService {
 
     private final DocumentRepository documentRepository;
 
-    private final raca.api.repository.DocumentoDAO documentoDAO;
+    //private final raca.api.repository.DocumentoDAO documentoDAO;
 
     @Override
     public List<?> toList(Iterator<?> iterator) {
@@ -37,8 +35,7 @@ public class DocumentoServiceImpl implements DocumentService {
 
     @Override
     public List<DocumentoDTO> getFilterDocument(FilterDocumentDTO filter) {
-        List<Documento> documentos = documentoDAO.buscarPorFiltros(filter.getFilial(), filter.getEmissor(),
-                filter.getDatadocumentesc(), filter.getDatavalidade());
+        List<Documento> documentos =null;
         return getDocumentoDTOS(documentos);
     }
 
