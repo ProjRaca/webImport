@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import java.util.Date;
 
 @Data
@@ -24,5 +25,9 @@ public class DocumentoDTO {
     private byte[] documento;
 
     private Integer iddocpai;
+
+    private boolean restrito;
+
+    private String nome;
 
 }
