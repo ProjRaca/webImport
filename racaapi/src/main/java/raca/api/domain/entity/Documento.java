@@ -38,5 +38,8 @@ public class Documento {
     @Column
     private boolean restrito;
 
+    @Column
+    private String nome;
+
 
 }
