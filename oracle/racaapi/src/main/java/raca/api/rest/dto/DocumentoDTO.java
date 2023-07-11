@@ -12,20 +12,12 @@ import java.util.Date;
 public class DocumentoDTO {
     private Integer id;
     private String filial;
-
     private String emissor;
     private Date datadocumentesc;
-
     private Date datavalidade;
-
     private String tipodocumento;
-
     private byte[] documento;
-
     private Integer iddocpai;
-
     private boolean restrito;
-
     private String nome;
-
 }
