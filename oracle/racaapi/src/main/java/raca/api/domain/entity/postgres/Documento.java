@@ -33,7 +33,14 @@ public class Documento {
     @Column
     private byte[] documento;
 
+    @Column
     private Integer iddocpai;
+
+    @Column
+    private boolean restrito;
+
+    @Column
+    private String nome;
 
 
 }
