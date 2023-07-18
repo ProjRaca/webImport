@@ -409,3 +409,7 @@ ALTER TABLE raca.movimentacao ADD COLUMN historicodescricao VARCHAR(120);
 
 ALTER TABLE raca.documento ADD COLUMN tipodocumento varchar(60);
 ALTER TABLE raca.documento ADD COLUMN iddocpai integer;
+ALTER TABLE raca.documento ADD COLUMN restrito boolean;
+
+ALTER TABLE raca.documento ADD COLUMN nome varchar(255);
+
