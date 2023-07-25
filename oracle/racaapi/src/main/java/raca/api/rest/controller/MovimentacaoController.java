@@ -70,7 +70,7 @@ public class MovimentacaoController {
             @ApiResponse(code = 200, message = "Listagem atualizada com sucesso"),
             @ApiResponse(code = 400, message = "Erro de validação")
     })
-    public MovimentacaoDTO exprtandoMovement(@RequestBody @Valid MovimentacaoDTO movimentacaoDto) {
+    public MovimentacaoDTO exprtandoMovement(@RequestBody @Valid MovimentacaoDTO movimentacaoDto) throws Exception {
         return movimentacaoService.exprtandoMovement(movimentacaoDto);
     }
 

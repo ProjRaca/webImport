@@ -12,4 +12,8 @@ public interface ContasService {
 
     List<Contas> findByCpfFuncionario(String id);
 
+    List<Contas> getContaFuncionario(String cpffuncionario, String descricao);
+
+    List<Contas> getAllContas();
+
 }

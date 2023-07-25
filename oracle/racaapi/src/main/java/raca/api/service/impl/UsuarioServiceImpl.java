@@ -78,4 +78,7 @@ public class UsuarioServiceImpl implements UserDetailsService {
         return repository.encontrarPorNome(nome);
     }
 
+    public List<Usuario> getAllContas() {
+        return repository.findAll();
+    }
 }

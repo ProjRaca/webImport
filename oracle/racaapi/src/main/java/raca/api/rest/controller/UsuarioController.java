@@ -74,14 +74,14 @@ public class UsuarioController {
     }
 
 
-    @GetMapping("/all")
+    @GetMapping("/all7")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation("Retorna todos os usuários")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Listagem realizada com sucesso"),
             @ApiResponse(code = 400, message = "Erro de validação")
     })
-    public List<Usuario> getAll() {
+    public List<Usuario> getAll7() {
         return usuarioService.getAllUsuarios();
     }
 
@@ -96,6 +96,21 @@ public class UsuarioController {
         List<Usuario> listResponsavel = usuarioService.encontrarPorNome(nome);
         if(!listResponsavel.isEmpty())
             return ResponseEntity.ok(listResponsavel);
+        else
+            return ResponseEntity.ok(new ArrayList<>());
+    }
+
+    @GetMapping("/all")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ApiOperation("Retorna uma lista de contas")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Consulta com sucesso"),
+            @ApiResponse(code = 400, message = "Erro de validação")
+    })
+    public ResponseEntity<List<Usuario>> getAll() {
+        List<Usuario> contaFuncionario = usuarioService.getAllContas();
+        if(!contaFuncionario.isEmpty())
+            return ResponseEntity.ok(contaFuncionario);
         else
             return ResponseEntity.ok(new ArrayList<>());
     }

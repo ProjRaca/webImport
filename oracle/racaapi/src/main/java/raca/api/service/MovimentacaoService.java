@@ -14,7 +14,7 @@ public interface MovimentacaoService {
 
     MovimentacaoDTO criar(MultipartFile local);
 
-    MovimentacaoDTO exprtandoMovement(MovimentacaoDTO movimentacao);
+    MovimentacaoDTO exprtandoMovement(MovimentacaoDTO movimentacao) throws Exception;
 
     boolean buscarMovimentacoes(String cpfFuncionario, String historico, Date competencia, String cnpjEmpresa);
 

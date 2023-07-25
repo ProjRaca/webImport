@@ -8,10 +8,9 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import raca.api.domain.entity.oracle.MovimentacaoOracle;
 import raca.api.domain.entity.postgres.Contas;
 import raca.api.domain.entity.postgres.Movimentacao;
-import raca.api.repository.oracle.MovimentacaoRepositoryOracle;
+import raca.api.repository.oracle.MovimentacaoDao;
 import raca.api.repository.postgres.MovimentacaoRepository;
 import raca.api.rest.dto.MovimentacaoDTO;
 import raca.api.service.ContasService;
@@ -23,7 +22,10 @@ import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -31,8 +33,9 @@ import java.util.stream.Collectors;
 public class MovimentacaoServiceImpl implements MovimentacaoService {
 
     private final MovimentacaoRepository movimentacaoRepository;
+    private final MovimentacaoDao movimentacaoDao;
 
-    private final MovimentacaoRepositoryOracle movimentacaoRepositoryOracle;
+    //private final MovimentacaoRepositoryOracle movimentacaoRepositoryOracle;
 
     private final ContasService contasRepository;
     private final ContasService contasService;
@@ -40,13 +43,13 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
     public List<Movimentacao> getAllMovimentacao() {
         return movimentacaoRepository.findAll();
     }
-
+    int cont=0;
     @Override
     public MovimentacaoDTO processMovement(MovimentacaoDTO movimentacao) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
         List<Movimentacao> movimentacaos = movimentacao.getListMovimentacao().stream().map(moviment -> {
-                Contas byCpfFuncionarioAndHistorico = contasService.findByCpfFuncionarioAndHistorico(
-                        moviment.getCpffuncionario(), movimentacao.getHistorico());
+                cont++;
                 moviment.setCodigofilial(movimentacao.getCodigofilial());
                 moviment.setNota(movimentacao.getNota());
                 moviment.setCompetencia(movimentacao.getCompetencia());
@@ -55,6 +58,7 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
                 moviment.setVencimento(movimentacao.getVencimento());
                 moviment.setStatus("P");
                 movimentacaoRepository.save(moviment);
+                System.out.println("cont registro atual = " + cont)  ;
 
             return moviment; // Retornar o objeto moviment após as modificações
         }).collect(Collectors.toList());
@@ -119,32 +123,40 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
         return movimentacao;
     }
 
-    public MovimentacaoDTO exprtandoMovement(MovimentacaoDTO movimentacao) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+    public MovimentacaoDTO exprtandoMovement(MovimentacaoDTO movimentacao) throws Exception {
+        cont = 0;
+        List<Movimentacao> movimentacaos = getMovimentacaoList(movimentacao);
 
-        List<Movimentacao> movimentacaos = movimentacao.getListMovimentacao().stream().map(moviment -> {
-            if(moviment.getStatus().equals(StatusImportacao.P.getTipo())
-                && validaMovimentacaoBD(moviment)){
-                Contas byCpfFuncionarioAndHistorico = contasService.findByCpfFuncionarioAndHistorico(
-                        moviment.getCpffuncionario(), movimentacao.getHistorico());
-                moviment.setCodigofilial(movimentacao.getCodigofilial());
-                moviment.setCompetencia(movimentacao.getCompetencia());
-                moviment.setHistorico(movimentacao.getHistorico());
-                moviment.setVencimento(movimentacao.getVencimento());
-                moviment.setStatus("E");
-                if(byCpfFuncionarioAndHistorico != null){
+        movimentacaoDao.TransferirMovimentacaoOracle(movimentacaos);
+        movimentacao.setListMovimentacao(movimentacaos);
+        return movimentacao;
+    }
+
+    private List<Movimentacao> getMovimentacaoList(MovimentacaoDTO movimentacao) {
+        List<Movimentacao> movimentacaosList = new ArrayList<>();
+        movimentacaosList.stream().forEach( moviment -> {
+
+            Contas byCpfFuncionarioAndHistorico = getContaFuncionarioPorHistorico(
+                    moviment.getCpffuncionario(), movimentacao.getHistorico());
+            if(byCpfFuncionarioAndHistorico != null){
+                if(moviment.getStatus().equals(StatusImportacao.P.getTipo())
+                        && validaMovimentacaoBD(moviment)){
+                    moviment.setCodigofilial(movimentacao.getCodigofilial());
+                    moviment.setCompetencia(movimentacao.getCompetencia());
+                    moviment.setHistorico(movimentacao.getHistorico());
+                    moviment.setVencimento(movimentacao.getVencimento());
+                    moviment.setStatus("E");
                     moviment.setContacorrente(byCpfFuncionarioAndHistorico.getIdconta());
                     moviment.setIdfuncionario(byCpfFuncionarioAndHistorico.getMatriculafuncionario());
                     moviment.setTipoparceiro(byCpfFuncionarioAndHistorico.getTipoparceiro());
-
+                    movimentacaoRepository.save(moviment);
+                    cont ++;
+                    System.out.println("cont registro atual = " + cont)  ;
                 }
-                movimentacaoRepository.save(moviment);
-                movimentacaoRepositoryOracle.save(getMovimentacaoOracle(moviment));
             }
-            return moviment; // Retornar o objeto movimentacaoList após as modificações
-        }).collect(Collectors.toList());
-        movimentacao.setListMovimentacao(movimentacaos);
-        return movimentacao;
+            movimentacaosList.add(moviment);
+        });
+        return movimentacaosList;
     }
 
     private boolean validaMovimentacaoBD(Movimentacao mov){
@@ -156,29 +168,22 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
         String competenciaString = new SimpleDateFormat("yyyy-MM-dd").format(competencia);
         LocalDate competenciaDate = LocalDate.parse(competenciaString, formatter);
         String compet = formatter.format(competenciaDate);
-        List<MovimentacaoOracle> list = movimentacaoRepositoryOracle.findByCpfFuncionarioAndHistoricoAndCompetenciaAndCnpjEmpresaAndStatus(cpfFuncionario, historico, compet, cnpjEmpresa);
+        List<String> list = null;//movimentacaoRepositoryOracle.findByCpfFuncionarioAndHistoricoAndCompetenciaAndCnpjEmpresaAndStatus(cpfFuncionario, historico, compet, cnpjEmpresa);
         return (list != null && !list.isEmpty());
     }
 
-    private MovimentacaoOracle getMovimentacaoOracle(Movimentacao mov){
-        MovimentacaoOracle oracle = new  MovimentacaoOracle();
-        oracle.setAgencia(mov.getAgencia());
-        oracle.setCompetencia(mov.getCompetencia());
-        oracle.setCodigofilial(mov.getCodigofilial());
-        oracle.setContacorrente(mov.getContacorrente());
-        oracle.setCnpjempresa(mov.getCnpjempresa());
-        oracle.setAgenciadv(mov.getAgenciadv());
-        oracle.setContacorrentedv(mov.getContacorrentedv());
-        oracle.setIdfuncionario(mov.getIdfuncionario());
-        oracle.setHistorico(mov.getHistorico());
-        oracle.setCpffuncionario(mov.getCpffuncionario());
-        oracle.setValor(mov.getValor());
-        oracle.setVencimento(mov.getVencimento());
-        oracle.setNomefuncionario(mov.getNomefuncionario());
-        oracle.setStatus(mov.getStatus());
-        oracle.setNota(mov.getNota());
 
-        return oracle;
+    private Contas getContaFuncionarioPorHistorico(String cpf, String descricao){
+        List<Contas> list = contasService.getContaFuncionario(cpf, descricao);
+        //List<Contas> list = contasService.getContaFuncionario(cpf, descricao);
+        List<Contas> collect = list.stream().filter(x -> x.getDescricao().equals(descricao)).collect(Collectors.toList());
+        if (collect.isEmpty()){
+            return null;
+        }
+        return collect.get(0);
+
+
     }
+
 
 }
