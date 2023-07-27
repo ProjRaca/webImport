@@ -20,7 +20,6 @@ public class DocumentoServiceImpl implements DocumentService {
 
     private final DocumentRepository documentRepository;
 
-    //private final raca.api.repository.DocumentoDAO documentoDAO;
 
     @Override
     public List<?> toList(Iterator<?> iterator) {
@@ -35,8 +34,10 @@ public class DocumentoServiceImpl implements DocumentService {
 
     @Override
     public List<DocumentoDTO> getFilterDocument(FilterDocumentDTO filter) {
-        List<Documento> documentos =null;
-        return getDocumentoDTOS(documentos);
+       /// List<Documento> documentos = documentoDAO.buscarPorFiltros(filter.getFilial(), filter.getEmissor(),
+      //          filter.getDatadocumentesc(), filter.getDatavalidade());
+      //  return getDocumentoDTOS(documentos);
+        return null;
     }
 
     private static List<DocumentoDTO> getDocumentoDTOS(List<Documento> documentsByFilter) {
@@ -51,6 +52,8 @@ public class DocumentoServiceImpl implements DocumentService {
                     documentoDTO.setDocumento(document.getDocumento());
                     documentoDTO.setTipodocumento(document.getTipodocumento());
                     documentoDTO.setIddocpai(document.getIddocpai());
+                    documentoDTO.setNome(document.getNome());
+                    documentoDTO.setRestrito(document.isRestrito());
                     return documentoDTO;
                 })
                 .collect(Collectors.toList());
@@ -81,6 +84,8 @@ public class DocumentoServiceImpl implements DocumentService {
         documento.setDocumento(doc.getDocumento());
         documento.setTipodocumento(doc.getTipodocumento());
         documento.setIddocpai(doc.getIddocpai());
+        documento.setNome(doc.getNome());
+        documento.setRestrito(doc.isRestrito());
         return documento;
     }
     public static String convertDate(String inputDate) {
@@ -103,6 +108,8 @@ public class DocumentoServiceImpl implements DocumentService {
         documento.setDocumento(doc.getDocumento());
         documento.setTipodocumento(doc.getTipodocumento());
         documento.setIddocpai(doc.getIddocpai());
+        documento.setNome(doc.getNome());
+        documento.setRestrito(doc.isRestrito());
         return documento;
     }
 
