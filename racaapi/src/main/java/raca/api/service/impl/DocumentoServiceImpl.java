@@ -84,6 +84,8 @@ public class DocumentoServiceImpl implements DocumentService {
         documento.setDocumento(doc.getDocumento());
         documento.setTipodocumento(doc.getTipodocumento());
         documento.setIddocpai(doc.getIddocpai());
+        documento.setNome(doc.getNome());
+        documento.setRestrito(doc.isRestrito());
         return documento;
     }
     public static String convertDate(String inputDate) {
@@ -106,6 +108,8 @@ public class DocumentoServiceImpl implements DocumentService {
         documento.setDocumento(doc.getDocumento());
         documento.setTipodocumento(doc.getTipodocumento());
         documento.setIddocpai(doc.getIddocpai());
+        documento.setNome(doc.getNome());
+        documento.setRestrito(doc.isRestrito());
         return documento;
     }
 
