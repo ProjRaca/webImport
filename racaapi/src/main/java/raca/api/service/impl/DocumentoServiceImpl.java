@@ -54,6 +54,8 @@ public class DocumentoServiceImpl implements DocumentService {
                     documentoDTO.setDocumento(document.getDocumento());
                     documentoDTO.setTipodocumento(document.getTipodocumento());
                     documentoDTO.setIddocpai(document.getIddocpai());
+                    documentoDTO.setNome(document.getNome());
+                    documentoDTO.setRestrito(document.isRestrito());
                     return documentoDTO;
                 })
                 .collect(Collectors.toList());
