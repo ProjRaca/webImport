@@ -35,7 +35,7 @@
 }
 
 .input-large{
-  width: 87% !important;
+  width: 94% !important;
   min-width: auto;
   overflow: auto;
 }
@@ -55,7 +55,7 @@
 }
 
 .modal{
-  height: 550px !important;
+  height: 90% !important;
 }
 
 .margen {
@@ -70,4 +70,22 @@
 
  .margen-min {
   margin-right: 2%;
+}
+
+.content {
+  padding-right: 1rem;
+  padding-left: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 80% !important;
+  max-height: 80% !important;
+  width: 80% !important;
+  height: 80% !important;
+}
+
+.footer {
+  text-align: right;
+  margin-top: -2% !important;
 }

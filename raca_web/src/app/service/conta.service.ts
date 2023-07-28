@@ -13,7 +13,6 @@ export class ContaService {
 
   async findAllHistorico():Promise<any> {
     const req = new HttpRequest('GET',`${apiUrl}/historico`);
-  return await this.http.request(req).toPromise();
-
-}
+    return await this.http.request(req).toPromise();
+  }
 }

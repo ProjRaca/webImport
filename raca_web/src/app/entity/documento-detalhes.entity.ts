@@ -1,4 +1,4 @@
-import { HistoricoEnum } from "../enums/historicoEnum.enum";
+import { TipoDocumentoEnum } from "../enums/TipoDocumentoEnum.enum";
 
 export  interface DocumentoDetalhes {
   id?: number;

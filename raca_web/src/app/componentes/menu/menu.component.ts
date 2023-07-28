@@ -1,5 +1,4 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { ModalService } from 'src/app/service/modalService.service';
 
 @Component({
   selector: 'app-menu',
@@ -9,7 +8,7 @@ import { ModalService } from 'src/app/service/modalService.service';
  })
 export class MenuComponent  {
 
-  constructor(protected modalService: ModalService) {}
+  constructor() {}
 
   ngOnInit(): void {
   }

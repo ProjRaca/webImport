@@ -4,16 +4,15 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatMenuModule} from '@angular/material/menu';
-import {MatButtonModule} from '@angular/material/button';
-import {MatDialogModule} from '@angular/material/dialog';
-import {MatCardModule} from '@angular/material/card';
-import {MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/material/form-field';
-import {MatIconModule} from '@angular/material/icon';
-import {MatInputModule} from '@angular/material/input';
-import {MatDividerModule} from '@angular/material/divider';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
-
+import { MatMenuModule} from '@angular/material/menu';
+import { MatButtonModule} from '@angular/material/button';
+import { MatDialogModule} from '@angular/material/dialog';
+import { MatCardModule} from '@angular/material/card';
+import { MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/material/form-field';
+import { MatIconModule} from '@angular/material/icon';
+import { MatInputModule} from '@angular/material/input';
+import { MatDividerModule} from '@angular/material/divider';
+import { MatSnackBarModule} from '@angular/material/snack-bar';
 import { MenuComponent } from './componentes/menu/menu.component';
 import { ModalComponent } from './componentes/modal/modal.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -40,9 +39,19 @@ import { httpInterceptorProviders } from './service/interceptors';
 import { ScackBarCustomComponent } from './componentes/scack-bar-custom/scack-bar-custom.component';
 import { CpfECnpjPipe } from './pipes/cpf_cnpj.pipe';
 import { NgxMaskModule } from 'ngx-mask';
-import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { DialogDeleteComponent } from './componentes/dialogDelete/dialog-delete.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { NgFor, AsyncPipe } from '@angular/common';
+import { AutocompleteResponsavelComponent } from './componentes/autocomplete-responsavel/autocomplete-responsavel.component';
+import { ModalcadastrodocumentoComponent } from './componentes/modalcadastrodocumento/modalcadastrodocumento.component';
+import { FilialPipe } from './pipes/tipo-filial.pipe';
+import { DocumentoPipe } from './pipes/tipo-documento.pipe';
+import { DocumentoRestritoPipe } from './pipes/documento-restrito.pipe';
+
+
 
 
 @NgModule({
@@ -60,9 +69,14 @@ import { DialogDeleteComponent } from './componentes/dialogDelete/dialog-delete.
       CpfPipe,
       CnpjPipe,
       CpfECnpjPipe,
+      FilialPipe,
+      DocumentoPipe,
+      DocumentoRestritoPipe,
       MatriculaPipe,
       ScackBarCustomComponent,
-      DialogDeleteComponent
+      DialogDeleteComponent,
+      AutocompleteResponsavelComponent,
+      ModalcadastrodocumentoComponent
    ],
   imports: [
     BrowserModule,
@@ -89,6 +103,10 @@ import { DialogDeleteComponent } from './componentes/dialogDelete/dialog-delete.
     MatSortModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatAutocompleteModule,
+    NgFor,
+    MatSlideToggleModule,
+    AsyncPipe,
     NgxMaskModule.forRoot()
   ],
   providers: [ httpInterceptorProviders,

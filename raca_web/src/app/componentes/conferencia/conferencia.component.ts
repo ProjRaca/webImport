@@ -24,7 +24,6 @@ import { DataUtils } from 'src/app/utils/data.utils';
 export class ConferenciaComponent extends ScackBarCustomComponent implements  OnInit, AfterViewInit {
 
   displayedColumns: string[] = ['Matrícula', 'Colaborador', 'Cpf','Conta Débito','Valor','Histórico', 'Parceiro','Marca'];
-  // displayedColumns: string[] = ['Matrícula', 'Colaborador', 'Cpf','Conta Débito','Valor','Histórico', 'Parceiro','Marca','Ações'];
   formulario!: FormGroup;
   empresas = EmpresaEnum;
   dataSource = new MatTableDataSource<DocumentoDetalhes>;

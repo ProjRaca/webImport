@@ -5,7 +5,6 @@ export enum EmpresaEnum {
 
 
 export const EmpresaList: {
-  key: string;
+  id: number;
   value: string;
-}[] = Object.entries(EmpresaEnum)
-  .map(([key, value]) => ({ key, value }));
+}[] = [ { id:1, value: "Casa de Carnes" } , { id:2, value: "Raça Distribuidora"} ];

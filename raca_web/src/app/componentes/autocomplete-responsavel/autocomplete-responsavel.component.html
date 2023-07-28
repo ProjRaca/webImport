@@ -1,0 +1,13 @@
+<mat-form-field [formGroup]="form">
+  <mat-label>Responsável</mat-label>
+  <input matInput
+      formControlName="nomeResponsavelGroup"
+      [matAutocomplete]="auto">
+     <mat-autocomplete #auto="matAutocomplete">
+        <mat-option
+          *ngFor="let item of filteredOptions | async"
+          [value]="item.nome">
+            {{item.nome}}
+        </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

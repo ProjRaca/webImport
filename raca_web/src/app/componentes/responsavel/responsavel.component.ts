@@ -132,13 +132,6 @@ export class ResponsavelComponent extends ScackBarCustomComponent implements OnI
     });
   }
 
-  // deleteRegistro(isDeleteItem: string){
-  //   console.log(isDeleteItem)
-  //   if(isDeleteItem === 'true'){
-  //     this.remover(this.idRemocao)
-  //   }
-  // }
-
   remover(id: any){
     this.responsavelService.deleteById(id).then( response => {
       if (!response.ok) {
