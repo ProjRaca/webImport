@@ -27,3 +27,9 @@ svg#clouds {
   z-index: -10;
   width: 100%;
 }
+
+.twitter-like{
+  .mat-progress-spinner{
+      display: inline;
+  }
+}

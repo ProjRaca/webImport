@@ -50,7 +50,7 @@ import { ModalcadastrodocumentoComponent } from './componentes/modalcadastrodocu
 import { FilialPipe } from './pipes/tipo-filial.pipe';
 import { DocumentoPipe } from './pipes/tipo-documento.pipe';
 import { DocumentoRestritoPipe } from './pipes/documento-restrito.pipe';
-
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
 
@@ -107,6 +107,7 @@ import { DocumentoRestritoPipe } from './pipes/documento-restrito.pipe';
     NgFor,
     MatSlideToggleModule,
     AsyncPipe,
+    MatProgressSpinnerModule,
     NgxMaskModule.forRoot()
   ],
   providers: [ httpInterceptorProviders,

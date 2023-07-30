@@ -156,4 +156,8 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
     });
   }
 
+  detalhes(id: number){
+
+  }
+
 }

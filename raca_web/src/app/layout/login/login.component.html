@@ -1,4 +1,12 @@
 <mat-card-content class="container">
+
+  <div class="twitter-like" *ngIf="isLoginwait">
+    <!-- <mat-spinner class="background"
+        mode="determinate"
+      value="100">
+    </mat-spinner> -->
+    <mat-spinner></mat-spinner>
+    </div>
   <mat-card class="card-login">
     <mat-card-title>Login</mat-card-title>
     <form [formGroup]="formLogin" novalidate>
