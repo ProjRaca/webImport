@@ -149,4 +149,9 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
         return movimentacaoRepository.findByCpfFuncionarioAndHistoricoAndCompetenciaAndCnpjEmpresaAndStatus(cpfFuncionario, historico, competencia, cnpjEmpresa);
     }
 
+    @Override
+    public List<Movimentacao> getExMovimentacao() {
+        return movimentacaoRepository.getExMovimentacao();
+    }
+
 }

@@ -134,7 +134,7 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
 
     private List<Movimentacao> getMovimentacaoList(MovimentacaoDTO movimentacao) {
         List<Movimentacao> movimentacaosList = new ArrayList<>();
-        movimentacaosList.stream().forEach( moviment -> {
+        movimentacao.getListMovimentacao().stream().forEach( moviment -> {
 
             Contas byCpfFuncionarioAndHistorico = getContaFuncionarioPorHistorico(
                     moviment.getCpffuncionario(), movimentacao.getHistorico());
@@ -156,33 +156,47 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
             }
             movimentacaosList.add(moviment);
         });
+        System.out.println("TAMANHO DA LISTA  getMovimentacaoList = " + movimentacaosList.size())  ;
         return movimentacaosList;
     }
 
     private boolean validaMovimentacaoBD(Movimentacao mov){
-        return !buscarMovimentacoes(mov.getCpffuncionario(), mov.getHistorico(), mov.getCompetencia(), mov.getCnpjempresa());
+        return buscarMovimentacoes(mov.getCpffuncionario(), mov.getHistorico(), mov.getCompetencia(), mov.getCnpjempresa());
 
     }
     public boolean buscarMovimentacoes(String cpfFuncionario, String historico, Date competencia, String cnpjEmpresa) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String competenciaString = new SimpleDateFormat("yyyy-MM-dd").format(competencia);
         LocalDate competenciaDate = LocalDate.parse(competenciaString, formatter);
-        String compet = formatter.format(competenciaDate);
-        List<String> list = null;//movimentacaoRepositoryOracle.findByCpfFuncionarioAndHistoricoAndCompetenciaAndCnpjEmpresaAndStatus(cpfFuncionario, historico, compet, cnpjEmpresa);
-        return (list != null && !list.isEmpty());
+        List<Movimentacao> byCpfFuncionarioAndHistoricoAndCompetenciaAndCnpjEmpresaAndStatus =
+                movimentacaoRepository.findByCpfFuncionarioAndHistoricoAndCompetenciaAndCnpjEmpresaAndStatus(cpfFuncionario, historico, competenciaDate, cnpjEmpresa);
+        return (byCpfFuncionarioAndHistoricoAndCompetenciaAndCnpjEmpresaAndStatus != null);
     }
 
 
     private Contas getContaFuncionarioPorHistorico(String cpf, String descricao){
         List<Contas> list = contasService.getContaFuncionario(cpf, descricao);
-        //List<Contas> list = contasService.getContaFuncionario(cpf, descricao);
         List<Contas> collect = list.stream().filter(x -> x.getDescricao().equals(descricao)).collect(Collectors.toList());
         if (collect.isEmpty()){
             return null;
         }
         return collect.get(0);
+    }
 
+    public List<Movimentacao> buscarMovimentacoesPostgree(String cpfFuncionario, String historico, String competencia, String cnpjEmpresa) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String competenciaString = new SimpleDateFormat("yyyy-MM-dd").format(competencia);
+        LocalDate competenciaDate = LocalDate.parse(competenciaString, formatter);
+        String compet = formatter.format(competenciaDate);
 
+        List<Movimentacao> byCpfFuncionarioAndHistoricoAndCompetenciaAndCnpjEmpresaAndStatus = movimentacaoRepository.findByCpfFuncionarioAndHistoricoAndCompetenciaAndCnpjEmpresaAndStatus(cpfFuncionario, historico, competenciaDate, cnpjEmpresa);
+
+        return byCpfFuncionarioAndHistoricoAndCompetenciaAndCnpjEmpresaAndStatus ;
+    }
+
+    @Override
+    public List<Movimentacao> getExMovimentacao() {
+        return movimentacaoRepository.getExMovimentacao();
     }
 
 
