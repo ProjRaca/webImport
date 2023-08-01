@@ -80,6 +80,7 @@ export class ResponsavelComponent extends ScackBarCustomComponent implements OnI
   }
 
   openModalNovo(){
+    this.formulario.reset();
     this.exibirDetalhes = false;
     this.modalService.open('modalResponsavel');
   }

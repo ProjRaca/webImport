@@ -21,7 +21,7 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
   filteredOptions!: Observable<Responsavel[]>;
   empresaSelectedValue: string = '';
 
-  listaEmpresa  = [ { id:1, value: "Casa de Carnes" }, { id:2, value: "Raça Distribuidora"} ]
+  listaEmpresa  = [ { id:1, value: "Raça Distribuidora"}, { id:2, value: "Casa de Carnes" } ]
   responsaveis: Responsavel[] = [];
   documentos: DocumentoDTO[] = [];
   documento!: DocumentoDTO;

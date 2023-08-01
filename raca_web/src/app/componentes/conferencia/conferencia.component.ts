@@ -36,8 +36,8 @@ export class ConferenciaComponent extends ScackBarCustomComponent implements  On
   listaMovimentacao: Movimentacao[] = [];
   movimentacaoDTOAtualizada!: MovimentacaoDTO;
 
-  listaEmpresa = [{ id:1, value: "Casa de Carnes" },
-                  { id:2, value: "Raça Distribuidora"}
+  listaEmpresa = [{ id:1, value: "Raça Distribuidora" },
+                  { id:2, value: "Casa de Carnes"}
                 ];
 
   @ViewChild('paginator') paginator: MatPaginator;
@@ -137,8 +137,8 @@ export class ConferenciaComponent extends ScackBarCustomComponent implements  On
 
   getAll(){
     this.movimentacaoService.getAll().then( response => {
-      if (!response.ok) {
-        this.exibirMensagemErro('Falha na autenticação', 'Usuário ou senha incorretos.')
+      if (response.body.message) {
+        this.exibirMensagemErro('Falha na autenticação', response.body.message)
       }
 
       const lista = this.convertToDocumentoList(response.body);

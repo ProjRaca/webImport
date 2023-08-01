@@ -13,6 +13,7 @@ import { DocumentoDTO } from 'src/app/entity/documento-dto.entity';
 import { DialogDeleteComponent } from '../dialogDelete/dialog-delete.component';
 import { ScackBarCustomComponent } from '../scack-bar-custom/scack-bar-custom.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DataUtils } from 'src/app/utils/data.utils';
 
 @Component({
   selector: 'app-documentos',
@@ -23,24 +24,17 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
 
   formulario!: FormGroup;
 
-  documento: DocumentoInclusao = {
-    filial: '',
-    data_documento: '',
-    reponsavel: '',
-    data_validade: '',
-    tipo_tocumento: '',
-    documento_pai: '',
-    documento_restrito: false
-  }
 
-  displayedColumns: string[] = ['id','Nome', 'Filial', 'Resposável','Tp Documento','Dt Documento','Dt Validade', 'Doc Restrito','Ações'];
+  responsavel!: string;
+
+  displayedColumns: string[] = ['id','Nome', 'Filial', 'Responsável','Tp Documento','Dt Documento','Dt Validade', 'Doc Restrito','Ações'];
   responsaveis: Responsavel[] = [];
 
   documentos: DocumentoDTO[] = [];
   filteredOptions!: Observable<Responsavel[]>;
   empresaSelectedValue: string = '';
 
-  listaEmpresa  = [ { id:1, value: "Casa de Carnes" }, { id:2, value: "Raça Distribuidora"} ]
+  listaEmpresa  = [ { id:1, value: "Raça Distribuidora"}, { id:2, value: "Casa de Carnes" } ]
 
 
   tipoDocumento = [
@@ -68,14 +62,38 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
   ngOnInit() {
     this.criarFormulario();
     this.getAllResponsaveis();
-    this.filteredOptions = this.formulario.get('nomeResponsavelGroup')!.valueChanges.pipe(
+    this.filteredOptions = this.formulario.get('responsavel')!.valueChanges.pipe(
       startWith(''),
       map(value => ( value ? this._filterReponsavel(value || '') : this.responsaveis.slice())),
     );
     this.getDocumentos();
   }
 
-  pesquisar(){}
+  pesquisar(){
+
+   if(this.formulario.status == 'INVALID') return;
+    let dtDocumento = DataUtils.convertDataStringToPtBrFormat(this.formulario.get('dtDocumento')?.value);
+    let dtValidade = DataUtils.convertDataStringToPtBrFormat(this.formulario.get('dtValidade')?.value);
+
+    let filter: DocumentoDTO = {
+    datadocumentesc: dtDocumento || '',
+    datavalidade: dtValidade  || '',
+    emissor: this.formulario.get('responsavel')?.value  || '',
+    filial : this.formulario.get('empresa')?.value  || '',
+    iddocpai: undefined,
+    }
+
+
+    this.serviceDocumento.findByFilter(filter).then( response => {
+      if (!response.ok) {
+        this.exibirMensagemErro('Falha na autenticação','Usuário ou senha incorretos.');
+      }
+      this.documentos = response.body;
+
+    });
+
+    this.formulario.reset();
+  }
 
   getSizeModal(): string{
     return Sizes.Middle.toString();
@@ -86,10 +104,11 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
       empresa: [''],
       dtDocumento: [''],
       dtValidade: [''],
-      nomeResponsavelGroup: '',
+      responsavel: '',
       tpDocumento: [''],
-      docRegistro: ['']
+      docRegistro: [false]
     })
+    this.formulario.get('docRestrito')?.setValue(false)
   }
 
   getAllResponsaveis(){
