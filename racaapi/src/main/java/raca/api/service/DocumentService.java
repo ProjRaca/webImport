@@ -21,4 +21,14 @@ public interface DocumentService {
 
     void excluir(Integer id);
 
+    List<DocumentoDTO> getFilterDocument(Integer id,
+                                         String filial,
+                                         String emissor,
+                                         String datadocumentesc,
+                                         String datavalidade,
+                                         String tipodocumento,
+                                         Integer iddocpai,
+                                         boolean restrito,
+                                         String nome);
+
 }

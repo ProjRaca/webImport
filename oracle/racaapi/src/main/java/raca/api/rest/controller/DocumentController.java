@@ -30,8 +30,16 @@ public class DocumentController {
             @ApiResponse(code = 200, message = "Listagem exibida com sucesso"),
             @ApiResponse(code = 400, message = "Erro de validação")
     })
-    public List<DocumentoDTO> getFilterDocument(@RequestBody FilterDocumentDTO dto) {
-        return documentService.getFilterDocument(dto);
+    public List<DocumentoDTO> getFilterDocument(@RequestParam("id") Integer id,
+                                                @RequestParam("filial") String filial,
+                                                @RequestParam("emissor") String emissor,
+                                                @RequestParam("datadocumentesc") String datadocumentesc,
+                                                @RequestParam("datavalidade") String datavalidade,
+                                                @RequestParam("tipodocumento") String tipodocumento,
+                                                @RequestParam("iddocpai") Integer iddocpai,
+                                                @RequestParam("restrito") boolean restrito,
+                                                @RequestParam("nome") String nome) {
+        return documentService.getFilterDocument(id, filial, emissor, datadocumentesc, datavalidade,tipodocumento, iddocpai, restrito, nome);
     }
 
     @GetMapping

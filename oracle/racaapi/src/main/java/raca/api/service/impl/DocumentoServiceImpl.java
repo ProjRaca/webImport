@@ -1,15 +1,19 @@
 package raca.api.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import raca.api.domain.entity.postgres.Documento;
+import raca.api.repository.DocumentoSpecifications;
 import raca.api.repository.postgres.DocumentRepository;
 import raca.api.rest.dto.DocumentoDTO;
-import raca.api.rest.filter.FilterDocumentDTO;
 import raca.api.service.DocumentService;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,14 +34,6 @@ public class DocumentoServiceImpl implements DocumentService {
     public List<DocumentoDTO> getAllMDocumentos() {
         List<Documento> all = documentRepository.findAll();
         return getDocumentoDTOS(all);
-    }
-
-    @Override
-    public List<DocumentoDTO> getFilterDocument(FilterDocumentDTO filter) {
-       /// List<Documento> documentos = documentoDAO.buscarPorFiltros(filter.getFilial(), filter.getEmissor(),
-      //          filter.getDatadocumentesc(), filter.getDatavalidade());
-      //  return getDocumentoDTOS(documentos);
-        return null;
     }
 
     private static List<DocumentoDTO> getDocumentoDTOS(List<Documento> documentsByFilter) {
@@ -112,5 +108,29 @@ public class DocumentoServiceImpl implements DocumentService {
         documento.setRestrito(doc.isRestrito());
         return documento;
     }
+
+    public List<DocumentoDTO> getFilterDocument(Integer id, String filial, String emissor, String datadocumentesc, String datavalidade, String tipodocumento, Integer iddocpai, boolean restrito, String nome) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String datadocument = new SimpleDateFormat("yyyy-MM-dd").format(datadocumentesc);
+        LocalDate datadocumento = LocalDate.parse(datadocument, formatter);
+
+        String datavalidadeFilter = new SimpleDateFormat("yyyy-MM-dd").format(datavalidade);
+        LocalDate datavalidadeFilt = LocalDate.parse(datavalidadeFilter, formatter);
+
+        Specification<Documento> spec = DocumentoSpecifications.withFilters(filial,
+                emissor,
+                datadocumento,
+                datavalidadeFilt,
+                tipodocumento,
+                iddocpai,
+                restrito,
+                nome);
+        List<Documento> documentos = documentRepository.findAll(spec);
+
+        return documentos.stream().map(documento -> {
+            return getDocumentDTO(documento);
+        }).collect(Collectors.toList());
+    }
+
 
 }
