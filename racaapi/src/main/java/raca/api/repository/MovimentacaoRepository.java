@@ -16,4 +16,6 @@ public interface MovimentacaoRepository  extends JpaRepository<Movimentacao, Int
             "AND m.status = 'P'", nativeQuery = true)
     List<Movimentacao> findByCpfFuncionarioAndHistoricoAndCompetenciaAndCnpjEmpresaAndStatus(String cpfFuncionario, String historico, LocalDate competencia, String cnpjEmpresa);
 
+    @Query(value = "SELECT * FROM raca.movimentacao m WHERE m.status = 'E'", nativeQuery = true)
+    List<Movimentacao> getExMovimentacao();
 }

@@ -28,7 +28,7 @@ public class MovimentacaoDao {
 
     private final MinhaConnectionOracle minhaConnectionOracle;
     private final MovimentacaoRepository movimentacaoRepository;
-    
+
     public int ConsultarUltimoMovimento() throws Exception{
         int UltimoMovimento = 0;
         String sSql = "SELECT NVL(PROXNUMLANC,1) PROXNUMLANC FROM PCCONSUM";
@@ -69,30 +69,24 @@ public class MovimentacaoDao {
      }
 
     public void TransferirMovimentacaoOracle( List<Movimentacao> listMovimentacao) throws Exception{
-
-        final Connection connOracle = minhaConnectionOracle.createConnectionToOracle();
-
+         final Connection connOracle = minhaConnectionOracle.createConnectionToOracle();
          try {
+
              listMovimentacao.stream().forEach(x -> {
                  int numreg = 0;
                  try {
                      numreg = this.ConsultarUltimoMovimento();
-                 } catch (Exception e) {
-                     e.printStackTrace();
-                     throw new RuntimeException(e);
-                 }
 
-                 Date data = new Date();
-                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                 SimpleDateFormat dateFormatConsulta = new SimpleDateFormat("yyyy-MM-dd");
-                 String dataVencimento = dateFormat.format(x.getVencimento());
-                 String dataCompetencia = dateFormat.format(x.getCompetencia());
-                 String dataCompetenciaConsulta = dateFormatConsulta.format(x.getCompetencia());
-                 String dataSistema =  dateFormat.format(data);
+                     Date data = new Date();
+                     SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                     SimpleDateFormat dateFormatConsulta = new SimpleDateFormat("yyyy-MM-dd");
+                     String dataVencimento = dateFormat.format(x.getVencimento());
+                     String dataCompetencia = dateFormat.format(x.getCompetencia());
+                     String dataCompetenciaConsulta = dateFormatConsulta.format(x.getCompetencia());
+                     String dataSistema =  dateFormat.format(data);
 
-                 String oSql = getSql(x, numreg, dataVencimento, dataCompetencia, dataSistema);
+                     String oSql = getSql(x, numreg, dataVencimento, dataCompetencia, dataSistema);
 
-                 try {
                      if(!validaInsert( x.getCodigofilial(), x.getNota().replace("/",""),
                              dataCompetenciaConsulta,x.getIdfuncionario(), x.getContacorrente())){
                          if(x.getTipoparceiro() != null){
@@ -104,6 +98,7 @@ public class MovimentacaoDao {
                      e.printStackTrace();
                      throw new RuntimeException(e);
                  }
+
              });
          }catch (Exception e){
             e.printStackTrace();
@@ -148,6 +143,7 @@ public class MovimentacaoDao {
             rs = pstmtO.executeQuery();
 
             while (rs.next()) {
+                rs.getString("CODCONTA");
                 return true;
             }
         } catch (Exception ex) {

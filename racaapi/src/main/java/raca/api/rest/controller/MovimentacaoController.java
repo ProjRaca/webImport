@@ -76,4 +76,17 @@ public class MovimentacaoController {
         return movimentacaoService.exprtandoMovement(movimentacaoDto);
     }
 
+    @GetMapping("/ex")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ApiOperation("Lista todas as movimentações do BD com status E - Exportado")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Listagem exibida com sucesso"),
+            @ApiResponse(code = 400, message = "Erro de ao consultar")
+    })
+    public List<Movimentacao> getExMovimentacao() {
+        List<Movimentacao> list = movimentacaoService.getExMovimentacao();
+        return list;
+    }
+
+
 }

@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class ErroCod {
-    private String code;
+    private int code;
     private  String message;
 
 }

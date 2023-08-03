@@ -1,15 +1,19 @@
 package raca.api.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import raca.api.domain.entity.Documento;
 import raca.api.domain.entity.Movimentacao;
 import raca.api.repository.DocumentRepository;
 import raca.api.repository.DocumentoDAO;
+import raca.api.repository.DocumentoSpecifications;
 import raca.api.rest.dto.DocumentoDTO;
 import raca.api.rest.filter.FilterDocumentDTO;
 import raca.api.service.DocumentService;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
@@ -114,5 +118,29 @@ public class DocumentoServiceImpl implements DocumentService {
         documento.setRestrito(doc.isRestrito());
         return documento;
     }
+
+    public List<DocumentoDTO> getFilterDocument(Integer id, String filial, String emissor, String datadocumentesc, String datavalidade, String tipodocumento, Integer iddocpai, boolean restrito, String nome) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String datadocument = new SimpleDateFormat("yyyy-MM-dd").format(datadocumentesc);
+        LocalDate datadocumento = LocalDate.parse(datadocument, formatter);
+
+        String datavalidadeFilter = new SimpleDateFormat("yyyy-MM-dd").format(datavalidade);
+        LocalDate datavalidadeFilt = LocalDate.parse(datavalidadeFilter, formatter);
+
+        Specification<Documento> spec = DocumentoSpecifications.withFilters(filial,
+                emissor,
+                datadocumento,
+                datavalidadeFilt,
+                tipodocumento,
+                iddocpai,
+                restrito,
+                nome);
+        List<Documento> documentos = documentRepository.findAll(spec);
+
+        return documentos.stream().map(documento -> {
+            return getDocumentDTO(documento);
+        }).collect(Collectors.toList());
+    }
+
 
 }

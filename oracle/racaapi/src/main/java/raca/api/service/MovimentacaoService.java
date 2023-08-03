@@ -18,5 +18,9 @@ public interface MovimentacaoService {
 
     boolean buscarMovimentacoes(String cpfFuncionario, String historico, Date competencia, String cnpjEmpresa);
 
+    List<Movimentacao> buscarMovimentacoesPostgree(String cpfFuncionario, String historico, String competencia, String cnpjEmpresa);
+
+    List<Movimentacao> getExMovimentacao();
+
 
 }
