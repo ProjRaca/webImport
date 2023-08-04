@@ -14,6 +14,7 @@ import { ContaService } from 'src/app/service/conta.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MovimentacaoDTO } from 'src/app/entity/movimentacaoDTO.entity';
 import { DataUtils } from 'src/app/utils/data.utils';
+import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-conferencia',
@@ -35,7 +36,7 @@ export class ConferenciaComponent extends ScackBarCustomComponent implements  On
   listaHistorico: string[] = [];
   listaMovimentacao: Movimentacao[] = [];
   movimentacaoDTOAtualizada!: MovimentacaoDTO;
-
+  loading = true;
   listaEmpresa = [{ id:1, value: "Raça Distribuidora" },
                   { id:2, value: "Casa de Carnes"}
                 ];
@@ -61,8 +62,8 @@ export class ConferenciaComponent extends ScackBarCustomComponent implements  On
     ngAfterViewInit() {
       this.criarFormulario();
       this.getHistorico();
-      if(this.isArquivoCarregado()){
-        if(this.isListaImpostadaArquivo()){
+      if(this.isArquivoCarregado() === true){
+        if(this.isListaImpostadaArquivo() === true){
           this.listaSession =  JSON.parse(localStorage.getItem('importados') || '{}' );
           const lista = this.convertToDocumentoList(this.listaSession);
           this.listaMovimentacao = this.listaSession;
@@ -72,7 +73,7 @@ export class ConferenciaComponent extends ScackBarCustomComponent implements  On
           localStorage.setItem('cargaArquivo', '0')
         }
       }else{
-          this.getAll()
+          this.getAllExportadas()
       }
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
@@ -135,16 +136,24 @@ export class ConferenciaComponent extends ScackBarCustomComponent implements  On
 
   }
 
-  getAll(){
-    this.movimentacaoService.getAll().then( response => {
-      if (response.body.message) {
-        this.exibirMensagemErro('Falha na autenticação', response.body.message)
-      }
-
-      const lista = this.convertToDocumentoList(response.body);
+  getAllExportadas(){
+    this.movimentacaoService.getAllExportadas()
+    .pipe(
+      finalize(() => this.loading = false)
+    )
+    .toPromise()
+    .then((resposta) => {
+      // Continuar com a execução após a resposta.
+      const lista = this.convertToDocumentoList(resposta.body);
       this.dataSource = new MatTableDataSource<DocumentoDetalhes>(lista);
       this.dataSource.paginator = this.paginator;
     })
+    .catch((error) => {
+      // Lida com erros, se necessário.
+      console.error('Erro na chamada:', error);
+      this.exibirMensagemErro('Falha na autenticação', error.body.message)
+    });
+
   }
 
   convertToDocumentoList(listaEntry: any[]): DocumentoDetalhes[]{

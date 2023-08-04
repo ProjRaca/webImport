@@ -1,4 +1,4 @@
-import { HttpEvent, HttpRequest, HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpRequest, HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -49,4 +49,9 @@ export class MovimentacaoService {
     const req = new HttpRequest('POST', `${apiUrlMovimentacao}/exportar`,movimentacaoDTO);
     return await this.http.request(req).toPromise();
   }
+
+   getAllExportadas(): Observable<any>{
+    const req = new HttpRequest('GET',`${apiUrlMovimentacao}/ex`);
+    return this.http.request(req);
+   }
 }

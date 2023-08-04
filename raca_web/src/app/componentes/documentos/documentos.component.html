@@ -99,7 +99,7 @@
             <button mat-icon-button (click)="confirmDelete(item.id);" title="Exibir de documento">
               <mat-icon >delete_forever</mat-icon>
             </button>
-            <button mat-icon-button>
+            <button mat-icon-button (click)="visualizarDocumento(item.id)" title="Exibir detalhes do Documentos">
               <mat-icon class="icon">visibility</mat-icon>
             </button>
           </td>
@@ -111,6 +111,15 @@
   </mat-card>
 </div>
 
-<modal id="modalDocumento" [sizeType]="getSizeModal()">
+<modal id="modalDocumento" class="modal" [sizeType]="getSizeModal()">
+  <ngx-extended-pdf-viewer
+    [base64Src]="getBase64DocumentoCode()"
+    zoom="100%"
+    [height]="'60%'">
+  </ngx-extended-pdf-viewer>
+
+  <div style="text-align: right; margin-bottom: 10px; margin-top: 5px;">
+    <button mat-raised-button (click)="modalService.close();" color="primary">Fechar</button>
+  </div>
 
 </modal>

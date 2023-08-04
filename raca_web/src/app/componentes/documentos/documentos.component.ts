@@ -23,7 +23,7 @@ import { DataUtils } from 'src/app/utils/data.utils';
 export class DocumentosComponent extends ScackBarCustomComponent  implements OnInit {
 
   formulario!: FormGroup;
-
+  docBase64: string[] = [];
 
   responsavel!: string;
 
@@ -72,8 +72,8 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
   pesquisar(){
 
    if(this.formulario.status == 'INVALID') return;
-    let dtDocumento = DataUtils.convertDataStringToPtBrFormat(this.formulario.get('dtDocumento')?.value);
-    let dtValidade = DataUtils.convertDataStringToPtBrFormat(this.formulario.get('dtValidade')?.value);
+    let dtDocumento = this.formulario.get('dtDocumento') ? DataUtils.convertDataStringToPtBrFormat(this.formulario.get('dtDocumento')?.value) : '';
+    let dtValidade = this.formulario.get('dtValidade') ? DataUtils.convertDataStringToPtBrFormat(this.formulario.get('dtValidade')?.value) : '';
 
     let filter: DocumentoDTO = {
     datadocumentesc: dtDocumento || '',
@@ -177,6 +177,19 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
 
   detalhes(id: number){
 
+  }
+
+  visualizarDocumento(id: number){
+    console.log('Visualizar documento id => ',id);
+    var docs = this.documentos
+    .filter(documento => documento.id == id )
+     this.docBase64 = docs[0].documento!;
+    this.modalService.open('modalDocumento');
+
+  }
+
+  getBase64DocumentoCode(): string{
+    return this.docBase64 as any
   }
 
 }

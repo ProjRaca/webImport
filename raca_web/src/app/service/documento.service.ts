@@ -1,4 +1,4 @@
-import { HttpClient, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { DocumentoDTO } from '../entity/documento-dto.entity';
@@ -18,7 +18,16 @@ export class DocumentoService {
   }
 
   async findByFilter(filter: DocumentoDTO):Promise<any> {
-    const req = new HttpRequest('GET',`${apiUrl}/filter`, filter);
+
+
+    const options = {params: new HttpParams()
+                                            .set('datadocumentesc', filter.datadocumentesc || '' )
+                                            .set('datavalidade', filter.datavalidade || '' )
+                                            .set('emissor', filter.emissor || '' )
+                                            .set('filial', filter.filial || '' )
+                                            .set('iddocpai', filter.iddocpai || '' )
+                    }
+    const req = new HttpRequest('GET',`${apiUrl}/filter`, options);
     return await this.http.request(req).toPromise();
   }
 

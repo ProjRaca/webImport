@@ -20,6 +20,8 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
   formularioModal!: FormGroup;
   filteredOptions!: Observable<Responsavel[]>;
   empresaSelectedValue: string = '';
+  selectedFile: any = null;
+  formData = new FormData();
 
   listaEmpresa  = [ { id:1, value: "Raça Distribuidora"}, { id:2, value: "Casa de Carnes" } ]
   responsaveis: Responsavel[] = [];
@@ -35,7 +37,10 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
     { id: 7, value: 'Mdfe'},
     { id: 8, value: 'NF-e'},
     { id: 9, value: 'NFS_SE'}
-    ]
+  ]
+
+  currentFile?: File;
+  base64File: string[] = [];
 
   constructor(
     @Inject(FormBuilder) public formBuilder: FormBuilder,
@@ -64,7 +69,8 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
       tpDocumento: [''],
       docRestrito: [false],
       docPai: [''],
-      nomeDocumento: ['']
+      nomeDocumento: [''],
+      file: ['']
     });
     this.formularioModal.get('docRestrito')?.setValue(false)
   }
@@ -105,6 +111,7 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
       datavalidade: dataValidade,
       emissor: this.formularioModal.value?.nomeResponsavel,
       tipodocumento: this.formularioModal.value?.tpDocumento,
+      documento: this.base64File,
       restrito: this.formularioModal.value?.docRestrito,
       nome: this.formularioModal.value?.nomeDocumento
     };
@@ -123,8 +130,59 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
   getDocumentos(){
     this.serviceDocumento.findAll().then(response => {
       this.documentos = response.body;
-      console.log('documentos => ', this.documentos)
     })
   }
 
+  onFileChange(event: any): void {
+    let myfilename = '';
+
+    if (event.target.files.length > 0 && this.formularioModal != undefined ) {
+      this.currentFile = event.target.files[0];
+    }
+      Array.from(event.target.files).forEach((file: any) => {
+        console.log(file);
+        myfilename += file.name + ',';
+      });
+      const file = event.target.files[0];
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+
+       const base64String = e.target.result
+                .replace('data:', '')
+                .replace(/^.+,/, '');
+      this.base64File = base64String;
+      }
+      reader.readAsDataURL(file);
+
+
+
+  }
+
+  selectChange(event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+    const file = inputElement.files?.[0];
+
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = (e) => {
+        const fileContent = e.target?.result as string;
+        // Exiba o resultado para o usuário (opcional)
+        this.exibirMensagemSucesso('Arquivo PDF carregado com sucesso!', 'Fechar');
+        // Agora você pode salvar 'fileContent' (base64) no banco de dados.
+        console.log(fileContent);
+      };
+
+      reader.readAsDataURL(file);
+    }
+  }
+
 }
+
+export const toBase64 = (file: File) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });

@@ -1,5 +1,5 @@
 import { MovimentacaoService } from './../../service/movimentacao-service.service';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { FormBuilder } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';

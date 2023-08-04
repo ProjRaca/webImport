@@ -21,6 +21,7 @@
             </mat-select>
           </mat-form-field>
         </p>
+
         <p>
           <mat-form-field  class="input margen-min">
             <mat-label>Empresa</mat-label>
@@ -30,6 +31,7 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
+
           <mat-form-field  class="input margen-min">
             <mat-label>Responsável</mat-label>
             <input matInput
@@ -43,18 +45,18 @@
                   </mat-option>
             </mat-autocomplete>
           </mat-form-field>
+
           <mat-form-field  class="input-modal">
             <mat-label>Validade</mat-label>
             <input matInput formControlName="dtValidade" name="dtValidadeInsert" mask="00/00/0000">
           </mat-form-field>
         </p>
+
         <p>
           <mat-form-field  class="input-modal" >
             <mat-label>Data do Documento</mat-label>
             <input matInput formControlName="dtDocumento" name="dtDocumentoinsert" mask="00/00/0000">
           </mat-form-field>
-
-
 
           <mat-form-field  class="input-modal" >
             <mat-label>Tipo Documento</mat-label>
@@ -64,16 +66,18 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-form-field  class="input-modal" >
-            <mat-label>Selecione o Documento</mat-label>
-            <input matInput>
-          </mat-form-field>
+
 
         </p>
+        <div  class="input-modal">
+          <div>
+            <input  class="margen" required type="file" accept="application/pdf" matFileInput (change)="onFileChange($event)">
+            <section class="checkbox margen">
+              <mat-checkbox class="example-margin" name="documentoRestrito" formControlName="docRestrito">Doc Restrito</mat-checkbox>
+            </section>
+          </div>
+        </div>
 
-        <section class="checkbox">
-          <mat-checkbox class="example-margin" name="documentoRestrito" formControlName="docRestrito">Doc Restrito</mat-checkbox>
-        </section>
       </form>
       </mat-card-content>
     </div>

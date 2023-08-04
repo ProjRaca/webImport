@@ -55,7 +55,8 @@
 }
 
 .modal{
-  height: 550px !important;
+  height: auto !important;
+  padding: 5px !important;
 }
 
 .margen {

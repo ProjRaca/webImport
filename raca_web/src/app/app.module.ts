@@ -51,6 +51,8 @@ import { FilialPipe } from './pipes/tipo-filial.pipe';
 import { DocumentoPipe } from './pipes/tipo-documento.pipe';
 import { DocumentoRestritoPipe } from './pipes/documento-restrito.pipe';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
+import { PdfViewComponent } from './componentes/pdf-view/pdf-view.component';
 
 
 
@@ -76,7 +78,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
       ScackBarCustomComponent,
       DialogDeleteComponent,
       AutocompleteResponsavelComponent,
-      ModalcadastrodocumentoComponent
+      ModalcadastrodocumentoComponent,
+      PdfViewComponent
    ],
   imports: [
     BrowserModule,
@@ -108,7 +111,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     MatSlideToggleModule,
     AsyncPipe,
     MatProgressSpinnerModule,
-    NgxMaskModule.forRoot()
+    NgxMaskModule.forRoot(),
+    NgxExtendedPdfViewerModule
   ],
   providers: [ httpInterceptorProviders,
     {provide: [MAT_FORM_FIELD_DEFAULT_OPTIONS, HTTP_INTERCEPTORS], useValue: {appearance: 'outline'},
