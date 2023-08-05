@@ -1,2 +1,13 @@
-<ngx-extended-pdf-viewer  [base64Src]="getImagem()" >
-</ngx-extended-pdf-viewer>
+<modal id="modalPdf" class="modal" [sizeType]="getSizeModal()">
+  <ngx-extended-pdf-viewer
+    [showToolbar]="false"
+    [useBrowserLocale]="true"
+    [base64Src]="getImagem()"
+    zoom="100%"
+    [height]="'auto'">
+  </ngx-extended-pdf-viewer>
+
+  <div style="text-align: right; margin-bottom: 10px; margin-top: 5px;">
+    <button mat-raised-button (click)="modalService.close();" color="primary">Fechar</button>
+  </div>
+</modal>

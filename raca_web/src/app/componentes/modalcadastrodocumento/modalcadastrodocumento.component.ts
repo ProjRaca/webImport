@@ -41,6 +41,7 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
 
   currentFile?: File;
   base64File: string[] = [];
+  detalhes: boolean = false;
 
   constructor(
     @Inject(FormBuilder) public formBuilder: FormBuilder,
@@ -53,11 +54,15 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
   ngOnInit(): void {
     this.criarFormulario();
     this.getAllResponsaveis();
-    this.filteredOptions = this.formularioModal.get('nomeResponsavel')!.valueChanges.pipe(
-      startWith(''),
-      map(value => ( value ? this._filterReponsavel(value || '') : this.responsaveis.slice())),
-    );
-    this.getDocumentos();
+    if(this.detalhes === false){
+      this.filteredOptions = this.formularioModal.get('nomeResponsavel')!.valueChanges.pipe(
+        startWith(''),
+        map(value => ( value ? this._filterReponsavel(value || '') : this.responsaveis.slice())),
+      );
+      this.getDocumentos();
+    }else{
+      this.preencherFoumulario(this.documento);
+    }
   }
 
   criarFormulario(){
@@ -175,6 +180,11 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
 
       reader.readAsDataURL(file);
     }
+  }
+
+  preencherFoumulario(documento: DocumentoDTO){
+    this.formularioModal.get('nomeDocumento')?.setValue(documento.nome);
+
   }
 
 }

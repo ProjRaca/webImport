@@ -94,12 +94,16 @@
          <ng-container matColumnDef="Ações">
           <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
           <td mat-cell *matCellDef="let item">
-            <mat-icon class="icon" (click)="detalhes(item.id)" title="Exibir detalhes do Documentos">search</mat-icon>
-            <mat-icon class="icon">edit_square</mat-icon>
-            <button mat-icon-button (click)="confirmDelete(item.id);" title="Exibir de documento">
+            <button mat-icon-button>
+              <mat-icon class="icon" (click)="detalhes(item.id)" title="Exibir detalhes do Documentos">search</mat-icon>
+            </button>
+            <button mat-icon-button>
+              <mat-icon class="icon">edit_square</mat-icon>
+            </button>
+              <button mat-icon-button (click)="confirmDelete(item.id);" title="Exibir de documento">
               <mat-icon >delete_forever</mat-icon>
             </button>
-            <button mat-icon-button (click)="visualizarDocumento(item.id)" title="Exibir pdf do Documentos">
+            <button mat-icon-button (click)="visualizarDocumento(item.id)" title="Exibir pdf do Documento">
               <mat-icon class="icon">visibility</mat-icon>
             </button>
           </td>
@@ -111,15 +115,5 @@
   </mat-card>
 </div>
 
-<modal id="modalDocumento" class="modal" [sizeType]="getSizeModal()">
-  <ngx-extended-pdf-viewer
-    [base64Src]="getBase64DocumentoCode()"
-    zoom="100%"
-    [height]="'60%'">
-  </ngx-extended-pdf-viewer>
 
-  <div style="text-align: right; margin-bottom: 10px; margin-top: 5px;">
-    <button mat-raised-button (click)="modalService.close();" color="primary">Fechar</button>
-  </div>
-
-</modal>
+<pdf-view [base64File]="getBase64DocumentoCode()" ></pdf-view>

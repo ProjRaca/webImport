@@ -1,6 +1,6 @@
 import { Sizes } from './../../enums/sizes.enum';
 import { DocumentoInclusao } from './../../entity/documento-inclusao.entity';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ModalService } from 'src/app/service/modalService.service';
 import { ResponsavelService } from 'src/app/service/responsavel.service';
 import { Responsavel } from 'src/app/entity/responsavel.entity';
@@ -21,6 +21,8 @@ import { DataUtils } from 'src/app/utils/data.utils';
   styleUrls: ['./documentos.component.css'],
 })
 export class DocumentosComponent extends ScackBarCustomComponent  implements OnInit {
+
+  @Output() documentBase64Emitter = new EventEmitter<string[]>();
 
   formulario!: FormGroup;
   docBase64: string[] = [];
@@ -49,6 +51,9 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
     { id: 9, value: 'NFS_SE'}
     ]
 
+    page = 5;
+    spreadMode: "off" | "even" | "odd" = "off";
+
   constructor(
     protected modalService: ModalService,
     private formBuilder: FormBuilder,
@@ -72,15 +77,17 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
   pesquisar(){
 
    if(this.formulario.status == 'INVALID') return;
-    let dtDocumento = this.formulario.get('dtDocumento') ? DataUtils.convertDataStringToPtBrFormat(this.formulario.get('dtDocumento')?.value) : '';
-    let dtValidade = this.formulario.get('dtValidade') ? DataUtils.convertDataStringToPtBrFormat(this.formulario.get('dtValidade')?.value) : '';
+    let dtDocumento = this.formulario.get('dtDocumento')?.value != '' ? DataUtils.convertDataStringToPtBrFormat(this.formulario.get('dtDocumento')?.value) : '';
+    let dtValidade = this.formulario.get('dtValidade')?.value != '' ? DataUtils.convertDataStringToPtBrFormat(this.formulario.get('dtValidade')?.value) : '';
+    let nomeResponsavel = this.formulario.get('responsavel')?.value ;
+    let idResponsavel = this.responsaveis.filter(respo => respo.nome === nomeResponsavel )[0].id
 
     let filter: DocumentoDTO = {
-    datadocumentesc: dtDocumento || '',
-    datavalidade: dtValidade  || '',
-    emissor: this.formulario.get('responsavel')?.value  || '',
-    filial : this.formulario.get('empresa')?.value  || '',
-    iddocpai: undefined,
+      datadocumentesc: dtDocumento || '',
+      datavalidade: dtValidade  || '',
+      emissor: idResponsavel?.toString() || '' ,
+      filial : this.formulario.get('empresa')?.value  || '',
+      iddocpai: undefined,
     }
 
 
@@ -168,7 +175,6 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
     const dialogRef = this.dialog.open(DialogDeleteComponent);
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed', result);
       if(result === true){
         this.remover(id)
       }
@@ -177,15 +183,26 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
 
   detalhes(id: number){
 
+    var doc = this.documentos
+    .filter(documento => documento.id == id )[0]
+
+    const dialogRef = this.dialog.open(ModalcadastrodocumentoComponent,
+      {
+        height: '60%',
+        width: '60%',
+      });
+    dialogRef.componentInstance.detalhes = true;
+    dialogRef.componentInstance.documento = doc;
+
   }
 
   visualizarDocumento(id: number){
-    console.log('Visualizar documento id => ',id);
+
     var docs = this.documentos
     .filter(documento => documento.id == id )
      this.docBase64 = docs[0].documento!;
-    this.modalService.open('modalDocumento');
 
+    this.documentBase64Emitter.emit(this.docBase64);
   }
 
   getBase64DocumentoCode(): string{
