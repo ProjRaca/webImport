@@ -4,11 +4,12 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import { MatMenuModule} from '@angular/material/menu';
 import { MatButtonModule} from '@angular/material/button';
 import { MatDialogModule} from '@angular/material/dialog';
 import { MatCardModule} from '@angular/material/card';
-import { MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS} from '@angular/material/form-field';
+import { MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldControl} from '@angular/material/form-field';
 import { MatIconModule} from '@angular/material/icon';
 import { MatInputModule} from '@angular/material/input';
 import { MatDividerModule} from '@angular/material/divider';
@@ -80,6 +81,7 @@ import { PdfViewComponent } from './componentes/pdf-view/pdf-view.component';
       AutocompleteResponsavelComponent,
       ModalcadastrodocumentoComponent,
       PdfViewComponent
+
    ],
   imports: [
     BrowserModule,

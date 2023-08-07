@@ -5,7 +5,7 @@ export interface DocumentoDTO{
   datadocumentesc?: string,
   datavalidade?: string,
   emissor?: string
-  tipoDocumento?: string,
+  tipodocumento?: string,
   documento?: string[],
   restrito?: boolean,
   nome?: string

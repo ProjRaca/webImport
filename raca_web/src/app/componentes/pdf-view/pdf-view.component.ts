@@ -14,7 +14,7 @@ export class PdfViewComponent{
 
   @Input()
   set base64File(texto: any){
-    if(texto != undefined && texto.length > 0){
+    if(texto != null && texto.length > 0){
       this.setBase64File(texto);
     }
   }

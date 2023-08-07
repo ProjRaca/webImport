@@ -2,6 +2,7 @@ import { HttpClient, HttpParams, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { DocumentoDTO } from '../entity/documento-dto.entity';
+import { Observable } from 'rxjs';
 
 let apiUrl = environment.apiUrl+'/document'
 
@@ -12,9 +13,9 @@ export class DocumentoService {
 
   constructor(private http: HttpClient) { }
 
-  async findAll():Promise<any> {
+  findAll():Observable<any> {
     const req = new HttpRequest('GET',`${apiUrl}`);
-    return await this.http.request(req).toPromise();
+    return this.http.request(req);
   }
 
   async findByFilter(filter: DocumentoDTO):Promise<any> {

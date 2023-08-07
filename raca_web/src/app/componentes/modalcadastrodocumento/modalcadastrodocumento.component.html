@@ -6,7 +6,7 @@
   </mat-card-header>
   <div class="content" style="padding: 24px 24px;">
     <mat-card-content>
-      <form [formGroup]="formularioModal">
+      <form [formGroup]="formularioModal" *ngIf="!detalhes">
         <p>
           <mat-form-field  class="input-large">
             <mat-label>Nome do Documento</mat-label>
@@ -14,7 +14,7 @@
           </mat-form-field>
           <mat-form-field  class="input-large">
             <mat-label>Documento Pai</mat-label>
-            <mat-select formControlName="docPai" *ngIf="!detalhes">
+            <mat-select formControlName="docPai" >
               <mat-option *ngFor="let doc of documentos" [value]="doc.id">
                 {{doc.nome}}
               </mat-option>
@@ -80,13 +80,53 @@
         </div>
 
       </form>
+      <div *ngIf="detalhes">
+        <p>
+          <mat-form-field  class="input-large">
+            <mat-label>Nome do Documento</mat-label>
+            <input matInput [readonly]="documento.nome!==''"  [(ngModel)] = "documento.nome"/>
+          </mat-form-field>
+
+          <mat-form-field  class="input-large" *ngIf="documento.iddocpai !== null">
+            <mat-label>Documento Pai</mat-label>
+            <input matInput [readonly]="documento.iddocpai !== null" [(ngModel)]="nomeDocumentoPai"/>
+          </mat-form-field>
+
+          <mat-form-field  class="input-large" *ngIf="documento.filial !== null">
+            <mat-label>Empresa</mat-label>
+            <input matInput [readonly]="documento.filial !== null" [value]="nomeEmpresa"/>
+          </mat-form-field>
+          <mat-form-field  class="input-large" *ngIf="documento.emissor !== null">
+            <mat-label>Responsável</mat-label>
+            <input matInput [readonly]="documento.emissor !== null" [value]="documento.emissor"/>
+          </mat-form-field>
+
+          <mat-form-field  class="input-modal" *ngIf="documento.datavalidade !== null">
+            <mat-label>Validade</mat-label>
+            <input matInput [value]="dataValidade" [readonly]="detalhes">
+          </mat-form-field>
+
+          <mat-form-field  class="input-modal" *ngIf="documento.datadocumentesc !== null">
+            <mat-label>Data do Documento</mat-label>
+            <input matInput [value]="dataDocumento" [readonly]="detalhes">
+          </mat-form-field>
+
+          <mat-form-field  class="input-modal" *ngIf="tipoDocumentoDesc !== null">
+            <mat-label>Tipo Documento</mat-label>
+            <input matInput [value]="tipoDocumentoDesc" [readonly]="detalhes">
+          </mat-form-field>
+          <mat-form-field  class="input-modal" *ngIf="documentoRestritoDesc !== null">
+            <mat-label>Doc Restrito</mat-label>
+            <input matInput [value]="documentoRestritoDesc" [readonly]="detalhes">
+          </mat-form-field>
+        </p>
+    </div>
       </mat-card-content>
     </div>
     <div class="footer">
       <mat-card-footer>
         <button mat-raised-button  style="margin-right:50px !important;" mat-dialog-close>Cancelar</button>
-        <button mat-raised-button color="primary" style="margin-right:50px !important;" (click)="salvar()" [mat-dialog-close]="true" >Salvar</button>
+        <button mat-raised-button color="primary" style="margin-right:50px !important;" (click)="salvar()" [mat-dialog-close]="true" *ngIf="!detalhes" >Salvar</button>
       </mat-card-footer>
     </div>
   </mat-card>
-

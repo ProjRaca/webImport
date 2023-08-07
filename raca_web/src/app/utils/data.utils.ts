@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 export class DataUtils {
 
   /**
@@ -21,5 +22,10 @@ export class DataUtils {
     let ano = date.substring(2,8);
     return `${mes}/${ano}`;
 
+  }
+
+  public static formatarData(dataOriginal: string){
+    const dataObj = new Date(dataOriginal);
+    return format(dataObj, 'dd/MM/yyyy');
   }
 }

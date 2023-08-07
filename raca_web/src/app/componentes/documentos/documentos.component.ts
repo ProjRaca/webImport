@@ -153,9 +153,17 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
   }
 
   getDocumentos(){
-    this.serviceDocumento.findAll().then(response => {
-      this.documentos = response.body;
-    })
+    this.serviceDocumento.findAll()
+        .pipe()
+        .toPromise()
+        .then(response => {
+        this.documentos = response.body;
+      })
+      .catch((error) => {
+        // Lida com erros, se necessário.
+        console.error('Erro na chamada:', error);
+        this.exibirMensagemErro('Ocorreu um erro ao realizar chamada', error.body.message)
+      })
   }
 
   remover(id: any){
