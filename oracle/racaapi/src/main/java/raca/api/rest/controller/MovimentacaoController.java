@@ -16,7 +16,7 @@ import raca.api.service.MovimentacaoService;
 import javax.validation.Valid;
 import java.util.List;
 
-@CrossOrigin("http://localhost:4200")
+@CrossOrigin("*")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/movimentacao")

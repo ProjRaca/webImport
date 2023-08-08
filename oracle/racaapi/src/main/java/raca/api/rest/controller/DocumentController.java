@@ -15,7 +15,7 @@ import raca.api.service.DocumentService;
 import javax.validation.Valid;
 import java.util.List;
 
-@CrossOrigin("http://localhost:4200")
+@CrossOrigin("*")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/document")
@@ -30,16 +30,17 @@ public class DocumentController {
             @ApiResponse(code = 200, message = "Listagem exibida com sucesso"),
             @ApiResponse(code = 400, message = "Erro de validação")
     })
-    public List<DocumentoDTO> getFilterDocument(@RequestParam("id") Integer id,
-                                                @RequestParam("filial") String filial,
-                                                @RequestParam("emissor") String emissor,
-                                                @RequestParam("datadocumentesc") String datadocumentesc,
-                                                @RequestParam("datavalidade") String datavalidade,
-                                                @RequestParam("tipodocumento") String tipodocumento,
-                                                @RequestParam("iddocpai") Integer iddocpai,
-                                                @RequestParam("restrito") boolean restrito,
-                                                @RequestParam("nome") String nome) {
-        return documentService.getFilterDocument(id, filial, emissor, datadocumentesc, datavalidade,tipodocumento, iddocpai, restrito, nome);
+    public List<DocumentoDTO> getFilterDocument(@RequestParam(value = "id", required = false) Integer id,
+                                                @RequestParam(value = "filial", required = false) String filial,
+                                                @RequestParam(value = "emissor", required = false) String emissor,
+                                                @RequestParam(value = "datadocumentesc", required = false) String datadocumentesc,
+                                                @RequestParam(value = "datavalidade", required = false) String datavalidade,
+                                                @RequestParam(value = "tipodocumento", required = false) String tipodocumento,
+                                                @RequestParam(value = "iddocpai", required = false) Integer iddocpai,
+                                                @RequestParam(value = "restrito", required = false, defaultValue = "false") Boolean restrito,
+                                                @RequestParam(value = "nome", required = false) String nome) {
+
+        return documentService.getFilterDocument(id, filial, emissor, datadocumentesc, datavalidade, tipodocumento, iddocpai, restrito, nome);
     }
 
     @GetMapping
@@ -74,8 +75,23 @@ public class DocumentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> excluir(@PathVariable Integer id){
-        documentService.excluir(id);
+    public ResponseEntity<HttpStatus> excluir(@PathVariable Integer id){
+        boolean excluido = documentService.excluir(id);
+
+        if (excluido) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DocumentoDTO> getId(@PathVariable Integer id){
+        DocumentoDTO dto = documentService.getId(id);
+        if(dto != null){
+            return ResponseEntity.ok(dto);
+        }
         return ResponseEntity.noContent().build();
     }
+
 }

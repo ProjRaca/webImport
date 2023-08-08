@@ -15,7 +15,7 @@ import raca.api.service.ContasService;
 import java.util.ArrayList;
 import java.util.List;
 
-@CrossOrigin("http://localhost:4200")
+@CrossOrigin("*")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/contas")

@@ -22,12 +22,14 @@ public class DocumentoDTO {
 
     private String tipodocumento;
 
-    private byte[] documento;
-
     private Integer iddocpai;
 
     private boolean restrito;
 
     private String nome;
+
+    private String nomepai;
+
+    private byte[] documento;
 
 }

@@ -7,7 +7,8 @@ import javax.persistence.criteria.Predicate;
 import java.time.LocalDate;
 public class DocumentoSpecifications {
 
-    public static Specification<Documento> withFilters(String filial,
+    public static Specification<Documento> withFilters(Integer id,
+                                                       String filial,
                                                        String emissor,
                                                        LocalDate datadocumentesc,
                                                        LocalDate datavalidade,
@@ -17,6 +18,10 @@ public class DocumentoSpecifications {
                                                        String nome) {
         return (root, query, criteriaBuilder) -> {
             Predicate predicate = criteriaBuilder.conjunction();
+
+            if (id != null) {
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("id"), id));
+            }
 
             if (filial != null) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("filial"), filial));
@@ -42,7 +47,9 @@ public class DocumentoSpecifications {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("iddocpai"), iddocpai));
             }
 
-            predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("restrito"), restrito));
+            if(restrito != false){
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("restrito"), restrito));
+            }
 
             if (nome != null) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("nome"), nome));

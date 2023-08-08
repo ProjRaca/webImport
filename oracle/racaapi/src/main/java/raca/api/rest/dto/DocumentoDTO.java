@@ -16,8 +16,9 @@ public class DocumentoDTO {
     private Date datadocumentesc;
     private Date datavalidade;
     private String tipodocumento;
-    private byte[] documento;
     private Integer iddocpai;
     private boolean restrito;
     private String nome;
+    private String nomepai;
+    private byte[] documento;
 }

@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin("http://localhost:4200")
+@CrossOrigin("*")
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/responsavel")

@@ -26,6 +26,8 @@ public interface DocumentService {
 
     DocumentoDTO update(DocumentoDTO doc);
 
-    void excluir(Integer id);
+    boolean excluir(Integer id);
+
+    DocumentoDTO getId(Integer id);
 
 }

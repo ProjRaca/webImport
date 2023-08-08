@@ -4,12 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import raca.api.domain.entity.Documento;
-import raca.api.domain.entity.Movimentacao;
 import raca.api.repository.DocumentRepository;
-import raca.api.repository.DocumentoDAO;
 import raca.api.repository.DocumentoSpecifications;
 import raca.api.rest.dto.DocumentoDTO;
-import raca.api.rest.filter.FilterDocumentDTO;
 import raca.api.service.DocumentService;
 
 import java.text.SimpleDateFormat;
@@ -18,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -26,7 +24,6 @@ public class DocumentoServiceImpl implements DocumentService {
 
     private final DocumentRepository documentRepository;
 
-    private final raca.api.repository.DocumentoDAO documentoDAO;
 
     @Override
     public List<?> toList(Iterator<?> iterator) {
@@ -37,13 +34,6 @@ public class DocumentoServiceImpl implements DocumentService {
     public List<DocumentoDTO> getAllMDocumentos() {
         List<Documento> all = documentRepository.findAll();
         return getDocumentoDTOS(all);
-    }
-
-    @Override
-    public List<DocumentoDTO> getFilterDocument(FilterDocumentDTO filter) {
-        List<Documento> documentos = documentoDAO.buscarPorFiltros(filter.getFilial(), filter.getEmissor(),
-                filter.getDatadocumentesc(), filter.getDatavalidade());
-        return getDocumentoDTOS(documentos);
     }
 
     private static List<DocumentoDTO> getDocumentoDTOS(List<Documento> documentsByFilter) {
@@ -77,9 +67,16 @@ public class DocumentoServiceImpl implements DocumentService {
     }
 
     @Override
-    public void excluir(Integer id) {
-          documentRepository.deleteById(id);
+    public boolean excluir(Integer id) {
+        try {
+            documentRepository.deleteById(id);
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return false;
     }
+
 
     private Documento getDocument(DocumentoDTO doc){
         Documento documento = new Documento();
@@ -113,7 +110,11 @@ public class DocumentoServiceImpl implements DocumentService {
         documento.setDatadocumentesc(doc.getDatadocumentesc());
         documento.setDocumento(doc.getDocumento());
         documento.setTipodocumento(doc.getTipodocumento());
-        documento.setIddocpai(doc.getIddocpai());
+        if(doc.getIddocpai() != null){
+            Optional<Documento> byId = documentRepository.findById(doc.getIddocpai());
+            documento.setIddocpai(doc.getIddocpai());
+            documento.setNomepai(byId.get().getNome());
+        }
         documento.setNome(doc.getNome());
         documento.setRestrito(doc.isRestrito());
         return documento;
@@ -121,13 +122,23 @@ public class DocumentoServiceImpl implements DocumentService {
 
     public List<DocumentoDTO> getFilterDocument(Integer id, String filial, String emissor, String datadocumentesc, String datavalidade, String tipodocumento, Integer iddocpai, boolean restrito, String nome) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String datadocument = new SimpleDateFormat("yyyy-MM-dd").format(datadocumentesc);
-        LocalDate datadocumento = LocalDate.parse(datadocument, formatter);
+        String datadocument = "";
+        LocalDate datadocumento = null;
+        if(datadocumentesc != null){
+            datadocument = new SimpleDateFormat("yyyy-MM-dd").format(datadocumentesc);
+            datadocumento = LocalDate.parse(datadocument, formatter);
+        }
+        String datavalidadeFilter = "";
+        LocalDate datavalidadeFilt = null;
 
-        String datavalidadeFilter = new SimpleDateFormat("yyyy-MM-dd").format(datavalidade);
-        LocalDate datavalidadeFilt = LocalDate.parse(datavalidadeFilter, formatter);
+        if(datavalidade != null){
+            datavalidadeFilter = new SimpleDateFormat("yyyy-MM-dd").format(datavalidade);
+            datavalidadeFilt = LocalDate.parse(datavalidadeFilter, formatter);
+        }
 
-        Specification<Documento> spec = DocumentoSpecifications.withFilters(filial,
+
+
+        Specification<Documento> spec = DocumentoSpecifications.withFilters(id, filial,
                 emissor,
                 datadocumento,
                 datavalidadeFilt,
@@ -140,6 +151,12 @@ public class DocumentoServiceImpl implements DocumentService {
         return documentos.stream().map(documento -> {
             return getDocumentDTO(documento);
         }).collect(Collectors.toList());
+    }
+
+    @Override
+    public DocumentoDTO getId(Integer id) {
+        Optional<Documento> one = documentRepository.findById(id);
+        return getDocumentDTO(one.get());
     }
 
 

@@ -31,16 +31,17 @@ public class DocumentController {
             @ApiResponse(code = 200, message = "Listagem exibida com sucesso"),
             @ApiResponse(code = 400, message = "Erro de validação")
     })
-    public List<DocumentoDTO> getFilterDocument(@RequestParam("id") Integer id,
-                                                @RequestParam("filial") String filial,
-                                                @RequestParam("emissor") String emissor,
-                                                @RequestParam("datadocumentesc") String datadocumentesc,
-                                                @RequestParam("datavalidade") String datavalidade,
-                                                @RequestParam("tipodocumento") String tipodocumento,
-                                                @RequestParam("iddocpai") Integer iddocpai,
-                                                @RequestParam("restrito") boolean restrito,
-                                                @RequestParam("nome") String nome) {
-        return documentService.getFilterDocument(id, filial, emissor, datadocumentesc, datavalidade,tipodocumento, iddocpai, restrito, nome);
+    public List<DocumentoDTO> getFilterDocument(@RequestParam(value = "id", required = false) Integer id,
+                                                @RequestParam(value = "filial", required = false) String filial,
+                                                @RequestParam(value = "emissor", required = false) String emissor,
+                                                @RequestParam(value = "datadocumentesc", required = false) String datadocumentesc,
+                                                @RequestParam(value = "datavalidade", required = false) String datavalidade,
+                                                @RequestParam(value = "tipodocumento", required = false) String tipodocumento,
+                                                @RequestParam(value = "iddocpai", required = false) Integer iddocpai,
+                                                @RequestParam(value = "restrito", required = false, defaultValue = "false") Boolean restrito,
+                                                @RequestParam(value = "nome", required = false) String nome) {
+
+        return documentService.getFilterDocument(id, filial, emissor, datadocumentesc, datavalidade, tipodocumento, iddocpai, restrito, nome);
     }
 
     @GetMapping
