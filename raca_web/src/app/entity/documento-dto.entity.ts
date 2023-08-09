@@ -8,5 +8,6 @@ export interface DocumentoDTO{
   tipodocumento?: string,
   documento?: string[],
   restrito?: boolean,
-  nome?: string
+  nome?: string,
+  nomepai?: string
 }

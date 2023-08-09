@@ -18,18 +18,31 @@ export class DocumentoService {
     return this.http.request(req);
   }
 
-  async findByFilter(filter: DocumentoDTO):Promise<any> {
+  findByFilter(filter: DocumentoDTO): Observable<any>{
 
 
-    const options = {params: new HttpParams()
-                                            .set('datadocumentesc', filter.datadocumentesc || '' )
-                                            .set('datavalidade', filter.datavalidade || '' )
-                                            .set('emissor', filter.emissor || '' )
-                                            .set('filial', filter.filial || '' )
-                                            .set('iddocpai', filter.iddocpai || '' )
-                    }
+    let parametros = new HttpParams();
+    parametros = this.getCondictionalParams(filter, parametros);
+
+    const options = {params: parametros}
     const req = new HttpRequest('GET',`${apiUrl}/filter`, options);
-    return await this.http.request(req).toPromise();
+    return this.http.request(req);
+  }
+
+  private getCondictionalParams(filter: any, parametros: HttpParams): HttpParams {
+    if (filter.id != '')
+      parametros = parametros.append('id', filter.id);
+    if (filter.datadocumentesc != undefined)
+      parametros = parametros.append('datadocumentesc', filter.datadocumentesc);
+    if (filter.datavalidade != undefined)
+      parametros = parametros.append('datavalidade', filter.datavalidade);
+    if (filter.emissor != undefined)
+      parametros = parametros.append('emissor', filter.emissor);
+    if (filter.filial != undefined)
+      parametros = parametros.append('filial', filter.filial);
+    if (filter.iddocpai != undefined)
+      parametros = parametros.append('iddocpai', filter.iddocpai);
+    return parametros;
   }
 
   async save(filter: DocumentoDTO):Promise<any> {

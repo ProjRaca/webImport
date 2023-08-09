@@ -115,7 +115,6 @@ export class ConferenciaComponent extends ScackBarCustomComponent implements  On
       this.movimentacaoDTOAtualizada = response.body;
       this.dataSource = new MatTableDataSource<DocumentoDetalhes>(lista);
       this.dataSource.paginator = this.paginator;
-      console.log('Retorno Atualizar ==> ', this.movimentacaoDTOAtualizada)
     })
 
   }
@@ -131,7 +130,6 @@ export class ConferenciaComponent extends ScackBarCustomComponent implements  On
       this.movimentacaoDTOAtualizada = response.body;
       this.dataSource = new MatTableDataSource<DocumentoDetalhes>(lista);
       this.dataSource.paginator = this.paginator;
-      console.log('Retorno transferida ==> ', this.movimentacaoDTOAtualizada)
     })
 
   }

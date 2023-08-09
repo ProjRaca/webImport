@@ -5,7 +5,7 @@ import { ModalService } from 'src/app/service/modalService.service';
 import { ResponsavelService } from 'src/app/service/responsavel.service';
 import { Responsavel } from 'src/app/entity/responsavel.entity';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Observable, map, startWith } from 'rxjs';
+import { Observable, finalize, map, startWith } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalcadastrodocumentoComponent } from '../modalcadastrodocumento/modalcadastrodocumento.component';
 import { DocumentoService } from 'src/app/service/documento.service';
@@ -14,6 +14,7 @@ import { DialogDeleteComponent } from '../dialogDelete/dialog-delete.component';
 import { ScackBarCustomComponent } from '../scack-bar-custom/scack-bar-custom.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DataUtils } from 'src/app/utils/data.utils';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-documentos',
@@ -90,15 +91,17 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
       iddocpai: undefined,
     }
 
-
-    this.serviceDocumento.findByFilter(filter).then( response => {
-      if (!response.ok) {
-        this.exibirMensagemErro('Falha na autenticação','Usuário ou senha incorretos.');
-      }
-      this.documentos = response.body;
-
+    this.serviceDocumento.findByFilter(filter)
+    .pipe()
+    .toPromise()
+    .then((resposta) => {
+      this.documentos = resposta.body
+    })
+    .catch((error) => {
+      // Lida com erros, se necessário.
+      console.error('Erro na chamada:', error);
+      this.exibirMensagemErro('Falha na autenticação', error.body.message)
     });
-
     this.formulario.reset();
   }
 
@@ -191,17 +194,76 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
 
   detalhes(id: number){
 
-    var doc = this.documentos
-    .filter(documento => documento.id == id )[0]
+    var doc: DocumentoDTO = {
+      id: id
+    }
+    this.serviceDocumento.findByFilter(doc)
+    .pipe()
+    .toPromise()
+    .then((resposta) => {
+      if (resposta.body.length > 0){
 
+        doc = resposta.body[0]
+        this.callDialogDetalhes(doc);
+      }
+    })
+    .catch((error) => {
+      // Lida com erros, se necessário.
+      console.error('Erro na chamada:', error);
+      this.exibirMensagemErro('Falha na autenticação', error.body.message)
+    });
+
+
+  }
+
+  private callDialogDetalhes(doc: DocumentoDTO) {
     const dialogRef = this.dialog.open(ModalcadastrodocumentoComponent,
       {
         height: '60%',
         width: '60%',
       });
     dialogRef.componentInstance.detalhes = true;
+    dialogRef.componentInstance.update = false;
+    dialogRef.componentInstance.documento = doc;
+  }
+
+  editar(id: number){
+    var doc: DocumentoDTO = {
+      id: id
+    };
+
+    this.serviceDocumento.findByFilter(doc)
+    .pipe()
+    .toPromise()
+    .then((resposta) => {
+      if (resposta.body.length > 0){
+        doc = resposta.body[0]
+        this.callDialogEditar(doc);
+      }
+    })
+    .catch((error) => {
+      // Lida com erros, se necessário.
+      console.error('Erro na chamada:', error);
+      this.exibirMensagemErro('Falha na autenticação', error.body.message)
+    });
+  }
+
+  private callDialogEditar(doc: DocumentoDTO) {
+    const dialogRef = this.dialog.open(ModalcadastrodocumentoComponent,
+      {
+        height: '60%',
+        width: '60%',
+      });
+    dialogRef.componentInstance.detalhes = false;
+    dialogRef.componentInstance.update = true;
     dialogRef.componentInstance.documento = doc;
 
+    dialogRef.afterClosed().subscribe(result => {
+      if(result === true){
+        this.getDocumentos();
+        this.exibirMensagemSucesso('O registro foi alterado com sucesso','');
+      }
+    });
   }
 
   visualizarDocumento(id: number){

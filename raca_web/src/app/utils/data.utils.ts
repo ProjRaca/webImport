@@ -28,4 +28,18 @@ export class DataUtils {
     const dataObj = new Date(dataOriginal);
     return format(dataObj, 'dd/MM/yyyy');
   }
+
+    /**
+   *  recebe uma string com dia mes e ano 12/10/2023 e devolve juntos (12102023)
+   * @param date format param 12102023
+   */
+    public static convertDataStringToReversePtBrFormat(date: string): string{
+      if(date.length > 0 && date != undefined){
+        let ano = date.substring(0,4);
+        let mes = date.substring(5,7);
+        let dia = date.substring(8,10);
+        return `${dia}${mes}${ano}`;
+      }
+      return '';
+    }
 }

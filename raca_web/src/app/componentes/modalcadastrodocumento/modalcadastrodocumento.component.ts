@@ -19,9 +19,9 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
 
   @Output() documentBase64Emitter = new EventEmitter<string[]>();
 
+  tituloModal: string = '';
   formularioModal!: FormGroup;
   filteredOptions!: Observable<Responsavel[]>;
-  empresaSelectedValue: string = '';
   selectedFile: any = null;
   formData = new FormData();
   nomeEmpresa: string = '';
@@ -52,6 +52,7 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
   currentFile?: File;
   base64File: string[] = [];
   detalhes: boolean = false;
+  update: boolean = false;
 
   constructor(
     @Inject(FormBuilder) public formBuilder: FormBuilder,
@@ -62,76 +63,53 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
     }
 
   ngOnInit(): void {
-    this.getAllResponsaveis();
-    if(this.detalhes === false){
+    this.selecionarNomeModal();
+    if(this.isCadastro()){
+      this.getAllResponsaveis();
       this.getDocumentos();
       this.criarFormulario();
       this.filteredOptions = this.formularioModal.get('nomeResponsavel')!.valueChanges.pipe(
         startWith(''),
         map(value => ( value ? this._filterReponsavel(value || '') : this.responsaveis.slice())),
       );
-    }else{
+    }else if(this.isDetalhes()){
       this.carregarDadosDetalhes();
+    } else if (this.isUpdate()){
+      this.getDocumentos();
+      this.criarFormularioUpdate(this.documento);
     }
-  }
-
-  private carregarDadosDetalhes() {
-
-    sleep(5000);
-    this.criarFormularioDetalhes(this.documento);
-    console.log('Documento Destalhes ==> ', this.documento);
-    this.nomeEmpresa = this.listaEmpresa.filter(emp => emp.id === Number(this.documento.filial))[0].value;
-    this.dataDocumento = DataUtils.formatarData(this.documento.datadocumentesc as string);
-    this.dataValidade = DataUtils.formatarData(this.documento.datavalidade as string);
-    this.tipoDocumentoDesc = this.tipoDocumento.filter(tp => tp.id === Number(this.documento.tipodocumento))[0].value;
-    this.documentoRestritoDesc = this.documento.restrito === true ? 'Sim' : 'Não';
-    this.documentoBase64 = this.documento.documento || [];
-    this.serviceDocumento.findAll()
-      .pipe()
-      .toPromise()
-      .then(response => {
-      this.documentos = response.body;
-      console.log('Documentos =>', this.documentos);
-      this.nomeDocumentoPai = this.documentos.filter(doc => doc.id == this.documento.iddocpai)[0].nome || 'teste';
-    })
-    .catch((error) => {
-      // Lida com erros, se necessário.
-      console.error('Erro na chamada:', error);
-      this.exibirMensagemErro('Ocorreu um erro ao realizar chamada', error.body.message)
-    })
-
   }
 
   criarFormulario(){
       this.formularioModal = this.formBuilder.group({
-      empresa: [''],
-      dtDocumento: [''],
-      dtValidade: [''],
-      nomeResponsavel: '',
-      tpDocumento: [''],
-      docRestrito: [false],
-      docPai: [''],
-      nomeDocumento: [''],
-      file: ['']
+        empresaForm: [''],
+        dtDocumento: [''],
+        dtValidade: [''],
+        nomeResponsavel: '',
+        tpDocumento: [''],
+        docRestrito: [false],
+        docPai: [''],
+        nomeDocumento: [''],
+        file: ['']
     });
     this.formularioModal.get('docRestrito')?.setValue(false)
   }
 
-  criarFormularioDetalhes(documento: DocumentoDTO){
-    this.formularioModal = this.formBuilder.group({
-    empresa: new FormControl({value: documento.filial, disabled: true} ),
-    dtDocumento: new FormControl({value: documento.datadocumentesc, disabled: true}),
-    dtValidade: new FormControl({value: documento.datavalidade, disabled: true}),
-    nomeResponsavel: new FormControl({value: documento.emissor, disabled: true}),
-    tpDocumento: new FormControl({value: documento.tipodocumento, disabled: true}),
-    docRestrito: new FormControl({value: documento.restrito, disabled: true}),
-    docPai: new FormControl({value: documento.iddocpai, disabled: true}),
-    nomeDocumento: new FormControl({value: documento.nome, disabled: true}),
-    file: new FormControl({value: documento.documento, disabled: true}),
-  });
-  //this.formularioModal.get('docRestrito')?.setValue(false)
- }
-
+  criarFormularioUpdate(documento: DocumentoDTO){
+    let dataDocumento = DataUtils.convertDataStringToReversePtBrFormat( documento.datadocumentesc?.toString() || '' );
+    let dataValidade = DataUtils.convertDataStringToReversePtBrFormat( documento.datavalidade?.toString() || '' );
+      this.formularioModal = this.formBuilder.group({
+        empresaForm: [documento.filial],
+        dtDocumento: [  dataDocumento],
+        dtValidade: [  dataValidade],
+        nomeResponsavel: [  documento.emissor],
+        tpDocumento: [  documento.tipodocumento],
+        docRestrito: [  documento.restrito],
+        docPai: [  documento.iddocpai],
+        nomeDocumento: [  documento.nome],
+        file: [  documento.documento],
+    });
+  }
 
   getAllResponsaveis(){
     this.responsavelService.findAll().then(response => {
@@ -161,9 +139,9 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
     let dataValidade = DataUtils.convertDataStringToPtBrFormat( this.formularioModal.value?.dtValidade );
 
     if(this.formularioModal.status == 'INVALID') return;
-    let documentoInclusao = {
+    var documentoInclusao = {
       iddocpai: this.formularioModal.value?.docPai,
-      filial: this.formularioModal.value?.empresa,
+      filial: this.formularioModal.value?.empresaForm,
       datadocumentesc: dataDocumento,
       datavalidade: dataValidade,
       emissor: this.formularioModal.value?.nomeResponsavel,
@@ -172,7 +150,17 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
       restrito: this.formularioModal.value?.docRestrito,
       nome: this.formularioModal.value?.nomeDocumento
     };
-    this.serviceDocumento.save(documentoInclusao).then( response => {
+    if(this.documento.id != undefined){
+      Object.assign(documentoInclusao,{id:this.documento.id });
+      console.log('Update ==>', documentoInclusao)
+      this.serviceDocumento.update(documentoInclusao).then( response =>{
+        if (!response.ok) {
+          this.exibirMensagemErro('Ocorreu um erro ao tentar atualizar movimentação', 'Verifique seus dados.')
+        }else
+          this.formularioModal.reset();
+      })
+    }else
+      this.serviceDocumento.save(documentoInclusao).then( response => {
       if (!response.ok) {
         this.exibirMensagemErro('Ocorreu um erro ao tentar atualizar movimentação', 'Verifique seus dados.')
       }else
@@ -190,7 +178,6 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
       .toPromise()
       .then(response => {
       this.documentos = response.body;
-      console.log('Documentos', this.documentos)
     })
     .catch((error) => {
        // Lida com erros, se necessário.
@@ -206,7 +193,6 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
       this.currentFile = event.target.files[0];
     }
       Array.from(event.target.files).forEach((file: any) => {
-        console.log(file);
         myfilename += file.name + ',';
       });
       const file = event.target.files[0];
@@ -219,9 +205,6 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
       this.base64File = base64String;
       }
       reader.readAsDataURL(file);
-
-
-
   }
 
   selectChange(event: Event): void {
@@ -236,7 +219,6 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
         // Exiba o resultado para o usuário (opcional)
         this.exibirMensagemSucesso('Arquivo PDF carregado com sucesso!', 'Fechar');
         // Agora você pode salvar 'fileContent' (base64) no banco de dados.
-        console.log(fileContent);
       };
 
       reader.readAsDataURL(file);
@@ -249,6 +231,47 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
 
   getBase64DocumentoCode(): string{
     return this.documentoBase64 as any
+  }
+
+  private isCadastro() {
+    return this.detalhes === false && this.update === false;
+  }
+
+  private isDetalhes() {
+    return this.detalhes === true && this.update === false;
+  }
+
+  private isUpdate() {
+    return this.detalhes === false && this.update === true;
+  }
+
+  private carregarDadosDetalhes() {
+    sleep(5000);
+    this.nomeEmpresa = this.listaEmpresa.filter(emp => emp.id === Number(this.documento.filial))[0].value;
+    this.dataDocumento = DataUtils.formatarData(this.documento.datadocumentesc as string);
+    this.dataValidade = DataUtils.formatarData(this.documento.datavalidade as string);
+    this.tipoDocumentoDesc = this.tipoDocumento.filter(tp => tp.id === Number(this.documento.tipodocumento))[0].value;
+    this.documentoRestritoDesc = this.documento.restrito === true ? 'Sim' : 'Não';
+    this.nomeDocumentoPai = this.documento.nomepai || '';
+    this.documentoBase64 = this.documento.documento || [];
+  }
+
+  private selecionarNomeModal(){
+        if(!this.detalhes && !this.update){
+          this.tituloModal = "Cadastro de Documentos"
+        } else if(!this.detalhes && this.update){
+          this.tituloModal = "Editar de Documentos"
+        }  else if(this.detalhes && !this.update){
+          this.tituloModal = "Detalhes de Documentos"
+        }
+  }
+
+  compareValues(value1: any, value2: any): boolean {
+    return Number(value1) === Number(value2); //adicione sua logica aqui
+  }
+
+  compareValuesCompany(value1: any, value2: any): boolean {
+    return Number(value1) === Number(value2); //adicione sua logica aqui
   }
 
 }
