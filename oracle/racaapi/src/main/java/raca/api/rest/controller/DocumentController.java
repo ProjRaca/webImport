@@ -37,11 +37,13 @@ public class DocumentController {
                                                 @RequestParam(value = "datavalidade", required = false) String datavalidade,
                                                 @RequestParam(value = "tipodocumento", required = false) String tipodocumento,
                                                 @RequestParam(value = "iddocpai", required = false) Integer iddocpai,
-                                                @RequestParam(value = "restrito", required = false, defaultValue = "false") Boolean restrito,
+                                                @RequestParam(value = "restrito", required = false) Boolean restrito,
                                                 @RequestParam(value = "nome", required = false) String nome,
-                                                @RequestParam(value = "datafim", required = false) String datafim) {
+                                                @RequestParam(value = "datafim", required = false) String datafim,
+                                                @RequestParam(value = "datafimvalidade", required = false) String datafimvalidade) {
 
-        return documentService.getFilterDocument(id, filial, emissor, datadocumentesc, datavalidade, tipodocumento, iddocpai, restrito, nome, datafim);
+        return documentService.getFilterDocument(id, filial, emissor, datadocumentesc, datavalidade,
+                tipodocumento, iddocpai, restrito, nome, datafim, datafimvalidade);
     }
 
     @GetMapping
@@ -66,7 +68,7 @@ public class DocumentController {
     }
 
     @PutMapping
-    public ResponseEntity<DocumentoDTO> update(@RequestBody @Valid DocumentoDTO dto){
+    public ResponseEntity<DocumentoDTO> update(@RequestBody DocumentoDTO dto){
         DocumentoDTO updatedDocumento = documentService.update(dto);
         if (updatedDocumento != null) {
             return ResponseEntity.ok(updatedDocumento);

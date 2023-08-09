@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -23,9 +24,9 @@ public class Documento {
     @Column
     private String emissor;
     @Column
-    private Date datadocumentesc;
+    private LocalDate datadocumentesc;
     @Column
-    private Date datavalidade;
+    private LocalDate datavalidade;
 
     @Column
     private String tipodocumento;

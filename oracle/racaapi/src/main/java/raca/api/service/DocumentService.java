@@ -21,7 +21,8 @@ public interface DocumentService {
                                          Integer iddocpai,
                                          boolean restrito,
                                          String nome,
-                                         String datafim);
+                                         String datafim,
+                                         String datafimvalidade);
 
     DocumentoDTO salvar(DocumentoDTO doc);
 

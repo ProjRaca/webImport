@@ -1,6 +1,7 @@
 package raca.api.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import raca.api.domain.entity.postgres.Documento;
@@ -32,7 +33,7 @@ public class DocumentoServiceImpl implements DocumentService {
 
     @Override
     public List<DocumentoDTO> getAllMDocumentos() {
-        List<Documento> all = documentRepository.findAll();
+        List<Documento> all = documentRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
         return getDocumentoDTOS(all);
     }
 
@@ -63,7 +64,8 @@ public class DocumentoServiceImpl implements DocumentService {
 
     @Override
     public DocumentoDTO update(DocumentoDTO doc) {
-        return salvar(doc);
+        Documento save = documentRepository.save(getDocument(doc));
+        return getDocumentDTO(save);
     }
 
     @Override
@@ -91,6 +93,7 @@ public class DocumentoServiceImpl implements DocumentService {
         documento.setIddocpai(doc.getIddocpai());
         documento.setNome(doc.getNome());
         documento.setRestrito(doc.isRestrito());
+        documento.setId(doc.getId());
         return documento;
     }
 
@@ -115,40 +118,19 @@ public class DocumentoServiceImpl implements DocumentService {
     }
 
     public List<DocumentoDTO> getFilterDocument(Integer id, String filial, String emissor, String datadocumentesc, String datavalidade,
-                                                    String tipodocumento, Integer iddocpai, boolean restrito, String nome, String datafim) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-
-        String datadocument = "";
-        LocalDate datadocumento = null;
-        if(datadocumentesc != null){
-           // datadocument =   LocalDate.parse(datadocumentesc, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            datadocumento =   LocalDate.parse(datadocumentesc, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        }
-
-        String datavalidadeFilter = "";
-        LocalDate datavalidadeFilt = null;
-        if(datavalidade != null){
-           // datavalidadeFilter = new SimpleDateFormat("yyyy-MM-dd").format(datavalidade);
-            datavalidadeFilt =  LocalDate.parse(datavalidade, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        }
-
-        String dataFim = "";
-        LocalDate dataFimFilt = null;
-        if(datavalidade != null){
-            //dataFim = new SimpleDateFormat("yyyy-MM-dd").format(datafim);
-            dataFimFilt = LocalDate.parse(datafim, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        }
+                                                    String tipodocumento, Integer iddocpai, boolean restrito, String nome, String datafim,
+                                                    String datafimvalidade) {
 
         Specification<Documento> spec = DocumentoSpecifications.withFilters(id, filial,
                 emissor,
-                datadocumento,
-                datavalidadeFilt,
+                LocalDate.parse(datadocumentesc, DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                LocalDate.parse(datavalidade, DateTimeFormatter.ofPattern("yyyy-MM-dd")),
                 tipodocumento,
                 iddocpai,
                 restrito,
                 nome,
-                dataFimFilt);
+                LocalDate.parse(datafim, DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                LocalDate.parse(datafimvalidade, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         List<Documento> documentos = documentRepository.findAll(spec);
 
         return documentos.stream().map(documento -> {

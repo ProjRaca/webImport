@@ -16,7 +16,8 @@ public class DocumentoSpecifications {
                                                        Integer iddocpai,
                                                        boolean restrito,
                                                        String nome,
-                                                       LocalDate datafim) {
+                                                       LocalDate datafim,
+                                                       LocalDate datafimvalidade) {
         return (root, query, criteriaBuilder) -> {
             Predicate predicate = criteriaBuilder.conjunction();
 
@@ -36,6 +37,10 @@ public class DocumentoSpecifications {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.between(root.get("datadocumentesc"), datadocumentesc, datafim));
             }
 
+            if (datavalidade != null && datafimvalidade != null) {
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.between(root.get("datavalidade"), datavalidade, datafimvalidade));
+            }
+
             if (tipodocumento != null) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("tipodocumento"), tipodocumento));
             }
@@ -44,9 +49,9 @@ public class DocumentoSpecifications {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("iddocpai"), iddocpai));
             }
 
-            if(restrito != false){
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("restrito"), restrito));
-            }
+
+            predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("restrito"), restrito));
+
 
             if (nome != null) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("nome"), nome));

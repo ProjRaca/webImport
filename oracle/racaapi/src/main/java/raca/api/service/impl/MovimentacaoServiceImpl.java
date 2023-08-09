@@ -49,11 +49,10 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
             moviment.setNota(movimentacao.getNota());
 
             // Adicionar 1 dia às datas de competencia e vencimento
-            LocalDate novaCompetencia = movimentacao.getCompetencia().plusDays(1);
-            LocalDate novoVencimento = movimentacao.getVencimento().plusDays(1);
 
-            moviment.setCompetencia(novaCompetencia);
-            moviment.setVencimento(novoVencimento);
+
+            moviment.setCompetencia(movimentacao.getCompetencia());
+            moviment.setVencimento(movimentacao.getVencimento());
 
             moviment.setHistorico(movimentacao.getHistorico());
             moviment.setHistoricodescricao(movimentacao.getHistoricoDescricao());
