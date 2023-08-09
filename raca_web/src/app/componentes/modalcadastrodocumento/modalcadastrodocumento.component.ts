@@ -1,6 +1,6 @@
 import { DocumentoService } from './../../service/documento.service';
 import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
-import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Observable, startWith, map } from 'rxjs';
 import { DocumentoDTO } from 'src/app/entity/documento-dto.entity';
 import { Responsavel } from 'src/app/entity/responsavel.entity';
@@ -82,14 +82,14 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
 
   criarFormulario(){
       this.formularioModal = this.formBuilder.group({
-        empresaForm: [''],
-        dtDocumento: [''],
-        dtValidade: [''],
-        nomeResponsavel: '',
-        tpDocumento: [''],
-        docRestrito: [false],
-        docPai: [''],
-        nomeDocumento: [''],
+        empresaForm: ['',[Validators.required]],
+        dtDocumento: ['',[Validators.required]],
+        dtValidade: ['',[Validators.required]],
+        nomeResponsavel: ['',[Validators.required]],
+        tpDocumento: ['',[Validators.required]],
+        docRestrito: [false,[Validators.required]],
+        docPai: ['',[Validators.required]],
+        nomeDocumento: ['',[Validators.required]],
         file: ['']
     });
     this.formularioModal.get('docRestrito')?.setValue(false)
@@ -150,9 +150,9 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
       restrito: this.formularioModal.value?.docRestrito,
       nome: this.formularioModal.value?.nomeDocumento
     };
-    if(this.documento.id != undefined){
+    if(this.documento != undefined && this.documento.id != undefined){
       Object.assign(documentoInclusao,{id:this.documento.id });
-      console.log('Update ==>', documentoInclusao)
+
       this.serviceDocumento.update(documentoInclusao).then( response =>{
         if (!response.ok) {
           this.exibirMensagemErro('Ocorreu um erro ao tentar atualizar movimentação', 'Verifique seus dados.')
