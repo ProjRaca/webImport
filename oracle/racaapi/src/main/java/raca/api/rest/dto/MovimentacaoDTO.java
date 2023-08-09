@@ -27,9 +27,9 @@ public class MovimentacaoDTO {
 
     private String historicoDescricao;
     @NotNull(message = "{campo.codigo-vencimento.obrigatorio}")
-    private Date vencimento;
+    private LocalDate vencimento;
     @NotNull(message = "{campo.codigo-competencia.obrigatorio}")
-    private Date competencia;
+    private LocalDate competencia;
 
     private String nota;
     private List<Movimentacao> listMovimentacao;

@@ -41,9 +41,9 @@ public class Movimentacao {
     @Column
     private BigDecimal valor;
     @Column
-    private Date vencimento;
+    private LocalDate vencimento;
     @Column
-    private Date competencia;
+    private LocalDate competencia;
     @Column
     private String status;
     @Column

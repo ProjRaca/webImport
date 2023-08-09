@@ -80,12 +80,12 @@ public class MovimentacaoDao {
                      Date data = new Date();
                      SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                      SimpleDateFormat dateFormatConsulta = new SimpleDateFormat("yyyy-MM-dd");
-                     String dataVencimento = dateFormat.format(x.getVencimento());
-                     String dataCompetencia = dateFormat.format(x.getCompetencia());
-                     String dataCompetenciaConsulta = dateFormatConsulta.format(x.getCompetencia());
-                     String dataSistema =  dateFormat.format(data);
+                     //String dataVencimento = dateFormat.format(x.getVencimento());
+                     //String dataCompetencia = dateFormat.format(x.getCompetencia());
+                     String dataCompetenciaConsulta = x.getCompetencia().toString();
+                     String dataSistema =  dateFormatConsulta.format(data);
 
-                     String oSql = getSql(x, numreg, dataVencimento, dataCompetencia, dataSistema);
+                     String oSql = getSql(x, numreg, x.getVencimento().toString(), x.getCompetencia().toString(), dataSistema);
 
                      if(!validaInsert( x.getCodigofilial(), x.getNota().replace("/",""),
                              dataCompetenciaConsulta,x.getIdfuncionario(), x.getContacorrente())){
@@ -112,14 +112,13 @@ public class MovimentacaoDao {
                 " TIPOLANC, TIPOPARCEIRO, NOMEFUNC, MOEDA, NFSERVICO, PARCELA, NUMNOTA," +
                 " CODFORNEC, FORNECEDOR, TIPOSERVICO, UTILIZOURATEIOCONTA, PRCRATEIOUTILIZADO, VALOR," +
                 " CODCONTA, RECNUMPRINC, DTVENC, DTEMISSAO, DTCOMPETENCIA)" +
-                " VALUES (" + numreg + ", '" + dataSistema + "', '" + x.getHistorico() +
+                " VALUES (" + numreg + ", SYSDATE, '" + x.getHistorico() +
                 "', '1', '" + x.getCodigofilial() + "', 'A', 'C', '" + x.getTipoparceiro() +
                 "', 'INTEGRACAO RH'," +
                 " 'R', 'N', '1', " + Integer.parseInt( x.getNota().replace("/","")) + ", " +
                 x.getIdfuncionario() + ", '" + x.getNomefuncionario() + "'," +
                 " '99', 'N', 100, " + x.getValor() + ", " +
-                x.getContacorrente() + ", " + numreg + ", '" + dataVencimento +
-                "', '" + dataSistema + "', '" + dataCompetencia + "')";
+                x.getContacorrente() + ", " + numreg + ", TO_DATE('" + dataVencimento + "', 'YYYY-MM-DD'),  SYSDATE, TO_DATE('" + dataCompetencia + "', 'YYYY-MM-DD'))";
         return oSql;
     }
 

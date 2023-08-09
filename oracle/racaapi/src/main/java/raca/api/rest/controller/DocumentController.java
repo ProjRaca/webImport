@@ -38,9 +38,10 @@ public class DocumentController {
                                                 @RequestParam(value = "tipodocumento", required = false) String tipodocumento,
                                                 @RequestParam(value = "iddocpai", required = false) Integer iddocpai,
                                                 @RequestParam(value = "restrito", required = false, defaultValue = "false") Boolean restrito,
-                                                @RequestParam(value = "nome", required = false) String nome) {
+                                                @RequestParam(value = "nome", required = false) String nome,
+                                                @RequestParam(value = "datafim", required = false) String datafim) {
 
-        return documentService.getFilterDocument(id, filial, emissor, datadocumentesc, datavalidade, tipodocumento, iddocpai, restrito, nome);
+        return documentService.getFilterDocument(id, filial, emissor, datadocumentesc, datavalidade, tipodocumento, iddocpai, restrito, nome, datafim);
     }
 
     @GetMapping
@@ -55,7 +56,7 @@ public class DocumentController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<DocumentoDTO> salvar(@RequestBody @Valid DocumentoDTO dto){
+    public ResponseEntity<DocumentoDTO> salvar(@RequestBody DocumentoDTO dto){
         DocumentoDTO savedDocumento = documentService.salvar(dto);
         if (savedDocumento != null) {
             return ResponseEntity.ok(savedDocumento);

@@ -23,7 +23,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,10 +33,6 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
 
     private final MovimentacaoRepository movimentacaoRepository;
     private final MovimentacaoDao movimentacaoDao;
-
-    //private final MovimentacaoRepositoryOracle movimentacaoRepositoryOracle;
-
-    private final ContasService contasRepository;
     private final ContasService contasService;
     @Override
     public List<Movimentacao> getAllMovimentacao() {
@@ -49,18 +44,24 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
         List<Movimentacao> movimentacaos = movimentacao.getListMovimentacao().stream().map(moviment -> {
-                cont++;
-                moviment.setCodigofilial(movimentacao.getCodigofilial());
-                moviment.setNota(movimentacao.getNota());
-                moviment.setCompetencia(movimentacao.getCompetencia());
-                moviment.setHistorico(movimentacao.getHistorico());
-                moviment.setHistoricodescricao(movimentacao.getHistoricoDescricao());
-                moviment.setVencimento(movimentacao.getVencimento());
-                moviment.setStatus("P");
-                movimentacaoRepository.save(moviment);
-                System.out.println("cont registro atual = " + cont)  ;
+            cont++;
+            moviment.setCodigofilial(movimentacao.getCodigofilial());
+            moviment.setNota(movimentacao.getNota());
 
-            return moviment; // Retornar o objeto moviment após as modificações
+            // Adicionar 1 dia às datas de competencia e vencimento
+            LocalDate novaCompetencia = movimentacao.getCompetencia().plusDays(1);
+            LocalDate novoVencimento = movimentacao.getVencimento().plusDays(1);
+
+            moviment.setCompetencia(novaCompetencia);
+            moviment.setVencimento(novoVencimento);
+
+            moviment.setHistorico(movimentacao.getHistorico());
+            moviment.setHistoricodescricao(movimentacao.getHistoricoDescricao());
+            moviment.setStatus("P");
+            movimentacaoRepository.save(moviment);
+            System.out.println("cont registro atual = " + cont);
+
+            return moviment;
         }).collect(Collectors.toList());
         movimentacao.setListMovimentacao(movimentacaos);
         return movimentacao;
@@ -164,12 +165,12 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
         return buscarMovimentacoes(mov.getCpffuncionario(), mov.getHistorico(), mov.getCompetencia(), mov.getCnpjempresa());
 
     }
-    public boolean buscarMovimentacoes(String cpfFuncionario, String historico, Date competencia, String cnpjEmpresa) {
+    public boolean buscarMovimentacoes(String cpfFuncionario, String historico, LocalDate competencia, String cnpjEmpresa) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String competenciaString = new SimpleDateFormat("yyyy-MM-dd").format(competencia);
-        LocalDate competenciaDate = LocalDate.parse(competenciaString, formatter);
+        //String competenciaString = new SimpleDateFormat("yyyy-MM-dd").format(competencia);
+        //LocalDate competenciaDate = LocalDate.parse(competenciaString, formatter);
         List<Movimentacao> byCpfFuncionarioAndHistoricoAndCompetenciaAndCnpjEmpresaAndStatus =
-                movimentacaoRepository.findByCpfFuncionarioAndHistoricoAndCompetenciaAndCnpjEmpresaAndStatus(cpfFuncionario, historico, competenciaDate, cnpjEmpresa);
+                movimentacaoRepository.findByCpfFuncionarioAndHistoricoAndCompetenciaAndCnpjEmpresaAndStatus(cpfFuncionario, historico, competencia, cnpjEmpresa);
         return (byCpfFuncionarioAndHistoricoAndCompetenciaAndCnpjEmpresaAndStatus != null);
     }
 

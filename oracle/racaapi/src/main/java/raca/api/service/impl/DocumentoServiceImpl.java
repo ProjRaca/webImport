@@ -82,8 +82,10 @@ public class DocumentoServiceImpl implements DocumentService {
         Documento documento = new Documento();
         documento.setFilial(doc.getFilial());
         documento.setEmissor(doc.getEmissor());
-        documento.setDatavalidade(doc.getDatavalidade());
-        documento.setDatadocumentesc(doc.getDatadocumentesc());
+        if(doc.getDatavalidade() != null)
+            documento.setDatavalidade(doc.getDatavalidade());
+        if(doc.getDatadocumentesc() != null)
+            documento.setDatadocumentesc(doc.getDatadocumentesc());
         documento.setDocumento(doc.getDocumento());
         documento.setTipodocumento(doc.getTipodocumento());
         documento.setIddocpai(doc.getIddocpai());
@@ -91,15 +93,7 @@ public class DocumentoServiceImpl implements DocumentService {
         documento.setRestrito(doc.isRestrito());
         return documento;
     }
-    public static String convertDate(String inputDate) {
-        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        LocalDateTime localDateTime = LocalDateTime.parse(inputDate, inputFormatter);
-        String formattedDate = localDateTime.format(outputFormatter);
-
-        return formattedDate;
-    }
 
     private DocumentoDTO getDocumentDTO(Documento doc){
         DocumentoDTO documento = new DocumentoDTO();
@@ -120,23 +114,31 @@ public class DocumentoServiceImpl implements DocumentService {
         return documento;
     }
 
-    public List<DocumentoDTO> getFilterDocument(Integer id, String filial, String emissor, String datadocumentesc, String datavalidade, String tipodocumento, Integer iddocpai, boolean restrito, String nome) {
+    public List<DocumentoDTO> getFilterDocument(Integer id, String filial, String emissor, String datadocumentesc, String datavalidade,
+                                                    String tipodocumento, Integer iddocpai, boolean restrito, String nome, String datafim) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+
         String datadocument = "";
         LocalDate datadocumento = null;
         if(datadocumentesc != null){
-            datadocument = new SimpleDateFormat("yyyy-MM-dd").format(datadocumentesc);
-            datadocumento = LocalDate.parse(datadocument, formatter);
+           // datadocument =   LocalDate.parse(datadocumentesc, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            datadocumento =   LocalDate.parse(datadocumentesc, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         }
+
         String datavalidadeFilter = "";
         LocalDate datavalidadeFilt = null;
-
         if(datavalidade != null){
-            datavalidadeFilter = new SimpleDateFormat("yyyy-MM-dd").format(datavalidade);
-            datavalidadeFilt = LocalDate.parse(datavalidadeFilter, formatter);
+           // datavalidadeFilter = new SimpleDateFormat("yyyy-MM-dd").format(datavalidade);
+            datavalidadeFilt =  LocalDate.parse(datavalidade, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         }
 
-
+        String dataFim = "";
+        LocalDate dataFimFilt = null;
+        if(datavalidade != null){
+            //dataFim = new SimpleDateFormat("yyyy-MM-dd").format(datafim);
+            dataFimFilt = LocalDate.parse(datafim, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        }
 
         Specification<Documento> spec = DocumentoSpecifications.withFilters(id, filial,
                 emissor,
@@ -145,7 +147,8 @@ public class DocumentoServiceImpl implements DocumentService {
                 tipodocumento,
                 iddocpai,
                 restrito,
-                nome);
+                nome,
+                dataFimFilt);
         List<Documento> documentos = documentRepository.findAll(spec);
 
         return documentos.stream().map(documento -> {

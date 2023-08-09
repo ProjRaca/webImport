@@ -20,7 +20,8 @@ public interface DocumentService {
                                          String tipodocumento,
                                          Integer iddocpai,
                                          boolean restrito,
-                                         String nome);
+                                         String nome,
+                                         String datafim);
 
     DocumentoDTO salvar(DocumentoDTO doc);
 

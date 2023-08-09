@@ -120,23 +120,21 @@ public class DocumentoServiceImpl implements DocumentService {
         return documento;
     }
 
-    public List<DocumentoDTO> getFilterDocument(Integer id, String filial, String emissor, String datadocumentesc, String datavalidade, String tipodocumento, Integer iddocpai, boolean restrito, String nome) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String datadocument = "";
+    public List<DocumentoDTO> getFilterDocument(Integer id, String filial, String emissor, String datadocumentesc, String datavalidade,
+                                                String tipodocumento, Integer iddocpai, boolean restrito, String nome, String datafim) {
+
         LocalDate datadocumento = null;
         if(datadocumentesc != null){
-            datadocument = new SimpleDateFormat("yyyy-MM-dd").format(datadocumentesc);
-            datadocumento = LocalDate.parse(datadocument, formatter);
+            datadocumento =   LocalDate.parse(datadocumentesc, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         }
-        String datavalidadeFilter = "";
         LocalDate datavalidadeFilt = null;
-
         if(datavalidade != null){
-            datavalidadeFilter = new SimpleDateFormat("yyyy-MM-dd").format(datavalidade);
-            datavalidadeFilt = LocalDate.parse(datavalidadeFilter, formatter);
+            datavalidadeFilt =  LocalDate.parse(datavalidade, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         }
-
-
+        LocalDate dataFimFilt = null;
+        if(datavalidade != null){
+            dataFimFilt = LocalDate.parse(datafim, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        }
 
         Specification<Documento> spec = DocumentoSpecifications.withFilters(id, filial,
                 emissor,
@@ -145,7 +143,8 @@ public class DocumentoServiceImpl implements DocumentService {
                 tipodocumento,
                 iddocpai,
                 restrito,
-                nome);
+                nome,
+                dataFimFilt);
         List<Documento> documentos = documentRepository.findAll(spec);
 
         return documentos.stream().map(documento -> {

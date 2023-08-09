@@ -15,7 +15,8 @@ public class DocumentoSpecifications {
                                                        String tipodocumento,
                                                        Integer iddocpai,
                                                        boolean restrito,
-                                                       String nome) {
+                                                       String nome,
+                                                       LocalDate datafim) {
         return (root, query, criteriaBuilder) -> {
             Predicate predicate = criteriaBuilder.conjunction();
 
@@ -31,12 +32,8 @@ public class DocumentoSpecifications {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("emissor"), emissor));
             }
 
-            if (datadocumentesc != null) {
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("datadocumentesc"), datadocumentesc));
-            }
-
-            if (datavalidade != null) {
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("datavalidade"), datavalidade));
+            if (datadocumentesc != null && datafim != null) {
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.between(root.get("datadocumentesc"), datadocumentesc, datafim));
             }
 
             if (tipodocumento != null) {
