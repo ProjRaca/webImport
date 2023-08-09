@@ -30,17 +30,17 @@ export class DocumentoService {
   }
 
   private getCondictionalParams(filter: any, parametros: HttpParams): HttpParams {
-    if (filter.id != '')
+    if (filter.id != '' && filter.id != undefined)
       parametros = parametros.append('id', filter.id);
-    if (filter.datadocumentesc != undefined)
+    if (filter.datadocumentesc != '' &&  filter.datadocumentesc != undefined)
       parametros = parametros.append('datadocumentesc', filter.datadocumentesc);
-    if (filter.datavalidade != undefined)
+    if (filter.datavalidade != '' &&  filter.datavalidade != undefined)
       parametros = parametros.append('datavalidade', filter.datavalidade);
-    if (filter.emissor != undefined)
+    if (filter.emissor != '' && filter.emissor != undefined)
       parametros = parametros.append('emissor', filter.emissor);
-    if (filter.filial != undefined)
+    if ( filter.filial != '' && filter.filial != undefined)
       parametros = parametros.append('filial', filter.filial);
-    if (filter.iddocpai != undefined)
+    if (filter.iddocpai != '' && filter.iddocpai != undefined)
       parametros = parametros.append('iddocpai', filter.iddocpai);
     return parametros;
   }
