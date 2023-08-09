@@ -42,6 +42,8 @@ export class DocumentoService {
       parametros = parametros.append('filial', filter.filial);
     if (filter.iddocpai != '' && filter.iddocpai != undefined)
       parametros = parametros.append('iddocpai', filter.iddocpai);
+    if (filter.tipodocumento != '' && filter.tipodocumento != undefined)
+      parametros = parametros.append('tipodocumento', filter.tipodocumento);
     return parametros;
   }
 

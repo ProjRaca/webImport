@@ -80,8 +80,8 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
    if(this.formulario.status == 'INVALID') return;
    let dtDocumento = this.formulario.get('dtDocumento')?.value != '' && this.formulario.get('dtDocumento')?.value != undefined ? DataUtils.convertDataStringToPtBrFormat(this.formulario.get('dtDocumento')?.value) : '';
    let dtValidade = this.formulario.get('dtValidade')?.value != '' && this.formulario.get('dtValidade')?.value != undefined ? DataUtils.convertDataStringToPtBrFormat(this.formulario.get('dtValidade')?.value) : '';
-    let nomeResponsavel = this.formulario.get('responsavel')?.value || undefined ;
-    let idResponsavel = nomeResponsavel != undefined ? this.responsaveis.filter(respo => respo.nome === nomeResponsavel )[0].id : ''
+   let nomeResponsavel = this.formulario.get('responsavel')?.value || undefined ;
+   let idResponsavel = nomeResponsavel != undefined ? this.responsaveis.filter(respo => respo.nome === nomeResponsavel )[0].nome : ''
 
     let filter: DocumentoDTO = {
       datadocumentesc: dtDocumento || undefined,
@@ -89,6 +89,7 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
       emissor: idResponsavel?.toString() ,
       filial : this.formulario.get('empresa')?.value  || undefined,
       iddocpai: undefined,
+      tipodocumento: this.formulario.get('tpDocumento')?.value || undefined
     }
 
     this.serviceDocumento.findByFilter(filter)
