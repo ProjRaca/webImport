@@ -9,5 +9,8 @@ export interface DocumentoDTO{
   documento?: string[],
   restrito?: boolean,
   nome?: string,
-  nomepai?: string
+  nomepai?: string,
+  numerodocumento?: number,
+  datafimvalidade?: string,
+  datafim?: string
 }

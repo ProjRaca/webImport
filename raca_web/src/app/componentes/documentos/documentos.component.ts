@@ -25,6 +25,7 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
 
   @Output() documentBase64Emitter = new EventEmitter<string[]>();
 
+  panelOpenState = false;
   formulario!: FormGroup;
   docBase64: string[] = [];
 
@@ -78,8 +79,10 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
   pesquisar(){
 
    if(this.formulario.status == 'INVALID') return;
-   let dtDocumento = this.formulario.get('dtDocumento')?.value != '' && this.formulario.get('dtDocumento')?.value != undefined ? DataUtils.convertDataStringToPtBrFormat(this.formulario.get('dtDocumento')?.value) : '';
-   let dtValidade = this.formulario.get('dtValidade')?.value != '' && this.formulario.get('dtValidade')?.value != undefined ? DataUtils.convertDataStringToPtBrFormat(this.formulario.get('dtValidade')?.value) : '';
+   let dtDocumento = this.formulario.get('dtDocumento')?.value != '' && this.formulario.get('dtDocumento')?.value != undefined ? DataUtils.formatarDatetoUsFormat(this.formulario.get('dtDocumento')?.value) : '';
+   let dtFim = this.formulario.get('dtDocumentoFinal')?.value != '' && this.formulario.get('dtDocumentoFinal')?.value != undefined ? DataUtils.formatarDatetoUsFormat(this.formulario.get('dtDocumentoFinal')?.value) : '';
+   let dtValidade = this.formulario.get('dtValidade')?.value != '' && this.formulario.get('dtValidade')?.value != undefined ? DataUtils.formatarDatetoUsFormat(this.formulario.get('dtValidade')?.value) : '';
+   let dtFimValidade = this.formulario.get('dtValidadeFinal')?.value != '' && this.formulario.get('dtValidadeFinal')?.value != undefined ? DataUtils.formatarDatetoUsFormat(this.formulario.get('dtValidadeFinal')?.value) : '';
    let nomeResponsavel = this.formulario.get('responsavel')?.value || undefined ;
    let idResponsavel = nomeResponsavel != undefined ? this.responsaveis.filter(respo => respo.nome === nomeResponsavel )[0].nome : ''
 
@@ -89,7 +92,11 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
       emissor: idResponsavel?.toString() ,
       filial : this.formulario.get('empresa')?.value  || undefined,
       iddocpai: undefined,
-      tipodocumento: this.formulario.get('tpDocumento')?.value || undefined
+      tipodocumento: this.formulario.get('tpDocumento')?.value || undefined,
+      restrito: this.formulario.get('docRegistro')?.value || false,
+      numerodocumento: this.formulario.get('numeroDocumento')?.value || undefined,
+      datafimvalidade: dtFimValidade,
+      datafim: dtFim
     }
 
     this.serviceDocumento.findByFilter(filter)
@@ -114,10 +121,13 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
       this.formulario = this.formBuilder.group({
       empresa: [''],
       dtDocumento: [''],
+      dtDocumentoFinal: [''],
       dtValidade: [''],
+      dtValidadeFinal: [''],
       responsavel: '',
       tpDocumento: [''],
-      docRegistro: [false]
+      docRegistro: [false],
+      numeroDocumento:['']
     })
     this.formulario.get('docRestrito')?.setValue(false)
   }

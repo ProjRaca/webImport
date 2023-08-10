@@ -41,7 +41,7 @@ import { ScackBarCustomComponent } from './componentes/scack-bar-custom/scack-ba
 import { CpfECnpjPipe } from './pipes/cpf_cnpj.pipe';
 import { NgxMaskModule } from 'ngx-mask';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MAT_DATE_FORMATS, MatNativeDateModule } from '@angular/material/core';
 import { DialogDeleteComponent } from './componentes/dialogDelete/dialog-delete.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -51,10 +51,10 @@ import { ModalcadastrodocumentoComponent } from './componentes/modalcadastrodocu
 import { FilialPipe } from './pipes/tipo-filial.pipe';
 import { DocumentoPipe } from './pipes/tipo-documento.pipe';
 import { DocumentoRestritoPipe } from './pipes/documento-restrito.pipe';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { PdfViewComponent } from './componentes/pdf-view/pdf-view.component';
-
+import { MatExpansionModule } from '@angular/material/expansion';
 
 
 @NgModule({
@@ -114,10 +114,12 @@ import { PdfViewComponent } from './componentes/pdf-view/pdf-view.component';
     AsyncPipe,
     MatProgressSpinnerModule,
     NgxMaskModule.forRoot(),
-    NgxExtendedPdfViewerModule
+    NgxExtendedPdfViewerModule,
+    MatExpansionModule
   ],
+
   providers: [ httpInterceptorProviders,
-    {provide: [MAT_FORM_FIELD_DEFAULT_OPTIONS, HTTP_INTERCEPTORS], useValue: {appearance: 'outline'},
+    { provide: [MAT_FORM_FIELD_DEFAULT_OPTIONS, HTTP_INTERCEPTORS, MAT_DATE_FORMATS], useValue: {appearance: 'outline', display: { dateInput: 'DD/MM/YYYY' }},
       multi: true
   }, MovimentacaoService, UsuarioService
   ],

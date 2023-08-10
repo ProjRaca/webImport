@@ -9,9 +9,17 @@
 }
 
 .form-fields {
-  display: inline-flex;
+  /* display: flex;
   align-items: flex-start;
   min-width: 100%;
+  flex-flow: row wrap; */
+  display: inline-flex;
+  justify-content: flex-start; /* Alinha as colunas à esquerda */
+}
+
+.form-column {
+  flex: 1;
+  margin-right: 20px; /* Adicione margem entre as colunas */
 }
 
 .checkbox {
@@ -61,6 +69,10 @@
 
 .margen {
   margin-right: 5%;
+}
+
+.margen-left {
+  margin-left: 1% !important;
 }
 
 .input-modal{

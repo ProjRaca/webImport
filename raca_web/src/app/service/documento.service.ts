@@ -30,20 +30,28 @@ export class DocumentoService {
   }
 
   private getCondictionalParams(filter: any, parametros: HttpParams): HttpParams {
-    if (filter.id != '' && filter.id != undefined)
+    if (filter.id !== '' && filter.id !== undefined)
       parametros = parametros.append('id', filter.id);
-    if (filter.datadocumentesc != '' &&  filter.datadocumentesc != undefined)
+    if (filter.datadocumentesc !== '' &&  filter.datadocumentesc !== undefined)
       parametros = parametros.append('datadocumentesc', filter.datadocumentesc);
-    if (filter.datavalidade != '' &&  filter.datavalidade != undefined)
+    if (filter.datavalidade !== '' &&  filter.datavalidade !== undefined)
       parametros = parametros.append('datavalidade', filter.datavalidade);
-    if (filter.emissor != '' && filter.emissor != undefined)
+    if (filter.emissor !== '' && filter.emissor !== undefined)
       parametros = parametros.append('emissor', filter.emissor);
-    if ( filter.filial != '' && filter.filial != undefined)
+    if ( filter.filial !== '' && filter.filial !== undefined)
       parametros = parametros.append('filial', filter.filial);
-    if (filter.iddocpai != '' && filter.iddocpai != undefined)
+    if (filter.iddocpai !== '' && filter.iddocpai !== undefined)
       parametros = parametros.append('iddocpai', filter.iddocpai);
-    if (filter.tipodocumento != '' && filter.tipodocumento != undefined)
+    if (filter.tipodocumento !== '' && filter.tipodocumento !== undefined)
       parametros = parametros.append('tipodocumento', filter.tipodocumento);
+    if (filter.restrito !== '' && filter.restrito !== undefined)
+      parametros = parametros.append('restrito', filter.restrito);
+    if (filter.numerodocumento !== '' && filter.numerodocumento !== undefined)
+      parametros = parametros.append('numerodocumento', filter.numerodocumento);
+    if (filter.datafimvalidade !== '' && filter.datafimvalidade !== undefined)
+      parametros = parametros.append('datafimvalidade', filter.datafimvalidade);
+    if (filter.datafim !== '' && filter.datafim !== undefined)
+      parametros = parametros.append('datafim', filter.datafim);
     return parametros;
   }
 

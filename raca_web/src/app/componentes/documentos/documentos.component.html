@@ -1,57 +1,92 @@
 <div class="container" style="border: 3px;width: 100em;">
-  <form [formGroup]="formulario">
-    <h1>Documentos</h1>
-    <div class="form-fields">
-      <mat-form-field  class="input">
-        <mat-label>Empresa</mat-label>
-        <mat-select  name="empresa" formControlName = "empresa">
-          <mat-option *ngFor="let empresa of listaEmpresa" [value]="empresa.id">
-            {{empresa.value}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field  class="input">
-        <mat-label>Responsável</mat-label>
-            <input matInput
-                formControlName="responsavel"
-                [matAutocomplete]="auto">
-               <mat-autocomplete #auto="matAutocomplete">
-                  <mat-option
-                    *ngFor="let item of filteredOptions | async"
-                    [value]="item.nome">
-                      {{item.nome}}
-                  </mat-option>
-            </mat-autocomplete>
-      </mat-form-field>
+  <mat-accordion>
+    <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+      <mat-expansion-panel-header>
+        <mat-panel-title></mat-panel-title>
+        <mat-panel-description>Clique aqui para {{panelOpenState ? 'fechar' : 'abrir'}} o Formulário de pesquisa</mat-panel-description>
+      </mat-expansion-panel-header>
+      <form [formGroup]="formulario">
+        <h1>Documentos</h1>
+        <div class="form-fields row">
+          <div class="form-column">
+          <mat-form-field class="margen-left">
+            <mat-label>Empresa</mat-label>
+            <mat-select  name="empresa" formControlName = "empresa">
+              <mat-option *ngFor="let empresa of listaEmpresa" [value]="empresa.id">
+                {{empresa.value}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Responsável</mat-label>
+                <input matInput
+                    formControlName="responsavel"
+                    [matAutocomplete]="auto">
+                  <mat-autocomplete #auto="matAutocomplete">
+                      <mat-option
+                        *ngFor="let item of filteredOptions | async"
+                        [value]="item.nome">
+                          {{item.nome}}
+                      </mat-option>
+                </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="form-column">
+          <mat-form-field>
+            <mat-label>Data do Documento</mat-label>
+            <input matInput [matDatepicker]="pickerDocumentoInicial" formControlName="dtDocumento">
+            <!-- <input matInput name="dtDocumento" mask="00/00/0000" formControlName="dtDocumento"> -->
+            <mat-datepicker-toggle matSuffix [for]="pickerDocumentoInicial"></mat-datepicker-toggle>
+            <mat-datepicker #pickerDocumentoInicial></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Data do Documento Final</mat-label>
+            <input matInput [matDatepicker]="pickerDocumentoFinal" formControlName="dtDocumentoFinal">
+            <mat-datepicker-toggle matSuffix [for]="pickerDocumentoFinal"></mat-datepicker-toggle>
+            <mat-datepicker #pickerDocumentoFinal></mat-datepicker>
+            <!-- <input matInput name="dtDocumentoFinal" mask="00/00/0000" formControlName="dtDocumentoFinal"> -->
+          </mat-form-field>
+        </div>
+        <div class="form-column">
+          <mat-form-field>
+            <mat-label>Validade</mat-label>
+            <input matInput [matDatepicker]="pickerValidadeInicial" formControlName="dtValidade">
+            <mat-datepicker-toggle matSuffix [for]="pickerValidadeInicial"></mat-datepicker-toggle>
+            <mat-datepicker #pickerValidadeInicial></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Validade Final</mat-label>
+            <input matInput [matDatepicker]="pickerValidadeFinal" formControlName="dtValidadeFinal">
+            <mat-datepicker-toggle matSuffix [for]="pickerValidadeFinal"></mat-datepicker-toggle>
+            <mat-datepicker #pickerValidadeFinal></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="form-column">
+          <mat-form-field>
+            <mat-label>Tipo Documento</mat-label>
+            <mat-select name="tpDocumento" formControlName="tpDocumento">
+              <mat-option *ngFor="let item of tipoDocumento" [value]="item.id">
+                {{item.value}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
 
-      <mat-form-field  class="input">
-        <mat-label>Data do Documento</mat-label>
-        <input matInput name="dtDocumento" mask="00/00/0000" formControlName="dtDocumento">
-      </mat-form-field>
 
-      <mat-form-field  class="input">
-        <mat-label>Validade</mat-label>
-        <input  matInput name="dtValidade" mask="00/00/0000" formControlName="dtValidade">
-      </mat-form-field>
-
-      <mat-form-field  class="input" >
-        <mat-label>Tipo Documento</mat-label>
-        <mat-select name="tpDocumento" formControlName="tpDocumento">
-          <mat-option *ngFor="let item of tipoDocumento" [value]="item.id">
-            {{item.value}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-
-        <section class="checkbox">
-          <mat-checkbox class="example-margin" name="docRegistro" formControlName="docRegistro">Doc Restrito</mat-checkbox>
-        </section>
-
-      <br>
-      <button class="button" mat-raised-button color="primary" (click)="pesquisar()">Pesquisar</button>
-    </div>
-</form>
-
+            <section class="checkbox">
+              <mat-checkbox class="example-margin" name="docRegistro" formControlName="docRegistro">Doc Restrito</mat-checkbox>
+            </section>
+          </div>
+          <div class="form-column">
+            <mat-form-field>
+              <mat-label>Número Documento</mat-label>
+              <input matInput  formControlName="numeroDocumento" type="number">
+            </mat-form-field>
+            <button class="button" mat-raised-button color="primary" (click)="pesquisar()">Pesquisar</button>
+         </div>
+        </div>
+      </form>
+      </mat-expansion-panel>
+  </mat-accordion>
   <mat-divider class="divider"></mat-divider>
   <button mat-raised-button style="margin-bottom: 2%;" (click)="openNovo()">Novo</button><br>
   <label class="label"><i> Listagem de Documentos</i></label>
