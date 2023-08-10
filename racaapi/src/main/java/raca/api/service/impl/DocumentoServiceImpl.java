@@ -132,14 +132,14 @@ public class DocumentoServiceImpl implements DocumentService {
 
         Specification<Documento> spec = DocumentoSpecifications.withFilters(id, filial,
                 emissor,
-                LocalDate.parse(datadocumentesc, DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                LocalDate.parse(datavalidade, DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                datadocumentesc,
+                datavalidade,
                 tipodocumento,
                 iddocpai,
                 restrito,
                 nome,
-                LocalDate.parse(datafim, DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                LocalDate.parse(datafimvalidade, DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                datafim,
+                datafimvalidade,
                 numerodocumento);
         List<Documento> documentos = documentRepository.findAll(spec);
 
