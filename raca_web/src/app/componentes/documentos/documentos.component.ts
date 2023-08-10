@@ -154,7 +154,7 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
   openNovo(){
     const dialogRef = this.dialog.open(ModalcadastrodocumentoComponent,
       {
-        height: '60%',
+        height: '65%',
         width: '60%',
       });
 
