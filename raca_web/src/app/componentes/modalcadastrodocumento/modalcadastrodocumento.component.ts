@@ -135,8 +135,8 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
   }
 
   salvar(){
-    let dataDocumento = DataUtils.convertDataStringToPtBrFormat( this.formularioModal.value?.dtDocumento );
-    let dataValidade = DataUtils.convertDataStringToPtBrFormat( this.formularioModal.value?.dtValidade );
+    let dataDocumento = DataUtils.formatarDatetoUsFormat( this.formularioModal.value?.dtDocumento );
+    let dataValidade = DataUtils.formatarDatetoUsFormat( this.formularioModal.value?.dtValidade );
 
     if(this.formularioModal.status == 'INVALID') return;
     var documentoInclusao = {

@@ -49,14 +49,18 @@
 
           <mat-form-field  class="input-modal">
             <mat-label>Validade</mat-label>
-            <input matInput formControlName="dtValidade" name="dtValidadeInsert" mask="00/00/0000">
+              <input matInput [matDatepicker]="pickerValidade" formControlName="dtValidade">
+            <mat-datepicker-toggle matSuffix [for]="pickerValidade"></mat-datepicker-toggle>
+            <mat-datepicker #pickerValidade></mat-datepicker>
           </mat-form-field>
         </p>
 
         <p>
           <mat-form-field  class="input-modal" >
             <mat-label>Data do Documento</mat-label>
-            <input matInput formControlName="dtDocumento" name="dtDocumentoinsert" mask="00/00/0000">
+              <input matInput [matDatepicker]="pickerDocumento" formControlName="dtDocumento">
+            <mat-datepicker-toggle matSuffix [for]="pickerDocumento"></mat-datepicker-toggle>
+            <mat-datepicker #pickerDocumento></mat-datepicker>
           </mat-form-field>
 
           <mat-form-field  class="input-modal" >
