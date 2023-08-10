@@ -131,7 +131,7 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
   }
 
   getSizeModal(): string{
-    return Sizes.Middle.toString();
+    return Sizes.Large.toString();
   }
 
   salvar(){

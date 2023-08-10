@@ -62,6 +62,8 @@ export class ModalComponent implements OnInit, OnDestroy {
           return this.getMiddleCss()
         case Sizes.Small.toString():
           return this.getSmallCss()
+        case Sizes.Large.toString():
+          return this.getLargeCss()
         default:
           return this.getSmallCss()
       }
@@ -75,6 +77,9 @@ export class ModalComponent implements OnInit, OnDestroy {
     return "modal-body-small"
   }
 
+  getLargeCss(): string {
+    return "modal-body-large"
+  }
   getCssClass(): string {
     return this.setSize(this.sizeType);
   }
