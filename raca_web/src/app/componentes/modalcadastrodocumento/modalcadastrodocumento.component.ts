@@ -88,7 +88,7 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
         nomeResponsavel: ['',[Validators.required]],
         tpDocumento: ['',[Validators.required]],
         docRestrito: [false,[Validators.required]],
-        docPai: ['',[Validators.required]],
+        docPai: [''],
         nomeDocumento: ['',[Validators.required]],
         file: ['']
     });
