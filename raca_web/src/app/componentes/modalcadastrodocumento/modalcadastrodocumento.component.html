@@ -26,7 +26,7 @@
         <p>
           <mat-form-field  class="input margen-min">
             <mat-label>Empresa</mat-label>
-            <mat-select formControlName="empresaForm" *ngIf="!detalhes" [compareWith] = "compareValuesCompany">
+            <mat-select formControlName="empresaForm" *ngIf="!detalhes" [compareWith] = "compareValues">
               <mat-option *ngFor="let empresa of listaEmpresa" [value]="empresa.id" >
                 {{empresa.value}}
               </mat-option>

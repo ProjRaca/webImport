@@ -41,7 +41,7 @@ import { ScackBarCustomComponent } from './componentes/scack-bar-custom/scack-ba
 import { CpfECnpjPipe } from './pipes/cpf_cnpj.pipe';
 import { NgxMaskModule } from 'ngx-mask';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MAT_DATE_FORMATS, MatNativeDateModule } from '@angular/material/core';
+import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 import { DialogDeleteComponent } from './componentes/dialogDelete/dialog-delete.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
@@ -119,9 +119,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
   ],
 
   providers: [ httpInterceptorProviders,
-    { provide: [MAT_FORM_FIELD_DEFAULT_OPTIONS, HTTP_INTERCEPTORS, MAT_DATE_FORMATS], useValue: {appearance: 'outline', display: { dateInput: 'DD/MM/YYYY' }},
+    { provide: [MAT_FORM_FIELD_DEFAULT_OPTIONS, HTTP_INTERCEPTORS], useValue: {appearance: 'outline'},
       multi: true
-  }, MovimentacaoService, UsuarioService
+    },{provide: MAT_DATE_LOCALE, useValue: 'pt-BR'}, MovimentacaoService, UsuarioService
   ],
   bootstrap: [AppComponent]
 })
