@@ -30,6 +30,8 @@ public class DocumentoDTO {
 
     private String nomepai;
 
+    private Integer numerodocumento;
+
     private byte[] documento;
 
 }

@@ -50,6 +50,8 @@ public class DocumentoServiceImpl implements DocumentService {
                     documentoDTO.setIddocpai(document.getIddocpai());
                     documentoDTO.setNome(document.getNome());
                     documentoDTO.setRestrito(document.isRestrito());
+                    documentoDTO.setNumerodocumento(document.getNumerodocumento());
+                    documentoDTO.setId(document.getId());
                     return documentoDTO;
                 })
                 .collect(Collectors.toList());
@@ -89,6 +91,8 @@ public class DocumentoServiceImpl implements DocumentService {
         documento.setIddocpai(doc.getIddocpai());
         documento.setNome(doc.getNome());
         documento.setRestrito(doc.isRestrito());
+        documento.setNumerodocumento(doc.getNumerodocumento());
+        documento.setId(doc.getId());
         return documento;
     }
     public static String convertDate(String inputDate) {
@@ -117,12 +121,14 @@ public class DocumentoServiceImpl implements DocumentService {
         }
         documento.setNome(doc.getNome());
         documento.setRestrito(doc.isRestrito());
+        documento.setId(doc.getId());
+        documento.setNumerodocumento(doc.getNumerodocumento());
         return documento;
     }
 
     public List<DocumentoDTO> getFilterDocument(Integer id, String filial, String emissor, String datadocumentesc, String datavalidade,
                                                 String tipodocumento, Integer iddocpai, boolean restrito, String nome, String datafim,
-                                                String datafimvalidade) {
+                                                String datafimvalidade, Integer numerodocumento) {
 
         Specification<Documento> spec = DocumentoSpecifications.withFilters(id, filial,
                 emissor,
@@ -133,7 +139,8 @@ public class DocumentoServiceImpl implements DocumentService {
                 restrito,
                 nome,
                 LocalDate.parse(datafim, DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                LocalDate.parse(datafimvalidade, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                LocalDate.parse(datafimvalidade, DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                numerodocumento);
         List<Documento> documentos = documentRepository.findAll(spec);
 
         return documentos.stream().map(documento -> {

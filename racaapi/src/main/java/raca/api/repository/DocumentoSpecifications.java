@@ -17,7 +17,8 @@ public class DocumentoSpecifications {
                                                        boolean restrito,
                                                        String nome,
                                                        LocalDate datafim,
-                                                       LocalDate datafimvalidade) {
+                                                       LocalDate datafimvalidade,
+                                                       Integer numerodocumento) {
         return (root, query, criteriaBuilder) -> {
             Predicate predicate = criteriaBuilder.conjunction();
 
@@ -47,6 +48,10 @@ public class DocumentoSpecifications {
 
             if (iddocpai != null) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("iddocpai"), iddocpai));
+            }
+
+            if (numerodocumento != null) {
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("numerodocumento"), numerodocumento));
             }
 
 
