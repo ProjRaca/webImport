@@ -119,18 +119,19 @@ public class DocumentoServiceImpl implements DocumentService {
 
     public List<DocumentoDTO> getFilterDocument(Integer id, String filial, String emissor, String datadocumentesc, String datavalidade,
                                                     String tipodocumento, Integer iddocpai, boolean restrito, String nome, String datafim,
-                                                    String datafimvalidade) {
+                                                    String datafimvalidade, Integer numerodocumento) {
 
         Specification<Documento> spec = DocumentoSpecifications.withFilters(id, filial,
                 emissor,
-                LocalDate.parse(datadocumentesc, DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                LocalDate.parse(datavalidade, DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                datadocumentesc,
+                datavalidade,
                 tipodocumento,
                 iddocpai,
                 restrito,
                 nome,
-                LocalDate.parse(datafim, DateTimeFormatter.ofPattern("yyyy-MM-dd")),
-                LocalDate.parse(datafimvalidade, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                datafim,
+                datafimvalidade,
+                numerodocumento);
         List<Documento> documentos = documentRepository.findAll(spec);
 
         return documentos.stream().map(documento -> {

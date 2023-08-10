@@ -412,4 +412,5 @@ ALTER TABLE raca.documento ADD COLUMN iddocpai integer;
 ALTER TABLE raca.documento ADD COLUMN restrito boolean;
 
 ALTER TABLE raca.documento ADD COLUMN nome varchar(255);
+ALTER TABLE raca.documento ADD COLUMN numerodocumento integer;
 

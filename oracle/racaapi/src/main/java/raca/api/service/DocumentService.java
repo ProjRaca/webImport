@@ -22,7 +22,8 @@ public interface DocumentService {
                                          boolean restrito,
                                          String nome,
                                          String datafim,
-                                         String datafimvalidade);
+                                         String datafimvalidade,
+                                         Integer numerodocumento);
 
     DocumentoDTO salvar(DocumentoDTO doc);
 

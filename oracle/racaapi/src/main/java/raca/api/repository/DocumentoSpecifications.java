@@ -5,6 +5,8 @@ import raca.api.domain.entity.postgres.Documento;
 
 import javax.persistence.criteria.Predicate;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 public class DocumentoSpecifications {
 
     public static Specification<Documento> withFilters1(Integer id,
@@ -63,14 +65,15 @@ public class DocumentoSpecifications {
     public static Specification<Documento> withFilters(Integer id,
                                                        String filial,
                                                        String emissor,
-                                                       LocalDate datadocumentesc,
-                                                       LocalDate datavalidade,
+                                                       String datadocumentesc,
+                                                       String datavalidade,
                                                        String tipodocumento,
                                                        Integer iddocpai,
                                                        boolean restrito,
                                                        String nome,
-                                                       LocalDate datafim,
-                                                       LocalDate datafimvalidade) {
+                                                       String datafim,
+                                                       String datafimvalidade,
+                                                       Integer numerodocumento) {
         return (root, query, criteriaBuilder) -> {
             Predicate predicate = criteriaBuilder.conjunction();
 
@@ -87,11 +90,15 @@ public class DocumentoSpecifications {
             }
 
             if (datadocumentesc != null && datafim != null) {
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.between(root.get("datadocumentesc"), datadocumentesc, datafim));
+                LocalDate parse1 = LocalDate.parse(datafim, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                LocalDate parse = LocalDate.parse(datadocumentesc, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.between(root.get("datadocumentesc"), parse, parse1));
             }
 
             if (datavalidade != null && datafimvalidade != null) {
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.between(root.get("datavalidade"), datavalidade, datafimvalidade));
+                LocalDate parse1 = LocalDate.parse(datafimvalidade, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                LocalDate parse = LocalDate.parse(datavalidade, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.between(root.get("datavalidade"), parse, parse1));
             }
 
             if (tipodocumento != null) {
@@ -100,6 +107,10 @@ public class DocumentoSpecifications {
 
             if (iddocpai != null) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("iddocpai"), iddocpai));
+            }
+
+            if (numerodocumento != null) {
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("numerodocumento"), numerodocumento));
             }
 
 

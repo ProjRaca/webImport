@@ -43,4 +43,7 @@ public class Documento {
     @Column
     private String nome;
 
+    @Column
+    private Integer numerodocumento;
+
 }
