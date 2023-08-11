@@ -90,6 +90,7 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
         docRestrito: [false,[Validators.required]],
         docPai: [''],
         nomeDocumento: ['',[Validators.required]],
+        numeroDocumento: ['',[Validators.required]],
         file: ['']
     });
     this.formularioModal.get('docRestrito')?.setValue(false)
@@ -107,6 +108,7 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
         docRestrito: [  documento.restrito],
         docPai: [  documento.iddocpai],
         nomeDocumento: [  documento.nome],
+        numeroDocumento: [ documento.numerodocumento ],
         file: [  documento.documento],
     });
   }
@@ -148,7 +150,8 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
       tipodocumento: this.formularioModal.value?.tpDocumento,
       documento: this.base64File,
       restrito: this.formularioModal.value?.docRestrito,
-      nome: this.formularioModal.value?.nomeDocumento
+      nome: this.formularioModal.value?.nomeDocumento,
+      numerodocumento : this.formularioModal.value?.numerodocumento
     };
     if(this.documento != undefined && this.documento.id != undefined){
       Object.assign(documentoInclusao,{id:this.documento.id });
