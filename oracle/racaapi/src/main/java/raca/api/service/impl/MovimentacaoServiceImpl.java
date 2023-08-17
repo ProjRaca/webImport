@@ -126,8 +126,13 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
     public MovimentacaoDTO exprtandoMovement(MovimentacaoDTO movimentacao) throws Exception {
         cont = 0;
         List<Movimentacao> movimentacaos = getMovimentacaoList(movimentacao);
-        movimentacaoDao.TransferirMovimentacaoOracle(movimentacaos);
+        List<Movimentacao> movimentacaos1 = movimentacaoDao.TransferirMovimentacaoOracle(movimentacaos);
         movimentacao.setListMovimentacao(movimentacaos);
+        if(movimentacaos1 != null && movimentacaos1.size() == 0){
+            movimentacao.setMessage("Todos os registro já exportador");
+        }else{
+            movimentacao.setMessage("Registros exportador -> " + movimentacaos.size());
+        }
         return movimentacao;
     }
 

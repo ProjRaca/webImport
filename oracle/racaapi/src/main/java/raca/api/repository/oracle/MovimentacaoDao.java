@@ -16,6 +16,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -68,8 +69,9 @@ public class MovimentacaoDao {
          return all.stream().filter(m -> m.getStatus().equals("P")).collect(Collectors.toList());
      }
 
-    public void TransferirMovimentacaoOracle( List<Movimentacao> listMovimentacao) throws Exception{
+    public List<Movimentacao> TransferirMovimentacaoOracle( List<Movimentacao> listMovimentacao) throws Exception{
          final Connection connOracle = minhaConnectionOracle.createConnectionToOracle();
+        List<Movimentacao> listMovimentacaoProcessada = new ArrayList<>();
          try {
 
              listMovimentacao.stream().forEach(x -> {
@@ -91,6 +93,7 @@ public class MovimentacaoDao {
                              dataCompetenciaConsulta,x.getIdfuncionario(), x.getContacorrente())){
                          if(x.getTipoparceiro() != null){
                              insertOracle(connOracle, numreg, oSql);
+                             listMovimentacaoProcessada.add(x);
                          }
                      }
                      AtualizarProximoRegistro(numreg);
@@ -105,6 +108,7 @@ public class MovimentacaoDao {
          }finally {
              connOracle.close();
          }
+        return listMovimentacaoProcessada;
     }
 
     private static String getSql(Movimentacao x, int numreg, String dataVencimento, String dataCompetencia, String dataSistema) {
