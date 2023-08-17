@@ -126,7 +126,6 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
     public MovimentacaoDTO exprtandoMovement(MovimentacaoDTO movimentacao) throws Exception {
         cont = 0;
         List<Movimentacao> movimentacaos = getMovimentacaoList(movimentacao);
-
         movimentacaoDao.TransferirMovimentacaoOracle(movimentacaos);
         movimentacao.setListMovimentacao(movimentacaos);
         return movimentacao;
@@ -144,6 +143,7 @@ public class MovimentacaoServiceImpl implements MovimentacaoService {
                     moviment.setCodigofilial(movimentacao.getCodigofilial());
                     moviment.setCompetencia(movimentacao.getCompetencia());
                     moviment.setHistorico(movimentacao.getHistorico());
+                    moviment.setHistoricodescricao(movimentacao.getHistoricoDescricao());
                     moviment.setVencimento(movimentacao.getVencimento());
                     moviment.setStatus("E");
                     moviment.setContacorrente(byCpfFuncionarioAndHistorico.getIdconta());
