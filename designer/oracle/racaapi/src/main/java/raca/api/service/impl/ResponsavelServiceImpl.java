@@ -38,7 +38,7 @@ public class ResponsavelServiceImpl implements ResponsavelService {
         if(responsavel.getEmail() != null ){
             resp.setEmail(responsavel.getEmail());
         }
-
+        resp.setFilial(responsavel.isFilial());
         responsavelRepository.save(resp);
     }
 
@@ -60,6 +60,7 @@ public class ResponsavelServiceImpl implements ResponsavelService {
         if(responsavel.getEmail() != null ){
             resp.setEmail(responsavel.getEmail());
         }
+        resp.setFilial(responsavel.isFilial());
         return responsavelRepository.save(resp);
     }
 

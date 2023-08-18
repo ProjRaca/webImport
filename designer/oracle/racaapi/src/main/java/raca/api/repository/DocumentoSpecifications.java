@@ -120,7 +120,9 @@ public class DocumentoSpecifications {
             if (nome != null) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("nome"), nome));
             }
-            if(isAdmin()){
+            if(!isAdmin()){
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("restrito"), restrito));
+            }else if(isAdmin() && restrito){
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("restrito"), restrito));
             }
 
