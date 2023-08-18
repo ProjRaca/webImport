@@ -64,7 +64,7 @@ public class ResponsavelController {
         responsavelService.salvarResponsavel(responsavelDTO);
     }
 
-    @PostUpdate
+    @PutMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
     @ApiOperation("Retorna um responsável pelo Id")
     @ApiResponses({

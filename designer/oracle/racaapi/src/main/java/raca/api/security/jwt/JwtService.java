@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import raca.api.domain.entity.postgres.Usuario;
 import raca.api.service.impl.UsuarioServiceImpl;
+import raca.api.util.Util;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -33,11 +34,6 @@ public class JwtService {
         LocalDateTime dataHoraExpiracao = LocalDateTime.now().plusMinutes(expString);
         Instant instant = dataHoraExpiracao.atZone(ZoneId.systemDefault()).toInstant();
         Date data = Date.from(instant);
-
-    //    usuarioServiceImpl.getIdlUsuarios(usuario.getId()).ifPresent( user -> {
-
-    //    });
-
 
         return Jwts
                 .builder()
