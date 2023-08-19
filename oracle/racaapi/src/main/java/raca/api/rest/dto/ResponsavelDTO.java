@@ -11,4 +11,5 @@ public class ResponsavelDTO extends ErroCode{
     private String nome;
     private String email;
     private String telefone;
+    private boolean filial;
 }

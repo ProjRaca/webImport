@@ -56,7 +56,7 @@ public class UsuarioController {
                     .admin(false).build();
             UserDetails usuarioAutenticado = usuarioService.autenticar(usuario);
             String token = jwtService.gerarToken(usuario);
-            return new TokenDTO(usuario.getLogin(), token,0,"");
+            return new TokenDTO(usuario.getLogin(), token,0,usuarioAutenticado.getAuthorities().stream().findFirst().get().toString());
         } catch (UsernameNotFoundException | SenhaInvalidaException e ){
             return new TokenDTO("", "",404,"Login  ou senha innválidos");
         }

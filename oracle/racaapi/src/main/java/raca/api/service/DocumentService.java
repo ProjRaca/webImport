@@ -24,7 +24,7 @@ public interface DocumentService {
                                          String datafim,
                                          String datafimvalidade,
                                          Integer numerodocumento,
-                                         boolean responsavel);
+                                         String responsavel);
 
     DocumentoDTO salvar(DocumentoDTO doc);
 

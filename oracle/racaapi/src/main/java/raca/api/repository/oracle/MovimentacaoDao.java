@@ -78,17 +78,11 @@ public class MovimentacaoDao {
                  int numreg = 0;
                  try {
                      numreg = this.ConsultarUltimoMovimento();
-
                      Date data = new Date();
-                     SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                      SimpleDateFormat dateFormatConsulta = new SimpleDateFormat("yyyy-MM-dd");
-                     //String dataVencimento = dateFormat.format(x.getVencimento());
-                     //String dataCompetencia = dateFormat.format(x.getCompetencia());
                      String dataCompetenciaConsulta = x.getCompetencia().toString();
                      String dataSistema =  dateFormatConsulta.format(data);
-
                      String oSql = getSql(x, numreg, x.getVencimento().toString(), x.getCompetencia().toString(), dataSistema);
-
                      if(!validaInsert( x.getCodigofilial(), x.getNota().replace("/",""),
                              dataCompetenciaConsulta,x.getIdfuncionario(), x.getContacorrente())){
                          if(x.getTipoparceiro() != null){
@@ -144,7 +138,6 @@ public class MovimentacaoDao {
             pstmtO.setString(5, codConta);
 
             rs = pstmtO.executeQuery();
-
             while (rs.next()) {
                 rs.getString("CODCONTA");
                 return true;
