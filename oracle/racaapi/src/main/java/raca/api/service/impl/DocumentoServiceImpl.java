@@ -5,7 +5,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import raca.api.domain.entity.postgres.Documento;
-import raca.api.repository.DocumentoSpecifications;
+import raca.api.repository.specifications.DocumentoSpecifications;
 import raca.api.repository.postgres.DocumentRepository;
 import raca.api.rest.dto.DocumentoDTO;
 import raca.api.service.DocumentService;

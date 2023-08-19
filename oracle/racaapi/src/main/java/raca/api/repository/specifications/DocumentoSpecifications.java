@@ -1,4 +1,4 @@
-package raca.api.repository;
+package raca.api.repository.specifications;
 
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;

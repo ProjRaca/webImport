@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface ResponsavelService {
 
-    List<Responsavel> getAllResponsavel();
+    List<ResponsavelDTO> getFilterResponsavel(Integer id,   String cpfcnpj,    String nome,    String email,    String telefone,    boolean filial);
 
     Optional<Responsavel> getRsponsavelId(Integer id);
 
