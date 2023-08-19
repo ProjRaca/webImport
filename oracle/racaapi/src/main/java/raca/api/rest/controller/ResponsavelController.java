@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import raca.api.domain.entity.postgres.Responsavel;
+import raca.api.rest.dto.DocumentoDTO;
 import raca.api.rest.dto.ResponsavelDTO;
 import raca.api.service.ResponsavelService;
 
@@ -33,9 +34,29 @@ public class ResponsavelController {
             @ApiResponse(code = 200, message = "Listagem exibida com sucesso"),
             @ApiResponse(code = 400, message = "Erro de validação")
     })
-    public List<Responsavel> getFilterDocument() {
+    public List<Responsavel> getAllResponsavel() {
         return responsavelService.getAllResponsavel();
     }
+
+
+    @GetMapping("/filter")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation("Lista de todos os responsáveis")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Listagem exibida com sucesso"),
+            @ApiResponse(code = 400, message = "Erro de validação")
+    })
+    public List<ResponsavelDTO> getFilterDocument(@RequestParam(value = "id", required = false) Integer id,
+                                                  @RequestParam(value = "cpfcnpj", required = false) String cpfcnpj,
+                                                  @RequestParam(value = "nome", required = false) String nome,
+                                                  @RequestParam(value = "email", required = false) String email,
+                                                  @RequestParam(value = "telefone", required = false) String telefone,
+                                                  @RequestParam(value = "filial", required = false) Boolean filial) {
+
+        return responsavelService.getFilterResponsavel(id, cpfcnpj, nome, email, telefone,filial);
+    }
+
+
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
@@ -64,7 +85,7 @@ public class ResponsavelController {
         responsavelService.salvarResponsavel(responsavelDTO);
     }
 
-    @PostUpdate
+    @PutMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
     @ApiOperation("Retorna um responsável pelo Id")
     @ApiResponses({

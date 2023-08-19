@@ -34,11 +34,6 @@ public class JwtService {
         Instant instant = dataHoraExpiracao.atZone(ZoneId.systemDefault()).toInstant();
         Date data = Date.from(instant);
 
-    //    usuarioServiceImpl.getIdlUsuarios(usuario.getId()).ifPresent( user -> {
-
-    //    });
-
-
         return Jwts
                 .builder()
                 .setSubject(usuario.getLogin())

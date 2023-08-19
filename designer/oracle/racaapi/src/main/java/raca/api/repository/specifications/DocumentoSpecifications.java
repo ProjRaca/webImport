@@ -1,4 +1,4 @@
-package raca.api.repository;
+package raca.api.repository.specifications;
 
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
@@ -76,7 +76,7 @@ public class DocumentoSpecifications {
                                                        String datafim,
                                                        String datafimvalidade,
                                                        Integer numerodocumento,
-                                                       boolean usaFilial) {
+                                                       String responsavel) {
         return (root, query, criteriaBuilder) -> {
 
             Predicate predicate = criteriaBuilder.conjunction();
@@ -120,11 +120,16 @@ public class DocumentoSpecifications {
             if (nome != null) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("nome"), nome));
             }
-            if(isAdmin()){
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("restrito"), restrito));
+
+            if(responsavel != null){
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("responsavel"), responsavel));
             }
 
-            predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("usafilial"), usaFilial));
+            if(!isAdmin()){
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("restrito"), restrito));
+            }else if(isAdmin() && restrito){
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("restrito"), restrito));
+            }
 
             return predicate;
         };

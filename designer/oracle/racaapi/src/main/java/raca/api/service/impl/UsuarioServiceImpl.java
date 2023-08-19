@@ -55,7 +55,7 @@ public class UsuarioServiceImpl implements UserDetailsService {
             //    .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado na base de dados."));
 
         String[] roles = usuario.isAdmin() ?
-                new String[]{"ADMIN", "USER"} : new String[]{"USER"};
+                new String[]{"ADMIN"} : new String[]{"USER"};
 
         return User
                 .builder()

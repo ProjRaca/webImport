@@ -7,20 +7,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import raca.api.domain.entity.postgres.Documento;
-import raca.api.repository.DocumentoSpecifications;
+import raca.api.repository.specifications.DocumentoSpecifications;
 import raca.api.repository.postgres.DocumentRepository;
 import raca.api.rest.dto.DocumentoDTO;
 import raca.api.service.DocumentService;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Service
@@ -133,8 +128,10 @@ public class DocumentoServiceImpl implements DocumentService {
         documento.setTipodocumento(doc.getTipodocumento());
         if(doc.getIddocpai() != null){
             Optional<Documento> byId = documentRepository.findById(doc.getIddocpai());
-            documento.setIddocpai(doc.getIddocpai());
-            documento.setNomepai(byId.get().getNome());
+            if(byId.isPresent()){
+                documento.setIddocpai(doc.getIddocpai());
+                documento.setNomepai(byId.get().getNome());
+            }
         }
         documento.setNome(doc.getNome());
         documento.setRestrito(doc.isRestrito());
@@ -143,7 +140,7 @@ public class DocumentoServiceImpl implements DocumentService {
 
     public List<DocumentoDTO> getFilterDocument(Integer id, String filial, String emissor, String datadocumentesc, String datavalidade,
                                                     String tipodocumento, Integer iddocpai, boolean restrito, String nome, String datafim,
-                                                    String datafimvalidade, Integer numerodocumento, boolean usaFilial) {
+                                                    String datafimvalidade, Integer numerodocumento, String responsavel) {
 
         Specification<Documento> spec = DocumentoSpecifications.withFilters(id, filial,
                 emissor,
@@ -156,7 +153,7 @@ public class DocumentoServiceImpl implements DocumentService {
                 datafim,
                 datafimvalidade,
                 numerodocumento,
-                usaFilial);
+                responsavel);
         List<Documento> documentos = documentRepository.findAll(spec);
 
         return documentos.stream().map(documento -> {
