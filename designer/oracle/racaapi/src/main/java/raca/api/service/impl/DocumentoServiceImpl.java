@@ -133,8 +133,10 @@ public class DocumentoServiceImpl implements DocumentService {
         documento.setTipodocumento(doc.getTipodocumento());
         if(doc.getIddocpai() != null){
             Optional<Documento> byId = documentRepository.findById(doc.getIddocpai());
-            documento.setIddocpai(doc.getIddocpai());
-            documento.setNomepai(byId.get().getNome());
+            if(byId.isPresent()){
+                documento.setIddocpai(doc.getIddocpai());
+                documento.setNomepai(byId.get().getNome());
+            }
         }
         documento.setNome(doc.getNome());
         documento.setRestrito(doc.isRestrito());
@@ -143,7 +145,7 @@ public class DocumentoServiceImpl implements DocumentService {
 
     public List<DocumentoDTO> getFilterDocument(Integer id, String filial, String emissor, String datadocumentesc, String datavalidade,
                                                     String tipodocumento, Integer iddocpai, boolean restrito, String nome, String datafim,
-                                                    String datafimvalidade, Integer numerodocumento, boolean usaFilial) {
+                                                    String datafimvalidade, Integer numerodocumento, String responsavel) {
 
         Specification<Documento> spec = DocumentoSpecifications.withFilters(id, filial,
                 emissor,
@@ -156,7 +158,7 @@ public class DocumentoServiceImpl implements DocumentService {
                 datafim,
                 datafimvalidade,
                 numerodocumento,
-                usaFilial);
+                responsavel);
         List<Documento> documentos = documentRepository.findAll(spec);
 
         return documentos.stream().map(documento -> {

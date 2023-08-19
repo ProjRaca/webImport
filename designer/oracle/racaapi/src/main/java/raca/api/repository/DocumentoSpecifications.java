@@ -76,7 +76,7 @@ public class DocumentoSpecifications {
                                                        String datafim,
                                                        String datafimvalidade,
                                                        Integer numerodocumento,
-                                                       boolean usaFilial) {
+                                                       String responsavel) {
         return (root, query, criteriaBuilder) -> {
 
             Predicate predicate = criteriaBuilder.conjunction();
@@ -120,13 +120,16 @@ public class DocumentoSpecifications {
             if (nome != null) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("nome"), nome));
             }
+
+            if(responsavel != null){
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("responsavel"), responsavel));
+            }
+
             if(!isAdmin()){
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("restrito"), restrito));
             }else if(isAdmin() && restrito){
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("restrito"), restrito));
             }
-
-            predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("usafilial"), usaFilial));
 
             return predicate;
         };
