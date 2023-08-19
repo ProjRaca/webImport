@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ResponsavelDTO extends ErroCode{
 
-    private String id;
+    private Integer id;
     private String cpfcnpj;
     private String nome;
     private String email;

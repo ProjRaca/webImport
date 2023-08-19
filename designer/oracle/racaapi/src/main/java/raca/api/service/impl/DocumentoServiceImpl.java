@@ -7,20 +7,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import raca.api.domain.entity.postgres.Documento;
-import raca.api.repository.DocumentoSpecifications;
+import raca.api.repository.specifications.DocumentoSpecifications;
 import raca.api.repository.postgres.DocumentRepository;
 import raca.api.rest.dto.DocumentoDTO;
 import raca.api.service.DocumentService;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Service
