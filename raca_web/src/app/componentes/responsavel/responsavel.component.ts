@@ -16,12 +16,13 @@ import { DialogDeleteComponent } from '../dialogDelete/dialog-delete.component';
 })
 export class ResponsavelComponent extends ScackBarCustomComponent implements OnInit {
 
-  displayedColumns: string[] = ['id', 'Nome','Email', 'Cpf/Cnpj','Telefone','Ações'];
+  displayedColumns: string[] = ['id','Nome','Email', 'Cpf/Cnpj','Filial','Telefone','Ações'];
 
   responsaveis: Responsavel[] = [];
   exibirDetalhes: boolean = false;
   formulario!: FormGroup;
   nomePesquisa: string = '';
+  filialPesquisa: boolean = false;
 
   responsavelDetalhes!: Responsavel;
   idRemocao: string = '';
@@ -43,15 +44,16 @@ export class ResponsavelComponent extends ScackBarCustomComponent implements OnI
   criarFormulario(){
     this.formulario = this.formBuilder.group({
       nome: ['', [Validators.required]],
-      email: ['', [ Validators.email]],
+      email: ['', [Validators.email]],
       cpfCnpj: ['', [Validators.required]],
+      filial:[false,[Validators.required]],
       telefone: [''],
     });
   }
 
   pesquisar(){
-    if (this.nomePesquisa.length == 0){
-      this.exibirMensagemErro('Falha na pesquisa','É necessário informar o nome para pesquisar.');
+    if (this.nomePesquisa.length == 0 || this.filialPesquisa != undefined){
+      this.exibirMensagemErro('Falha na pesquisa','É necessário informar o nome ou filial para pesquisar.');
       return;
     }
     this.responsavelService.findByName(this.nomePesquisa).then( response => {
@@ -91,7 +93,8 @@ export class ResponsavelComponent extends ScackBarCustomComponent implements OnI
       nome: this.formulario?.value.nome,
       cpfcnpj: this.formulario?.value.cpfCnpj,
       telefone: this.formulario?.value.telefone,
-      email: this.formulario?.value.email
+      email: this.formulario?.value.email,
+      filial: this.formulario?.value.filial
     };
 
     this.responsavelService.save(responsavelInclusao).then( response => {

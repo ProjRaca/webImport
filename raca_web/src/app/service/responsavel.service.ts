@@ -14,7 +14,7 @@ export class ResponsavelService {
     private router: Router,
     private http: HttpClient ) { }
 
-    async findAll():Promise<any> {
+  async findAll():Promise<any> {
       const req = new HttpRequest('GET',`${apiUrl}/all`);
     return await this.http.request(req).toPromise();
   }
@@ -38,4 +38,9 @@ export class ResponsavelService {
     const req = new HttpRequest('DELETE',`${apiUrl}/${id}`);
     return await this.http.request(req).toPromise();
   }
+
+  async findAllFiliais():Promise<any> {
+    const req = new HttpRequest('GET',`${apiUrl}/filiais`);
+  return await this.http.request(req).toPromise();
+}
 }
