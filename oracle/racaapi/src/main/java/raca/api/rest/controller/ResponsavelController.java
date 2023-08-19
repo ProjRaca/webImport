@@ -34,6 +34,18 @@ public class ResponsavelController {
             @ApiResponse(code = 200, message = "Listagem exibida com sucesso"),
             @ApiResponse(code = 400, message = "Erro de validação")
     })
+    public List<Responsavel> getAllResponsavel() {
+        return responsavelService.getAllResponsavel();
+    }
+
+
+    @GetMapping("/filter")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation("Lista de todos os responsáveis")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Listagem exibida com sucesso"),
+            @ApiResponse(code = 400, message = "Erro de validação")
+    })
     public List<ResponsavelDTO> getFilterDocument(@RequestParam(value = "id", required = false) Integer id,
                                                   @RequestParam(value = "cpfcnpj", required = false) String cpfcnpj,
                                                   @RequestParam(value = "nome", required = false) String nome,
