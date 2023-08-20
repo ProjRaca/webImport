@@ -52,11 +52,19 @@ export class ResponsavelComponent extends ScackBarCustomComponent implements OnI
   }
 
   pesquisar(){
-    if (this.nomePesquisa.length == 0 || this.filialPesquisa != undefined){
+    if (this.nomePesquisa.length == 0 && this.filialPesquisa == undefined){
       this.exibirMensagemErro('Falha na pesquisa','É necessário informar o nome ou filial para pesquisar.');
       return;
     }
-    this.responsavelService.findByName(this.nomePesquisa).then( response => {
+
+    let filter = {
+      nome: this.nomePesquisa!= '' ? this.nomePesquisa : '',
+      filial: this.filialPesquisa
+    }
+    this.responsavelService.findByFilter(filter)
+    .pipe()
+    .toPromise()
+    .then( response => {
       if (!response.ok) {
         this.exibirMensagemErro('Falha na autenticação','Usuário ou senha incorretos.');
       }
