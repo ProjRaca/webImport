@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Column;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -25,4 +26,6 @@ public class DocumentoDTO extends ErroCode{
     private String nomepai;
     private byte[] documento;
     private boolean usaFilial;
+    private Integer idresponsavel;
+    private Integer idfilial;
 }

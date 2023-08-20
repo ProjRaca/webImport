@@ -51,5 +51,11 @@ public class Documento {
     @Column
     private String responsavel;
 
+    @Column
+    private Integer idresponsavel;
+
+    @Column
+    private Integer idfilial;
+
 
 }
