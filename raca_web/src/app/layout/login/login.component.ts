@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ScackBarCustomComponent } from 'src/app/componentes/scack-bar-custom/scack-bar-custom.component';
 import { Login } from 'src/app/entity/login.entity';
+import { RolesEnum } from 'src/app/enums/rolesEnum.enum';
 import { UsuarioService } from 'src/app/service/usuario.service';
 
 @Component({
@@ -41,6 +42,7 @@ export class LoginComponent extends ScackBarCustomComponent implements OnInit {
       } else {
         localStorage.setItem('token', response.body.token);
         localStorage.setItem('login', response.body.login);
+        localStorage.setItem('role', response.body.roles == RolesEnum.ADM ? 'true' : 'false' );
         this.router.navigate(['']);
       }
       this.isLoginwait = false;

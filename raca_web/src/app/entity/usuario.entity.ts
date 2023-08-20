@@ -4,4 +4,5 @@ export  interface Usuario {
   email: string;
   login: string;
   senha: string;
+  admin: boolean;
 }

@@ -9,6 +9,7 @@ import { ResponsavelService } from 'src/app/service/responsavel.service';
 import { DataUtils } from 'src/app/utils/data.utils';
 import { ScackBarCustomComponent } from '../scack-bar-custom/scack-bar-custom.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UsuarioService } from 'src/app/service/usuario.service';
 
 @Component({
   selector: 'app-modalcadastrodocumento',
@@ -56,11 +57,13 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
   base64File: string[] = [];
   detalhes: boolean = false;
   update: boolean = false;
+  exibirRestrito: boolean = false
 
   constructor(
     @Inject(FormBuilder) public formBuilder: FormBuilder,
     private responsavelService: ResponsavelService,
     private serviceDocumento : DocumentoService,
+    private usuarioService: UsuarioService,
     snackBar: MatSnackBar) {
       super(snackBar);
     }
@@ -70,6 +73,7 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
     this.getAllFiliais();
     this.getAllResponsaveis();
     this.getDocumentos();
+    this.exibirRestrito = this.usuarioService.isUsuarioAdmin;
     if(this.isCadastro()){
       this.criarFormulario();
       this.filteredOptions = this.formularioModal.get('nomeResponsavel')!.valueChanges.pipe(

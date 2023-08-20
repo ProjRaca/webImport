@@ -89,7 +89,7 @@
           <div>
             <input  class="margen" required type="file" accept="application/pdf" matFileInput (change)="onFileChange($event)" *ngIf="!detalhes && !update">
             <section class="checkbox margen">
-              <mat-checkbox class="example-margin" name="documentoRestrito" formControlName="docRestrito" [disabled]="detalhes">Doc Restrito</mat-checkbox>
+              <mat-checkbox class="example-margin" name="documentoRestrito" formControlName="docRestrito" [disabled]="detalhes" *ngIf="exibirRestrito">Doc Restrito</mat-checkbox>
             </section>
           </div>
         </div>
