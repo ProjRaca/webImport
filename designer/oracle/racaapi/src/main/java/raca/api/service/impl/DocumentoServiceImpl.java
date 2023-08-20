@@ -71,6 +71,7 @@ public class DocumentoServiceImpl implements DocumentService {
                     documentoDTO.setRestrito(document.isRestrito());
                     documentoDTO.setResponsavel(document.getResponsavel());
                     documentoDTO.setEmpresa(document.getEmpresa());
+                    documentoDTO.setNumerodocumento(document.getNumerodocumento());
                     return documentoDTO;
                 })
                 .collect(Collectors.toList());
@@ -126,6 +127,7 @@ public class DocumentoServiceImpl implements DocumentService {
         documento.setId(doc.getId());
         documento.setEmpresa(doc.getEmpresa());
         documento.setResponsavel(doc.getResponsavel());
+        documento.setNumerodocumento(doc.getNumerodocumento());
         return documento;
     }
 
@@ -155,7 +157,7 @@ public class DocumentoServiceImpl implements DocumentService {
         documento.setRestrito(doc.isRestrito());
         documento.setEmpresa(doc.getEmpresa());
         documento.setResponsavel(doc.getResponsavel());
-
+        documento.setNumerodocumento(doc.getNumerodocumento());
         return documento;
     }
 
