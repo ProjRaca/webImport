@@ -7,10 +7,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import raca.api.domain.entity.postgres.Documento;
-import raca.api.repository.specifications.DocumentoSpecifications;
+import raca.api.domain.entity.postgres.Responsavel;
 import raca.api.repository.postgres.DocumentRepository;
+import raca.api.repository.specifications.DocumentoSpecifications;
 import raca.api.rest.dto.DocumentoDTO;
 import raca.api.service.DocumentService;
+import raca.api.service.ResponsavelService;
 
 import java.util.Iterator;
 import java.util.List;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 public class DocumentoServiceImpl implements DocumentService {
 
     private final DocumentRepository documentRepository;
+    private final ResponsavelService responsavelService;
 
 
     @Override
@@ -46,12 +49,18 @@ public class DocumentoServiceImpl implements DocumentService {
         return null;
     }
 
-    private static List<DocumentoDTO> getDocumentoDTOS(List<Documento> documentsByFilter) {
+    private List<DocumentoDTO> getDocumentoDTOS(List<Documento> documentsByFilter) {
         return documentsByFilter.stream()
                 .map(document -> {
                     DocumentoDTO documentoDTO = new DocumentoDTO();
                     documentoDTO.setId(document.getId());
                     documentoDTO.setFilial(document.getFilial());
+                    if (document.getFilial() != null && !document.getFilial() .isEmpty()) {
+                        Optional<Responsavel> responsavel = responsavelService.getRsponsavelId(Integer.valueOf(document.getFilial()));
+                        responsavel.ifPresent(x -> {
+                            documentoDTO.setNomefilial(x.getNome());
+                        });
+                    }
                     documentoDTO.setEmissor(document.getEmissor());
                     documentoDTO.setDatadocumentesc(document.getDatadocumentesc());
                     documentoDTO.setDatavalidade(document.getDatavalidade());
@@ -124,6 +133,11 @@ public class DocumentoServiceImpl implements DocumentService {
     private DocumentoDTO getDocumentDTO(Documento doc){
         DocumentoDTO documento = new DocumentoDTO();
         documento.setId(doc.getId());
+        if(doc.getFilial() != null && !doc.getFilial().isEmpty()){
+            responsavelService.getRsponsavelId(Integer.valueOf(doc.getFilial())).ifPresent( x->{
+                documento.setNomefilial(x.getNome());
+            });
+        }
         documento.setFilial(doc.getFilial());
         documento.setEmissor(doc.getEmissor());
         documento.setDatavalidade(doc.getDatavalidade());

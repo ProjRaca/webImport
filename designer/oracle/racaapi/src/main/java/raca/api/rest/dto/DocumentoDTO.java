@@ -24,9 +24,10 @@ public class DocumentoDTO extends ErroCode{
     private boolean restrito;
     private String nome;
     private String nomepai;
-    private byte[] documento;
     private String responsavel;
     private Integer empresa;
+    private String nomefilial;
+    private byte[] documento;
 
 
 }
