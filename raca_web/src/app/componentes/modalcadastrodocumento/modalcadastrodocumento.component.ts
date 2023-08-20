@@ -35,6 +35,7 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
 
   listaEmpresa  = [ { id:1, value: "Raça Distribuidora"}, { id:2, value: "Casa de Carnes" } ]
   responsaveis: Responsavel[] = [];
+  filiais: Responsavel[] = [];
   documentos: DocumentoDTO[] = [];
   documento!: DocumentoDTO;
   tipoDocumento = [
@@ -65,6 +66,7 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
   ngOnInit(): void {
     this.selecionarNomeModal();
     if(this.isCadastro()){
+      this.getAllFiliais();
       this.getAllResponsaveis();
       this.getDocumentos();
       this.criarFormulario();
@@ -91,7 +93,8 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
         docPai: [''],
         nomeDocumento: ['',[Validators.required]],
         numeroDocumento: ['',[Validators.required]],
-        file: ['']
+        file: [''],
+        filialForm: ['']
     });
     this.formularioModal.get('docRestrito')?.setValue(false)
   }
@@ -100,7 +103,7 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
     let dataDocumento = DataUtils.convertDataStringToReversePtBrFormat( documento.datadocumentesc?.toString() || '' );
     let dataValidade = DataUtils.convertDataStringToReversePtBrFormat( documento.datavalidade?.toString() || '' );
       this.formularioModal = this.formBuilder.group({
-        empresaForm: [documento.filial],
+        empresaForm: [documento.empresa],
         dtDocumento: [  dataDocumento],
         dtValidade: [  dataValidade],
         nomeResponsavel: [  documento.emissor],
@@ -110,12 +113,19 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
         nomeDocumento: [  documento.nome],
         numeroDocumento: [ documento.numerodocumento ],
         file: [  documento.documento],
+        filialForm: [documento.filial],
     });
   }
 
   getAllResponsaveis(){
     this.responsavelService.findAll().then(response => {
       this.responsaveis = response.body;
+    })
+  }
+
+  getAllFiliais(){
+    this.responsavelService.findAllFiliais().then(response => {
+      this.filiais = response.body;
     })
   }
 
@@ -143,7 +153,8 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
     if(this.formularioModal.status == 'INVALID') return;
     var documentoInclusao = {
       iddocpai: this.formularioModal.value?.docPai,
-      filial: this.formularioModal.value?.empresaForm,
+      empresa: this.formularioModal.value?.empresaForm,
+      filial: this.formularioModal.value?.filialForm,
       datadocumentesc: dataDocumento,
       datavalidade: dataValidade,
       emissor: this.formularioModal.value?.nomeResponsavel,
@@ -151,7 +162,8 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
       documento: this.base64File,
       restrito: this.formularioModal.value?.docRestrito,
       nome: this.formularioModal.value?.nomeDocumento,
-      numerodocumento : this.formularioModal.value?.numerodocumento
+      numerodocumento : this.formularioModal.value?.numeroDocumento,
+      responsavel: this.formularioModal.value?.nomeResponsavel,
     };
     if(this.documento != undefined && this.documento.id != undefined){
       Object.assign(documentoInclusao,{id:this.documento.id });

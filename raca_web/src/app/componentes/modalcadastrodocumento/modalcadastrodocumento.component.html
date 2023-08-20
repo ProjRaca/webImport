@@ -21,9 +21,17 @@
               <mat-option *ngIf="documentos.length == 0" value="">Sem registros para exibir</mat-option>
             </mat-select>
           </mat-form-field>
+          <mat-form-field  class="input margen-min">
+            <mat-label>Filial</mat-label>
+            <mat-select formControlName="filialForm" *ngIf="!detalhes" [compareWith] = "compareValues">
+              <mat-option *ngFor="let filial of filiais" [value]="filial.id" >
+                {{filial.nome}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
           <mat-form-field  class="input-modal" >
             <mat-label>Numero do Documento</mat-label>
-              <input matInput  formControlName="numerodocumento" mask="999999999">
+              <input matInput  formControlName="numeroDocumento" mask="999999999">
 
           </mat-form-field>
         </p>
