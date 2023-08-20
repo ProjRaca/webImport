@@ -14,5 +14,6 @@ export interface DocumentoDTO{
   datafimvalidade?: string,
   datafim?: string,
   empresa?: string,
-  responsavel?: string
+  responsavel?: string,
+  nomefilial?: string
 }

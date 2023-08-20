@@ -27,8 +27,10 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
   nomeEmpresa: string = '';
   nomeDocumentoPai: string = '';
   nomeResponsavel: string = '';
-  dataValidade: string = '';
-  dataDocumento: string = '';
+  dataValidade!: Date | 'undefined';
+  dataDocumento!: Date | 'undefined';
+  dataValidadeDetalhes: string = '';
+  dataDocumentoDetalhes: string  = '';
   tipoDocumentoDesc: string = '';
   documentoRestritoDesc: string = '';
   documentoBase64: string[] = [];
@@ -65,10 +67,10 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
 
   ngOnInit(): void {
     this.selecionarNomeModal();
+    this.getAllFiliais();
+    this.getAllResponsaveis();
+    this.getDocumentos();
     if(this.isCadastro()){
-      this.getAllFiliais();
-      this.getAllResponsaveis();
-      this.getDocumentos();
       this.criarFormulario();
       this.filteredOptions = this.formularioModal.get('nomeResponsavel')!.valueChanges.pipe(
         startWith(''),
@@ -77,7 +79,6 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
     }else if(this.isDetalhes()){
       this.carregarDadosDetalhes();
     } else if (this.isUpdate()){
-      this.getDocumentos();
       this.criarFormularioUpdate(this.documento);
     }
   }
@@ -100,8 +101,8 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
   }
 
   criarFormularioUpdate(documento: DocumentoDTO){
-    let dataDocumento = DataUtils.convertDataStringToReversePtBrFormat( documento.datadocumentesc?.toString() || '' );
-    let dataValidade = DataUtils.convertDataStringToReversePtBrFormat( documento.datavalidade?.toString() || '' );
+      let dataDocumento = DataUtils.formatarDatetoBrFormat(documento.datadocumentesc?.toString());
+      let dataValidade =  DataUtils.formatarDatetoBrFormat(documento.datavalidade?.toString());
       this.formularioModal = this.formBuilder.group({
         empresaForm: [documento.empresa],
         dtDocumento: [  dataDocumento],
@@ -261,14 +262,15 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
   }
 
   private carregarDadosDetalhes() {
-    sleep(5000);
-    this.nomeEmpresa = this.listaEmpresa.filter(emp => emp.id === Number(this.documento.filial))[0].value;
-    this.dataDocumento = DataUtils.formatarData(this.documento.datadocumentesc as string);
-    this.dataValidade = DataUtils.formatarData(this.documento.datavalidade as string);
+
+    this.nomeEmpresa = this.listaEmpresa.filter(emp => emp.id === Number(this.documento.empresa))[0].value;
+    this.dataDocumentoDetalhes = DataUtils.formatarData(this.documento.datadocumentesc as string);
+    this.dataValidadeDetalhes = DataUtils.formatarData(this.documento.datavalidade as string);
     this.tipoDocumentoDesc = this.tipoDocumento.filter(tp => tp.id === Number(this.documento.tipodocumento))[0].value;
     this.documentoRestritoDesc = this.documento.restrito === true ? 'Sim' : 'Não';
     this.nomeDocumentoPai = this.documento.nomepai || '';
     this.documentoBase64 = this.documento.documento || [];
+    sleep(5000);
   }
 
   private selecionarNomeModal(){

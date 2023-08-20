@@ -87,12 +87,12 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
    let dtFimValidade = this.formulario.get('dtValidadeFinal')?.value != '' && this.formulario.get('dtValidadeFinal')?.value != undefined ? DataUtils.formatarDatetoUsFormat(this.formulario.get('dtValidadeFinal')?.value) : '';
    let nomeResponsavel = this.formulario.get('responsavel')?.value || undefined ;
    let idResponsavel = nomeResponsavel != undefined ? this.responsaveis.filter(respo => respo.nome === nomeResponsavel )[0].nome : ''
-
+    let filialFilter = this.formulario.get('filial')?.value || undefined ;
     let filter: DocumentoDTO = {
       datadocumentesc: dtDocumento || undefined,
       datavalidade: dtValidade  || undefined,
       emissor: idResponsavel?.toString() ,
-      filial : this.formulario.get('empresa')?.value  || undefined,
+      empresa : this.formulario.get('empresa')?.value  || undefined,
       iddocpai: undefined,
       tipodocumento: this.formulario.get('tpDocumento')?.value || undefined,
       restrito: this.formulario.get('docRegistro')?.value || false,
@@ -100,6 +100,7 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
       datafimvalidade: dtFimValidade,
       datafim: dtFim,
       responsavel: idResponsavel?.toString() ,
+      filial: this.formulario.get('filial')?.value || undefined
     }
 
     this.serviceDocumento.findByFilter(filter)
@@ -218,7 +219,8 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
   detalhes(id: number){
 
     var doc: DocumentoDTO = {
-      id: id
+      id: id,
+      restrito: false
     }
     this.serviceDocumento.findByFilter(doc)
     .pipe()
@@ -252,7 +254,8 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
 
   editar(id: number){
     var doc: DocumentoDTO = {
-      id: id
+      id: id,
+      restrito: false
     };
 
     this.serviceDocumento.findByFilter(doc)
