@@ -141,6 +141,7 @@ public class DocumentoServiceImpl implements DocumentService {
         documento.setRestrito(doc.isRestrito());
         documento.setEmpresa(doc.getEmpresa());
         documento.setResponsavel(doc.getResponsavel());
+
         return documento;
     }
 
