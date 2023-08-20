@@ -60,6 +60,8 @@ public class DocumentoServiceImpl implements DocumentService {
                     documentoDTO.setIddocpai(document.getIddocpai());
                     documentoDTO.setNome(document.getNome());
                     documentoDTO.setRestrito(document.isRestrito());
+                    documentoDTO.setResponsavel(document.getResponsavel());
+                    documentoDTO.setEmpresa(document.getEmpresa());
                     return documentoDTO;
                 })
                 .collect(Collectors.toList());
@@ -113,6 +115,8 @@ public class DocumentoServiceImpl implements DocumentService {
         documento.setNome(doc.getNome());
         documento.setRestrito(doc.isRestrito());
         documento.setId(doc.getId());
+        documento.setEmpresa(doc.getEmpresa());
+        documento.setResponsavel(doc.getResponsavel());
         return documento;
     }
 
@@ -135,12 +139,14 @@ public class DocumentoServiceImpl implements DocumentService {
         }
         documento.setNome(doc.getNome());
         documento.setRestrito(doc.isRestrito());
+        documento.setEmpresa(doc.getEmpresa());
+        documento.setResponsavel(doc.getResponsavel());
         return documento;
     }
 
     public List<DocumentoDTO> getFilterDocument(Integer id, String filial, String emissor, String datadocumentesc, String datavalidade,
                                                     String tipodocumento, Integer iddocpai, boolean restrito, String nome, String datafim,
-                                                    String datafimvalidade, Integer numerodocumento, String responsavel) {
+                                                    String datafimvalidade, Integer numerodocumento, String responsavel,Integer empresa) {
 
         Specification<Documento> spec = DocumentoSpecifications.withFilters(id, filial,
                 emissor,
@@ -153,7 +159,8 @@ public class DocumentoServiceImpl implements DocumentService {
                 datafim,
                 datafimvalidade,
                 numerodocumento,
-                responsavel);
+                responsavel,
+                empresa);
         List<Documento> documentos = documentRepository.findAll(spec);
 
         return documentos.stream().map(documento -> {

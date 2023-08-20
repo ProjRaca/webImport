@@ -52,10 +52,7 @@ public class Documento {
     private String responsavel;
 
     @Column
-    private Integer idresponsavel;
-
-    @Column
-    private Integer idfilial;
+    private Integer empresa;
 
 
 }

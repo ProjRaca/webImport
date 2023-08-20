@@ -12,4 +12,5 @@ public class TokenDTO {
     private String token;
     private int code;
     private String message;
+    private String roles;
 }

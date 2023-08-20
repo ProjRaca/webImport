@@ -25,7 +25,7 @@ public class DocumentoDTO extends ErroCode{
     private String nome;
     private String nomepai;
     private byte[] documento;
-    private boolean usaFilial;
-    private Integer idresponsavel;
-    private Integer idfilial;
+    private String responsavel;
+    private Integer empresa;
+
 }

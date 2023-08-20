@@ -76,7 +76,8 @@ public class DocumentoSpecifications {
                                                        String datafim,
                                                        String datafimvalidade,
                                                        Integer numerodocumento,
-                                                       String responsavel) {
+                                                       String responsavel,
+                                                       Integer empresa) {
         return (root, query, criteriaBuilder) -> {
 
             Predicate predicate = criteriaBuilder.conjunction();
@@ -129,6 +130,10 @@ public class DocumentoSpecifications {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("restrito"), restrito));
             }else if(isAdmin() && restrito){
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("restrito"), restrito));
+            }
+
+            if (empresa != null) {
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("empresa"), empresa));
             }
 
             return predicate;

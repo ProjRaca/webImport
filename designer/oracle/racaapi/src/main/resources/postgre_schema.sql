@@ -415,7 +415,5 @@ ALTER TABLE raca.documento ADD COLUMN nome varchar(255);
 ALTER TABLE raca.documento ADD COLUMN numerodocumento integer;
 ALTER TABLE raca.responsavel ADD COLUMN filial boolean;
 ALTER TABLE raca.documento ADD COLUMN responsavel varchar(120);
-
-ALTER TABLE raca.documento ADD COLUMN idfilial integer;
-ALTER TABLE raca.documento ADD COLUMN idresponsavel integer;
+ALTER TABLE raca.documento ADD COLUMN empresa integer;
 
