@@ -31,7 +31,7 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
 
   responsavel!: string;
 
-  displayedColumns: string[] = ['id','Nome', 'Empresa', 'Filial', 'Responsável','Tp Documento','Dt Documento','Dt Validade', 'Doc Restrito','Ações'];
+  displayedColumns: string[] = ['id','Nome', 'Filial', 'Responsável','Tp Documento','Dt Documento','Dt Validade', 'Doc Restrito','Ações'];
   responsaveis: Responsavel[] = [];
   filiais: Responsavel[] = [];
 
