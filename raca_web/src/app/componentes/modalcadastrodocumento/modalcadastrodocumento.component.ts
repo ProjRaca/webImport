@@ -89,10 +89,10 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
 
   criarFormulario(){
       this.formularioModal = this.formBuilder.group({
-        empresaForm: ['',[Validators.required]],
+        empresaForm: [''],
         dtDocumento: [new Date(),[Validators.required]],
         dtValidade: [new Date(),[Validators.required]],
-        nomeResponsavel: ['',[Validators.required]],
+        nomeResponsavel: [''],
         tpDocumento: ['',[Validators.required]],
         docRestrito: [false,[Validators.required]],
         docPai: [''],

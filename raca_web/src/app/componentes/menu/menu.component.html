@@ -4,7 +4,7 @@
   <button mat-menu-item routerLink="/conferencia">Conferência</button>
 </mat-menu>
 
-<button mat-button routerLink="/usuario" >Usuarios</button>
+<button mat-button routerLink="/usuario" *ngIf="isAdmininstrador" >Usuarios</button>
 <button mat-button routerLink="/responsavel" >Responsáveis</button>
 <button mat-button routerLink="/documentos" >Documentos</button>
 <div class="spacer"></div>

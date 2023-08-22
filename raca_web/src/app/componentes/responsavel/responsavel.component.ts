@@ -46,7 +46,7 @@ export class ResponsavelComponent extends ScackBarCustomComponent implements OnI
       nome: ['', [Validators.required]],
       email: ['', [Validators.email]],
       cpfCnpj: ['', [Validators.required]],
-      filial:[false,[Validators.required]],
+      filial:[false],
       telefone: [''],
     });
   }

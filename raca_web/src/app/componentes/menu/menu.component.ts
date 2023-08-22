@@ -1,4 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
+import { UsuarioService } from 'src/app/service/usuario.service';
 
 @Component({
   selector: 'app-menu',
@@ -8,12 +9,15 @@ import { Component, ViewEncapsulation } from '@angular/core';
  })
 export class MenuComponent  {
 
-  constructor() {}
+  isAdmininstrador: boolean = false;
+
+  constructor(private usuarioService: UsuarioService) {}
 
   ngOnInit(): void {
+    this.isAdmininstrador = this.usuarioService.isUsuarioAdmin;
   }
 
-  csvInputChange(fileInputEvent: any) {
+  csvInputChange() {
 
   }
 }
