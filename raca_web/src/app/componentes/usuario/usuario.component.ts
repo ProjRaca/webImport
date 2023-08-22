@@ -16,7 +16,7 @@ import { ScackBarCustomComponent } from '../scack-bar-custom/scack-bar-custom.co
 })
 export class UsuarioComponent extends ScackBarCustomComponent implements OnInit {
 
-  displayedColumns: string[] = ['id','Login', 'Nome', 'Email','Ações'];
+  displayedColumns: string[] = ['id','Login', 'Nome', 'Email','Tipo Usuário','Ações'];
   hideRequiredControl = new FormControl(false);
   floatLabelControl = new FormControl('auto' as FloatLabelType);
   exibirDetalhes: boolean = false;
@@ -25,8 +25,8 @@ export class UsuarioComponent extends ScackBarCustomComponent implements OnInit 
   usuarios!: Usuario[];
   formulario!: FormGroup;
   nomePesquisa: string = ''
-
-
+  exibirAdm: boolean = false
+  adminModel: boolean = false
   constructor( private formBuilder: FormBuilder,
     protected modalService: ModalService,
     private usuarioService: UsuarioService,
@@ -37,6 +37,7 @@ export class UsuarioComponent extends ScackBarCustomComponent implements OnInit 
     ngOnInit(): void {
     this.usuarios = this.getAll()
     this.criarFormulario()
+    this.exibirAdm = this.usuarioService.isUsuarioAdmin
   }
 
   criarFormulario(){
@@ -45,7 +46,8 @@ export class UsuarioComponent extends ScackBarCustomComponent implements OnInit 
       login: ['', [Validators.required]],
       senha: ['', [Validators.required]],
       confimaSenha: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]]
+      email: ['', [Validators.required, Validators.email]],
+      admin: false
     })
   }
 
@@ -74,6 +76,7 @@ export class UsuarioComponent extends ScackBarCustomComponent implements OnInit 
         this.exibirMensagemErro('Ocorreu um erro na requisição','Verifique os dados informados.');
       }
       this.usuarioDetalhes = response.body;
+      this.adminModel = response.body.admin;
       this.exibirDetalhes = true;
       this.formulario.get('login')?.setValue(this.usuarioDetalhes.login)
 
@@ -96,7 +99,8 @@ export class UsuarioComponent extends ScackBarCustomComponent implements OnInit 
       email: this.formulario?.value.email,
       login: this.formulario?.value.login,
       senha: this.formulario?.value.senha,
-      status: 'A'
+      status: 'A',
+      admin: this.formulario?.value.admin,
     }
     this.usuarioService.save(usuarioInclusao).then( response => {
       if (!response.ok) {
@@ -106,6 +110,8 @@ export class UsuarioComponent extends ScackBarCustomComponent implements OnInit 
       this.modalService.close();
       this.exibirMensagemSucesso('Registro Incluído com Sucesso','')
       this.getAll()
+      this.formulario.reset();
+      this.adminModel = false;
     })
   }
 }

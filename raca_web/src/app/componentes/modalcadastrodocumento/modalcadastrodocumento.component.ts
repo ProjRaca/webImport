@@ -9,6 +9,7 @@ import { ResponsavelService } from 'src/app/service/responsavel.service';
 import { DataUtils } from 'src/app/utils/data.utils';
 import { ScackBarCustomComponent } from '../scack-bar-custom/scack-bar-custom.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UsuarioService } from 'src/app/service/usuario.service';
 
 @Component({
   selector: 'app-modalcadastrodocumento',
@@ -27,14 +28,17 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
   nomeEmpresa: string = '';
   nomeDocumentoPai: string = '';
   nomeResponsavel: string = '';
-  dataValidade: string = '';
-  dataDocumento: string = '';
+  dataValidade!: Date | 'undefined';
+  dataDocumento!: Date | 'undefined';
+  dataValidadeDetalhes: string = '';
+  dataDocumentoDetalhes: string  = '';
   tipoDocumentoDesc: string = '';
   documentoRestritoDesc: string = '';
   documentoBase64: string[] = [];
 
   listaEmpresa  = [ { id:1, value: "Raça Distribuidora"}, { id:2, value: "Casa de Carnes" } ]
   responsaveis: Responsavel[] = [];
+  filiais: Responsavel[] = [];
   documentos: DocumentoDTO[] = [];
   documento!: DocumentoDTO;
   tipoDocumento = [
@@ -53,20 +57,24 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
   base64File: string[] = [];
   detalhes: boolean = false;
   update: boolean = false;
+  exibirRestrito: boolean = false
 
   constructor(
     @Inject(FormBuilder) public formBuilder: FormBuilder,
     private responsavelService: ResponsavelService,
     private serviceDocumento : DocumentoService,
+    private usuarioService: UsuarioService,
     snackBar: MatSnackBar) {
       super(snackBar);
     }
 
   ngOnInit(): void {
     this.selecionarNomeModal();
+    this.getAllFiliais();
+    this.getAllResponsaveis();
+    this.getDocumentos();
+    this.exibirRestrito = this.usuarioService.isUsuarioAdmin;
     if(this.isCadastro()){
-      this.getAllResponsaveis();
-      this.getDocumentos();
       this.criarFormulario();
       this.filteredOptions = this.formularioModal.get('nomeResponsavel')!.valueChanges.pipe(
         startWith(''),
@@ -75,32 +83,32 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
     }else if(this.isDetalhes()){
       this.carregarDadosDetalhes();
     } else if (this.isUpdate()){
-      this.getDocumentos();
       this.criarFormularioUpdate(this.documento);
     }
   }
 
   criarFormulario(){
       this.formularioModal = this.formBuilder.group({
-        empresaForm: ['',[Validators.required]],
+        empresaForm: [''],
         dtDocumento: [new Date(),[Validators.required]],
         dtValidade: [new Date(),[Validators.required]],
-        nomeResponsavel: ['',[Validators.required]],
+        nomeResponsavel: [''],
         tpDocumento: ['',[Validators.required]],
         docRestrito: [false,[Validators.required]],
         docPai: [''],
         nomeDocumento: ['',[Validators.required]],
         numeroDocumento: ['',[Validators.required]],
-        file: ['']
+        file: [''],
+        filialForm: ['']
     });
     this.formularioModal.get('docRestrito')?.setValue(false)
   }
 
   criarFormularioUpdate(documento: DocumentoDTO){
-    let dataDocumento = DataUtils.convertDataStringToReversePtBrFormat( documento.datadocumentesc?.toString() || '' );
-    let dataValidade = DataUtils.convertDataStringToReversePtBrFormat( documento.datavalidade?.toString() || '' );
+      let dataDocumento = DataUtils.formatarDatetoBrFormat(documento.datadocumentesc?.toString());
+      let dataValidade =  DataUtils.formatarDatetoBrFormat(documento.datavalidade?.toString());
       this.formularioModal = this.formBuilder.group({
-        empresaForm: [documento.filial],
+        empresaForm: [documento.empresa],
         dtDocumento: [  dataDocumento],
         dtValidade: [  dataValidade],
         nomeResponsavel: [  documento.emissor],
@@ -110,12 +118,19 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
         nomeDocumento: [  documento.nome],
         numeroDocumento: [ documento.numerodocumento ],
         file: [  documento.documento],
+        filialForm: [documento.filial],
     });
   }
 
   getAllResponsaveis(){
     this.responsavelService.findAll().then(response => {
       this.responsaveis = response.body;
+    })
+  }
+
+  getAllFiliais(){
+    this.responsavelService.findAllFiliais().then(response => {
+      this.filiais = response.body;
     })
   }
 
@@ -143,7 +158,8 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
     if(this.formularioModal.status == 'INVALID') return;
     var documentoInclusao = {
       iddocpai: this.formularioModal.value?.docPai,
-      filial: this.formularioModal.value?.empresaForm,
+      empresa: this.formularioModal.value?.empresaForm,
+      filial: this.formularioModal.value?.filialForm,
       datadocumentesc: dataDocumento,
       datavalidade: dataValidade,
       emissor: this.formularioModal.value?.nomeResponsavel,
@@ -151,7 +167,8 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
       documento: this.base64File,
       restrito: this.formularioModal.value?.docRestrito,
       nome: this.formularioModal.value?.nomeDocumento,
-      numerodocumento : this.formularioModal.value?.numerodocumento
+      numerodocumento : this.formularioModal.value?.numeroDocumento,
+      responsavel: this.formularioModal.value?.nomeResponsavel,
     };
     if(this.documento != undefined && this.documento.id != undefined){
       Object.assign(documentoInclusao,{id:this.documento.id });
@@ -249,14 +266,15 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
   }
 
   private carregarDadosDetalhes() {
-    sleep(5000);
-    this.nomeEmpresa = this.listaEmpresa.filter(emp => emp.id === Number(this.documento.filial))[0].value;
-    this.dataDocumento = DataUtils.formatarData(this.documento.datadocumentesc as string);
-    this.dataValidade = DataUtils.formatarData(this.documento.datavalidade as string);
+
+    this.nomeEmpresa = this.listaEmpresa.filter(emp => emp.id === Number(this.documento.empresa))[0].value;
+    this.dataDocumentoDetalhes = DataUtils.formatarData(this.documento.datadocumentesc as string);
+    this.dataValidadeDetalhes = DataUtils.formatarData(this.documento.datavalidade as string);
     this.tipoDocumentoDesc = this.tipoDocumento.filter(tp => tp.id === Number(this.documento.tipodocumento))[0].value;
     this.documentoRestritoDesc = this.documento.restrito === true ? 'Sim' : 'Não';
     this.nomeDocumentoPai = this.documento.nomepai || '';
     this.documentoBase64 = this.documento.documento || [];
+    sleep(5000);
   }
 
   private selecionarNomeModal(){

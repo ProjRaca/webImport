@@ -55,6 +55,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { PdfViewComponent } from './componentes/pdf-view/pdf-view.component';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { UsuarioPipe } from './pipes/tipo-usuario.pipe';
 
 
 @NgModule({
@@ -73,6 +74,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
       CnpjPipe,
       CpfECnpjPipe,
       FilialPipe,
+      UsuarioPipe,
       DocumentoPipe,
       DocumentoRestritoPipe,
       MatriculaPipe,

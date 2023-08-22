@@ -33,6 +33,7 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
 
   displayedColumns: string[] = ['id','Nome', 'Filial', 'Responsável','Tp Documento','Dt Documento','Dt Validade', 'Doc Restrito','Ações'];
   responsaveis: Responsavel[] = [];
+  filiais: Responsavel[] = [];
 
   documentos: DocumentoDTO[] = [];
   filteredOptions!: Observable<Responsavel[]>;
@@ -69,6 +70,7 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
   ngOnInit() {
     this.criarFormulario();
     this.getAllResponsaveis();
+    this.getAllFiliais();
     this.filteredOptions = this.formulario.get('responsavel')!.valueChanges.pipe(
       startWith(''),
       map(value => ( value ? this._filterReponsavel(value || '') : this.responsaveis.slice())),
@@ -85,18 +87,20 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
    let dtFimValidade = this.formulario.get('dtValidadeFinal')?.value != '' && this.formulario.get('dtValidadeFinal')?.value != undefined ? DataUtils.formatarDatetoUsFormat(this.formulario.get('dtValidadeFinal')?.value) : '';
    let nomeResponsavel = this.formulario.get('responsavel')?.value || undefined ;
    let idResponsavel = nomeResponsavel != undefined ? this.responsaveis.filter(respo => respo.nome === nomeResponsavel )[0].nome : ''
-
+    let filialFilter = this.formulario.get('filial')?.value || undefined ;
     let filter: DocumentoDTO = {
       datadocumentesc: dtDocumento || undefined,
       datavalidade: dtValidade  || undefined,
       emissor: idResponsavel?.toString() ,
-      filial : this.formulario.get('empresa')?.value  || undefined,
+      empresa : this.formulario.get('empresa')?.value  || undefined,
       iddocpai: undefined,
       tipodocumento: this.formulario.get('tpDocumento')?.value || undefined,
       restrito: this.formulario.get('docRegistro')?.value || false,
       numerodocumento: this.formulario.get('numeroDocumento')?.value || undefined,
       datafimvalidade: dtFimValidade,
-      datafim: dtFim
+      datafim: dtFim,
+      responsavel: idResponsavel?.toString() ,
+      filial: this.formulario.get('filial')?.value || undefined
     }
 
     this.serviceDocumento.findByFilter(filter)
@@ -127,7 +131,8 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
       responsavel: '',
       tpDocumento: [''],
       docRegistro: [false],
-      numeroDocumento:['']
+      numeroDocumento:[''],
+      filial:[''],
     })
     this.formulario.get('docRestrito')?.setValue(false)
   }
@@ -135,6 +140,13 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
   getAllResponsaveis(){
     this.responsavelService.findAll().then(response => {
       this.responsaveis = response.body;
+    })
+  }
+
+  getAllFiliais(){
+    this.responsavelService.findAllFiliais().then(response => {
+      this.filiais = response.body;
+      console.log('filiais =>> ',this.filiais)
     })
   }
 
@@ -172,6 +184,7 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
         .toPromise()
         .then(response => {
         this.documentos = response.body;
+        console.log('documento --> ', this.documentos);
       })
       .catch((error) => {
         // Lida com erros, se necessário.
@@ -206,7 +219,8 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
   detalhes(id: number){
 
     var doc: DocumentoDTO = {
-      id: id
+      id: id,
+      restrito: false
     }
     this.serviceDocumento.findByFilter(doc)
     .pipe()
@@ -240,7 +254,8 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
 
   editar(id: number){
     var doc: DocumentoDTO = {
-      id: id
+      id: id,
+      restrito: false
     };
 
     this.serviceDocumento.findByFilter(doc)

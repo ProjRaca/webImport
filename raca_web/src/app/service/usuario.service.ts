@@ -37,6 +37,10 @@ export class UsuarioService {
       ;
   }
 
+  get isUsuarioAdmin(): boolean {
+    return localStorage.getItem('role') ==  'true' ? true : false;
+  }
+
   async findAll():Promise<any> {
       const req = new HttpRequest('GET',`${apiUrlUsuario}/all`, this.getHeader());
     return await this.http.request(req).toPromise();

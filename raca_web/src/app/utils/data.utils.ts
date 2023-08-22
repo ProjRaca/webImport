@@ -52,4 +52,17 @@ export class DataUtils {
       const dataObj = new Date(dataOriginal);
       return format(dataObj, 'yyyy-MM-dd');
     }
+
+     /**
+     *
+     * @param dataOriginal Recebe um date e retorna uma string no formato yyyy/MM/dd
+     * @returns
+     */
+     public static formatarDatetoBrFormat(dataOriginal: string | undefined): Date | 'undefined'{
+      if (dataOriginal != undefined){
+        return  new Date(dataOriginal);
+        //return format(dataObj, 'dd-MM-yyyy');
+      }else
+      return 'undefined'
+    }
 }
