@@ -1,6 +1,8 @@
 package raca.api.repository.specifications;
 
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import raca.api.domain.entity.postgres.Documento;
 import raca.api.util.Util;
@@ -12,7 +14,7 @@ import java.time.format.DateTimeFormatter;
 @Component
 public class DocumentoSpecifications {
 
-    public Specification<Documento> withFilters(Integer id,
+    public static Specification<Documento> withFilters(Integer id,
                                                        String filial,
                                                        String emissor,
                                                        String datadocumentesc,
@@ -24,10 +26,11 @@ public class DocumentoSpecifications {
                                                        String datafim,
                                                        String datafimvalidade,
                                                        Integer numerodocumento,
-                                                       String responsavel) {
+                                                       String responsavel,
+                                                       Integer empresa) {
         return (root, query, criteriaBuilder) -> {
-            Predicate predicate = null;
-            predicate = criteriaBuilder.conjunction();
+
+            Predicate predicate = criteriaBuilder.conjunction();
 
             if (id != null) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("id"), id));
@@ -69,18 +72,27 @@ public class DocumentoSpecifications {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("nome"), nome));
             }
 
-            if(!Util.isAdmin()){
+            if(responsavel != null){
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("responsavel"), responsavel));
+            }
+
+            if(!isAdmin()){
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("restrito"), restrito));
-            }else if(Util.isAdmin() && restrito){
+            }else if(isAdmin() && restrito){
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("restrito"), restrito));
             }
 
-            if (responsavel != null) {
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("responsavel"), responsavel));
+            if (empresa != null) {
+                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("empresa"), empresa));
             }
 
             return predicate;
         };
     }
+    protected static boolean isAdmin(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        return authentication.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().contains("ADMIN"));
+    }
 }

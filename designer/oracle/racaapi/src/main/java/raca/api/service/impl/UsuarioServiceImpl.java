@@ -84,4 +84,11 @@ public class UsuarioServiceImpl implements UserDetailsService {
     public List<Usuario> getAllContas() {
         return repository.findAll();
     }
+
+    @Transactional
+    public Usuario update(Usuario usuario){
+        usuario.setStatus("A");
+        return repository.save(usuario);
+    }
+
 }

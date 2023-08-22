@@ -12,9 +12,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import raca.api.domain.entity.postgres.Responsavel;
 import raca.api.domain.entity.postgres.Usuario;
 import raca.api.exception.SenhaInvalidaException;
 import raca.api.rest.dto.CredenciaisDTO;
+import raca.api.rest.dto.ResponsavelDTO;
 import raca.api.rest.dto.TokenDTO;
 import raca.api.security.jwt.JwtService;
 import raca.api.service.impl.UsuarioServiceImpl;
@@ -56,9 +58,9 @@ public class UsuarioController {
                     .admin(false).build();
             UserDetails usuarioAutenticado = usuarioService.autenticar(usuario);
             String token = jwtService.gerarToken(usuario);
-            return new TokenDTO(usuario.getLogin(), token,0,usuarioAutenticado.getAuthorities().stream().findFirst().get().toString());
+            return new TokenDTO(usuario.getLogin(), token,0,"Usuario logado com sucesso",usuarioAutenticado.getAuthorities().stream().findFirst().get().toString());
         } catch (UsernameNotFoundException | SenhaInvalidaException e ){
-            return new TokenDTO("", "",404,"Login  ou senha innválidos");
+            return new TokenDTO("", "",404,"Login  ou senha innválidos","");
         }
     }
 
@@ -113,6 +115,26 @@ public class UsuarioController {
             return ResponseEntity.ok(contaFuncionario);
         else
             return ResponseEntity.ok(new ArrayList<>());
+    }
+
+    @PutMapping
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ApiOperation("Altera o usuario")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Usuário alterado com sucesso"),
+            @ApiResponse(code = 400, message = "Erro de validação")
+    })
+    public ResponseEntity<Usuario> update(@RequestBody @Valid Usuario usuario ){
+        if(usuario.getSenha().length() < 60){
+            String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
+            usuario.setSenha(senhaCriptografada);
+        }
+        Usuario salvar = usuarioService.update(usuario);
+        if(salvar != null)
+            return ResponseEntity.ok(salvar);
+        else
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+
     }
 
 }

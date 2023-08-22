@@ -51,5 +51,8 @@ public class Documento {
     @Column
     private String responsavel;
 
+    @Column
+    private Integer empresa;
+
 
 }

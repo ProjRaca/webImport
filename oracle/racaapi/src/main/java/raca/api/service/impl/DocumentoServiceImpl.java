@@ -3,25 +3,28 @@ package raca.api.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import raca.api.domain.entity.postgres.Documento;
-import raca.api.repository.specifications.DocumentoSpecifications;
+import raca.api.domain.entity.postgres.Responsavel;
 import raca.api.repository.postgres.DocumentRepository;
+import raca.api.repository.specifications.DocumentoSpecifications;
 import raca.api.rest.dto.DocumentoDTO;
 import raca.api.service.DocumentService;
-import raca.api.util.Util;
+import raca.api.service.ResponsavelService;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-@Service
+
 @RequiredArgsConstructor
+@Service
 public class DocumentoServiceImpl implements DocumentService {
 
     private final DocumentRepository documentRepository;
-
-    private final DocumentoSpecifications documentoSpecifications;
+    private final ResponsavelService responsavelService;
 
 
     @Override
@@ -32,7 +35,7 @@ public class DocumentoServiceImpl implements DocumentService {
     @Override
     public List<DocumentoDTO> getAllMDocumentos() {
         try {
-            boolean isAdmin = Util.isAdmin();
+            boolean isAdmin = isAdmin();
             if (isAdmin) {
                 List<Documento> all = documentRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
                 return getDocumentoDTOS(all);
@@ -46,12 +49,18 @@ public class DocumentoServiceImpl implements DocumentService {
         return null;
     }
 
-    private static List<DocumentoDTO> getDocumentoDTOS(List<Documento> documentsByFilter) {
+    private List<DocumentoDTO> getDocumentoDTOS(List<Documento> documentsByFilter) {
         return documentsByFilter.stream()
                 .map(document -> {
                     DocumentoDTO documentoDTO = new DocumentoDTO();
                     documentoDTO.setId(document.getId());
                     documentoDTO.setFilial(document.getFilial());
+                    if (document.getFilial() != null && !document.getFilial() .isEmpty()) {
+                        Optional<Responsavel> responsavel = responsavelService.getRsponsavelId(Integer.valueOf(document.getFilial()));
+                        responsavel.ifPresent(x -> {
+                            documentoDTO.setNomefilial(x.getNome());
+                        });
+                    }
                     documentoDTO.setEmissor(document.getEmissor());
                     documentoDTO.setDatadocumentesc(document.getDatadocumentesc());
                     documentoDTO.setDatavalidade(document.getDatavalidade());
@@ -60,6 +69,9 @@ public class DocumentoServiceImpl implements DocumentService {
                     documentoDTO.setIddocpai(document.getIddocpai());
                     documentoDTO.setNome(document.getNome());
                     documentoDTO.setRestrito(document.isRestrito());
+                    documentoDTO.setResponsavel(document.getResponsavel());
+                    documentoDTO.setEmpresa(document.getEmpresa());
+                    documentoDTO.setNumerodocumento(document.getNumerodocumento());
                     return documentoDTO;
                 })
                 .collect(Collectors.toList());
@@ -80,7 +92,9 @@ public class DocumentoServiceImpl implements DocumentService {
     @Override
     public boolean excluir(Integer id) {
         try {
-            boolean isAdmin = Util.isAdmin();
+
+            boolean isAdmin = isAdmin();
+
             if (isAdmin) {
                 documentRepository.deleteById(id);
                 return true;
@@ -111,6 +125,9 @@ public class DocumentoServiceImpl implements DocumentService {
         documento.setNome(doc.getNome());
         documento.setRestrito(doc.isRestrito());
         documento.setId(doc.getId());
+        documento.setEmpresa(doc.getEmpresa());
+        documento.setResponsavel(doc.getResponsavel());
+        documento.setNumerodocumento(doc.getNumerodocumento());
         return documento;
     }
 
@@ -118,6 +135,11 @@ public class DocumentoServiceImpl implements DocumentService {
     private DocumentoDTO getDocumentDTO(Documento doc){
         DocumentoDTO documento = new DocumentoDTO();
         documento.setId(doc.getId());
+        if(doc.getFilial() != null && !doc.getFilial().isEmpty()){
+            responsavelService.getRsponsavelId(Integer.valueOf(doc.getFilial())).ifPresent( x->{
+                documento.setNomefilial(x.getNome());
+            });
+        }
         documento.setFilial(doc.getFilial());
         documento.setEmissor(doc.getEmissor());
         documento.setDatavalidade(doc.getDatavalidade());
@@ -133,14 +155,17 @@ public class DocumentoServiceImpl implements DocumentService {
         }
         documento.setNome(doc.getNome());
         documento.setRestrito(doc.isRestrito());
+        documento.setEmpresa(doc.getEmpresa());
+        documento.setResponsavel(doc.getResponsavel());
+        documento.setNumerodocumento(doc.getNumerodocumento());
         return documento;
     }
 
     public List<DocumentoDTO> getFilterDocument(Integer id, String filial, String emissor, String datadocumentesc, String datavalidade,
-                                                    String tipodocumento, Integer iddocpai, boolean restrito, String nome, String datafim,
-                                                    String datafimvalidade, Integer numerodocumento, String responsavel) {
+                                                String tipodocumento, Integer iddocpai, boolean restrito, String nome, String datafim,
+                                                String datafimvalidade, Integer numerodocumento, String responsavel,Integer empresa) {
 
-        Specification<Documento> spec = documentoSpecifications.withFilters(id, filial,
+        Specification<Documento> spec = DocumentoSpecifications.withFilters(id, filial,
                 emissor,
                 datadocumentesc,
                 datavalidade,
@@ -151,7 +176,8 @@ public class DocumentoServiceImpl implements DocumentService {
                 datafim,
                 datafimvalidade,
                 numerodocumento,
-                responsavel);
+                responsavel,
+                empresa);
         List<Documento> documentos = documentRepository.findAll(spec);
 
         return documentos.stream().map(documento -> {
@@ -163,6 +189,13 @@ public class DocumentoServiceImpl implements DocumentService {
     public DocumentoDTO getId(Integer id) {
         Optional<Documento> one = documentRepository.findById(id);
         return getDocumentDTO(one.get());
+    }
+
+    private boolean isAdmin(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        return authentication.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().contains("ADMIN"));
     }
 
 

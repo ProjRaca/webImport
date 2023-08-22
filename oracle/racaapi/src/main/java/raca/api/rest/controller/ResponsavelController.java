@@ -87,7 +87,7 @@ public class ResponsavelController {
 
     @PutMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
-    @ApiOperation("Retorna um responsável pelo Id")
+    @ApiOperation("Altera o responsável pelo Id")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Responsável alterado com sucesso"),
             @ApiResponse(code = 400, message = "Erro de validação")

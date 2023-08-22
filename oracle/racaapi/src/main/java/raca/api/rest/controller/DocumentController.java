@@ -42,10 +42,11 @@ public class DocumentController {
                                                 @RequestParam(value = "datafim", required = false) String datafim,
                                                 @RequestParam(value = "datafimvalidade", required = false) String datafimvalidade,
                                                 @RequestParam(value = "numerodocumento", required = false) Integer numerodocumento,
-                                                @RequestParam(value = "responsavel", required = false) String responsavel) {
+                                                @RequestParam(value = "responsavel", required = false) String responsavel,
+                                                @RequestParam(value = "empresa", required = false) Integer empresa) {
 
         return documentService.getFilterDocument(id, filial, emissor, datadocumentesc, datavalidade,
-                tipodocumento, iddocpai, restrito, nome, datafim, datafimvalidade, numerodocumento, responsavel);
+                tipodocumento, iddocpai, restrito, nome, datafim, datafimvalidade, numerodocumento, responsavel, empresa);
     }
 
     @GetMapping

@@ -116,4 +116,24 @@ public class UsuarioController {
             return ResponseEntity.ok(new ArrayList<>());
     }
 
+    @PutMapping
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ApiOperation("Altera o usuario")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Usuário alterado com sucesso"),
+            @ApiResponse(code = 400, message = "Erro de validação")
+    })
+    public ResponseEntity<Usuario> update(@RequestBody @Valid Usuario usuario ){
+        if(usuario.getSenha().length() < 60){
+            String senhaCriptografada = passwordEncoder.encode(usuario.getSenha());
+            usuario.setSenha(senhaCriptografada);
+        }
+        Usuario salvar = usuarioService.update(usuario);
+        if(salvar != null)
+            return ResponseEntity.ok(salvar);
+        else
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+
+    }
+
 }
