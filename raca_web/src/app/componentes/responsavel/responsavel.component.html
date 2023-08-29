@@ -114,7 +114,7 @@
           </mat-form-field>
         </p>
 
-          <section class="">
+          <section *ngIf="isAdmin">
             <mat-checkbox class="example-margin" name="filialPesquisa" formControlName="filial">Filial</mat-checkbox>
           </section>
 
