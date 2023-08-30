@@ -60,9 +60,20 @@ public class DocumentoSpecifications {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("tipodocumento"), tipodocumento));
             }
 
-            if (iddocpai != null) {
-                predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("iddocpai"), iddocpai));
+           // if (iddocpai != null) {
+               // predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("iddocpai"), iddocpai));
+          //  }
+            if ( iddocpai != null) {
+                Predicate idPredicate = null; // Predicate para a condição id
+                Predicate iddocpaiPredicate = null; // Predicate para a condição iddocpai
+                iddocpaiPredicate = criteriaBuilder.equal(root.get("iddocpai"), iddocpai);
+                // Combine as condições com OR
+                Predicate combinedPredicate = criteriaBuilder.or(idPredicate, iddocpaiPredicate);
+                // Adicione a condição composta ao predicado principal
+                predicate = criteriaBuilder.and(predicate, combinedPredicate);
             }
+
+
 
             if (numerodocumento != null) {
                 predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("numerodocumento"), numerodocumento));

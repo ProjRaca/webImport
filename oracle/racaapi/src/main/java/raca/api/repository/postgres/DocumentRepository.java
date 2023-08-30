@@ -21,4 +21,8 @@ public interface DocumentRepository extends JpaRepository<Documento, Integer > ,
     @Query(value = "SELECT * FROM raca.documento m WHERE m.restrito = 'false' order by m.id", nativeQuery = true)
     List<Documento> listDocNotRestrito();
 
+    @Query(value = "SELECT DISTINCT(iddocpai),id, filial, emissor, datadocumentesc, datavalidade, documento, tipodocumento, restrito, nome, numerodocumento, responsavel, empresa FROM raca.documento WHERE iddocpai is not null", nativeQuery = true)
+    List<Documento> getAllMDocumentosPai();
+
+
 }

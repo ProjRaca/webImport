@@ -35,4 +35,6 @@ public interface DocumentService {
 
     DocumentoDTO getId(Integer id);
 
+    List<DocumentoDTO> getAllMDocumentosPai();
+
 }
