@@ -68,4 +68,9 @@ export class UsuarioService {
     const req = new HttpRequest('GET',`${apiUrlUsuario}/find?nome=${nome}`, this.getHeader());
     return await this.http.request(req).toPromise();
   }
+
+  async update(usuario: Usuario):Promise<any>{
+    const req = new HttpRequest('PUT',`${apiUrlUsuario}`,usuario, this.getHeader());
+    return await this.http.request(req).toPromise();
+  }
 }

@@ -8,6 +8,7 @@ import { ResponsavelService } from 'src/app/service/responsavel.service';
 import { ScackBarCustomComponent } from '../scack-bar-custom/scack-bar-custom.component';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogDeleteComponent } from '../dialogDelete/dialog-delete.component';
+import { UsuarioService } from 'src/app/service/usuario.service';
 
 @Component({
   selector: 'app-responsavel',
@@ -26,11 +27,13 @@ export class ResponsavelComponent extends ScackBarCustomComponent implements OnI
 
   responsavelDetalhes!: Responsavel;
   idRemocao: string = '';
+  isAdmin: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
     protected modalService: ModalService,
     private responsavelService: ResponsavelService,
+    private usuarioService: UsuarioService,
     snackBar: MatSnackBar,
     public dialog: MatDialog ) {
       super(snackBar);
@@ -39,6 +42,7 @@ export class ResponsavelComponent extends ScackBarCustomComponent implements OnI
   ngOnInit() {
     this.criarFormulario();
     this.getAll();
+    this.isAdmin = this.usuarioService.isUsuarioAdmin;
   }
 
   criarFormulario(){

@@ -21,7 +21,8 @@ export class UsuarioComponent extends ScackBarCustomComponent implements OnInit 
   floatLabelControl = new FormControl('auto' as FloatLabelType);
   exibirDetalhes: boolean = false;
   usuarioDetalhes!: Usuario;
-
+  usuarioEditar!: Usuario;
+  exibirEditar: boolean = false;
   usuarios!: Usuario[];
   formulario!: FormGroup;
   nomePesquisa: string = ''
@@ -88,13 +89,14 @@ export class UsuarioComponent extends ScackBarCustomComponent implements OnInit 
 
   openModalNovo(){
     this.exibirDetalhes = false;
+    this.exibirEditar = false;
     this.modalService.open('modalUsuario');
   }
 
   save(){
     if(this.formulario.status == 'INVALID') return;
 
-    let usuarioInclusao = {
+    let usuarioAux = {
       nome: this.formulario?.value.nome,
       email: this.formulario?.value.email,
       login: this.formulario?.value.login,
@@ -102,18 +104,51 @@ export class UsuarioComponent extends ScackBarCustomComponent implements OnInit 
       status: 'A',
       admin: this.formulario?.value.admin,
     }
-    this.usuarioService.save(usuarioInclusao).then( response => {
-      if (!response.ok) {
-        this.exibirMensagemErro('Ocorreu um problema ao tentar salvar o usuário','Verifique os dados informados.');
-      }
-      usuarioInclusao = response
-      this.modalService.close();
-      this.exibirMensagemSucesso('Registro Incluído com Sucesso','')
-      this.getAll()
-      this.formulario.reset();
-      this.adminModel = false;
-    })
+    if(this.usuarioEditar && this.usuarioEditar.id != undefined ){
+      Object.assign(usuarioAux,{id:this.usuarioEditar.id });
+      this.usuarioService.update(usuarioAux).then( response => {
+        if (!response.ok) {
+          this.exibirMensagemErro('Ocorreu um problema ao tentar atualizar o usuário','Verifique os dados informados.');
+        }
+        usuarioAux = response
+        this.modalService.close();
+        this.exibirMensagemSucesso('Registro Alterado com Sucesso','')
+        this.getAll()
+        this.formulario.reset();
+        this.adminModel = false;
+      })
+    }else{
+      this.usuarioService.save(usuarioAux).then( response => {
+        if (!response.ok) {
+          this.exibirMensagemErro('Ocorreu um problema ao tentar salvar o usuário','Verifique os dados informados.');
+        }
+        usuarioAux = response
+        this.modalService.close();
+        this.exibirMensagemSucesso('Registro Incluído com Sucesso','')
+        this.getAll()
+        this.formulario.reset();
+        this.adminModel = false;
+      })
+    }
   }
+
+  editar(id: number){
+    this.usuarioService.findById(id).then( response => {
+      if (!response.ok) {
+        this.exibirMensagemErro('Ocorreu um erro na requisição','Verifique os dados informados.');
+      }
+      this.usuarioEditar = response.body;
+      this.formulario.get('login')?.setValue(this.usuarioEditar.login)
+
+      this.formulario.get('nome')?.setValue(this.usuarioEditar.nome)
+      this.formulario.get('email')?.setValue(this.usuarioEditar.email)
+      this.adminModel = response.body.admin;
+      this.exibirDetalhes = false;
+      this.exibirEditar = true;
+      this.modalService.open('modalUsuario');
+    });
+  }
+
 }
 
 

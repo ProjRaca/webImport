@@ -69,4 +69,9 @@ export class DocumentoService {
     const req = new HttpRequest('DELETE',`${apiUrl}/${id}`);
     return await this.http.request(req).toPromise();
   }
+
+  findAllDOcumentoPai():Observable<any> {
+    const req = new HttpRequest('GET',`${apiUrl}/pai`);
+    return this.http.request(req);
+  }
 }
