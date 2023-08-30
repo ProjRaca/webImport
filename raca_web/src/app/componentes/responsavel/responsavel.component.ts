@@ -26,8 +26,10 @@ export class ResponsavelComponent extends ScackBarCustomComponent implements OnI
   filialPesquisa: boolean = false;
 
   responsavelDetalhes!: Responsavel;
+  responsavelEditar!: Responsavel;
   idRemocao: string = '';
   isAdmin: boolean = false;
+  exibirEditar: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -96,12 +98,13 @@ export class ResponsavelComponent extends ScackBarCustomComponent implements OnI
   openModalNovo(){
     this.formulario.reset();
     this.exibirDetalhes = false;
+    this.exibirEditar = false;
     this.modalService.open('modalResponsavel');
   }
 
   save(){
     if(this.formulario.status == 'INVALID') return;
-    let responsavelInclusao: Responsavel = {
+    let responsavelAux: Responsavel = {
       nome: this.formulario?.value.nome,
       cpfcnpj: this.formulario?.value.cpfCnpj,
       telefone: this.formulario?.value.telefone,
@@ -109,15 +112,28 @@ export class ResponsavelComponent extends ScackBarCustomComponent implements OnI
       filial: this.formulario?.value.filial
     };
 
-    this.responsavelService.save(responsavelInclusao).then( response => {
-      if (!response.ok) {
-        this.exibirMensagemErro('Ocorreu um problema ao tentar salvar o usuário','Verifique os dados informados.');
-      }
-      responsavelInclusao = response;
-      this.modalService.close();
-      this.exibirMensagemSucesso('Registro Incluído com Sucesso','');
-      this.getAll();
-    });
+    if(this.responsavelEditar.id != undefined && this.responsavelEditar.id){
+      Object.assign(responsavelAux,{id:this.responsavelEditar.id });
+      this.responsavelService.update(responsavelAux).then( response => {
+        if (!response.ok) {
+          this.exibirMensagemErro('Ocorreu um problema ao tentar atualizar o responsável','Verifique os dados informados.');
+        }
+        responsavelAux = response;
+        this.modalService.close();
+        this.exibirMensagemSucesso('Registro Alterdo com Sucesso','');
+        this.getAll();
+      });
+    }else{
+      this.responsavelService.save(responsavelAux).then( response => {
+        if (!response.ok) {
+          this.exibirMensagemErro('Ocorreu um problema ao tentar salvar o responsável','Verifique os dados informados.');
+        }
+        responsavelAux = response;
+        this.modalService.close();
+        this.exibirMensagemSucesso('Registro Incluído com Sucesso','');
+        this.getAll();
+      });
+    }
   }
 
 
@@ -128,6 +144,7 @@ export class ResponsavelComponent extends ScackBarCustomComponent implements OnI
       }
       this.responsavelDetalhes = response.body;
       this.exibirDetalhes = true;
+      this.exibirEditar = false;
       this.formulario.get('nome')?.setValue(this.responsavelDetalhes.nome)
       this.formulario.get('email')?.setValue(this.responsavelDetalhes.email)
       this.formulario.get('cpfCnpj')?.setValue(this.responsavelDetalhes.cpfcnpj)
@@ -157,7 +174,24 @@ export class ResponsavelComponent extends ScackBarCustomComponent implements OnI
         this.exibirMensagemSucesso('O registro foi apagado com sucesso','');
       }
 
-  });
+    });
+  }
+
+  editar(id: any){
+    this.responsavelService.findById(id).then( response => {
+      if (!response.ok) {
+        this.exibirMensagemErro('Ocorreu um erro na requisição','Verifique os dados informados.');
+      }
+      this.responsavelEditar = response.body;
+      this.formulario.get('nome')?.setValue(this.responsavelEditar.nome)
+      this.formulario.get('email')?.setValue(this.responsavelEditar.email)
+      this.formulario.get('cpfCnpj')?.setValue(this.responsavelEditar.cpfcnpj)
+      this.formulario.get('telefone')?.setValue(this.responsavelEditar.telefone)
+
+      this.exibirDetalhes = false;
+      this.exibirEditar = true;
+      this.modalService.open('modalResponsavel');
+    });
   }
 
 }
