@@ -100,4 +100,14 @@ public class DocumentController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/pai")
+    @ApiOperation("Lista todos os documentos pai")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Listagem exibida com sucesso"),
+            @ApiResponse(code = 400, message = "Erro de validação")
+    })
+    public List<DocumentoDTO> getAllDocumentsPai() {
+        return documentService.getAllMDocumentosPai();
+    }
+
 }

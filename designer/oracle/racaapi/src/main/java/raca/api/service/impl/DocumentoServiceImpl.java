@@ -198,5 +198,18 @@ public class DocumentoServiceImpl implements DocumentService {
                 .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().contains("ADMIN"));
     }
 
+    @Override
+    public List<DocumentoDTO> getAllMDocumentosPai() {
+        List<Documento> findAll = documentRepository.findAll();
+
+        List<Documento> all = documentRepository.getAllMDocumentosPai();
+        List<Documento> filteredDocuments = all.stream().map(x-> {
+            return findAll.stream().filter(a->a.getId().equals(x.getIddocpai())).findFirst().orElse(null);
+        }).collect(Collectors.toList());
+        if(filteredDocuments != null)
+            System.out.println("tamanho da lista" + filteredDocuments.size());
+        return getDocumentoDTOS(filteredDocuments);
+    }
+
 
 }
