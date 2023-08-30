@@ -54,5 +54,8 @@ public class Documento {
     @Column
     private Integer empresa;
 
+    @Column
+    private Integer idresponsavel;
+
 
 }
