@@ -72,6 +72,7 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
     this.criarFormulario();
     this.getAllResponsaveis();
     this.getAllFiliais();
+    this.getDocumentoPai();
     this.filteredOptions = this.formulario.get('responsavel')!.valueChanges.pipe(
       startWith(''),
       map(value => ( value ? this._filterReponsavel(value || '') : this.responsaveis.slice())),

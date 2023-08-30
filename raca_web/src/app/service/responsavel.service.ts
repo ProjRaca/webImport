@@ -30,6 +30,11 @@ export class ResponsavelService {
     return await this.http.request(req).toPromise();
   }
 
+  async update(responsavel: Responsavel):Promise<any>{
+    const req = new HttpRequest('PUT',`${apiUrl}`,responsavel);
+    return await this.http.request(req).toPromise();
+  }
+
   async findById(id: string):Promise<any> {
     const req = new HttpRequest('GET',`${apiUrl}/${id}`);
     return await this.http.request(req).toPromise();
