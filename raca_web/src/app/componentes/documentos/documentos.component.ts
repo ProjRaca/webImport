@@ -36,6 +36,7 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
   filiais: Responsavel[] = [];
 
   documentos: DocumentoDTO[] = [];
+  listaDocumentoPai: DocumentoDTO[] = [];
   filteredOptions!: Observable<Responsavel[]>;
   empresaSelectedValue: string = '';
 
@@ -87,13 +88,14 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
    let dtFimValidade = this.formulario.get('dtValidadeFinal')?.value != '' && this.formulario.get('dtValidadeFinal')?.value != undefined ? DataUtils.formatarDatetoUsFormat(this.formulario.get('dtValidadeFinal')?.value) : '';
    let nomeResponsavel = this.formulario.get('responsavel')?.value || undefined ;
    let idResponsavel = nomeResponsavel != undefined ? this.responsaveis.filter(respo => respo.nome === nomeResponsavel )[0].nome : ''
+   let documentoPai = this.formulario.get('docPai')?.value != '' && this.formulario.get('docPai')?.value != undefined ? this.formulario.get('docPai')?.value : '';
     let filialFilter = this.formulario.get('filial')?.value || undefined ;
     let filter: DocumentoDTO = {
       datadocumentesc: dtDocumento || undefined,
       datavalidade: dtValidade  || undefined,
       emissor: idResponsavel?.toString() ,
       empresa : this.formulario.get('empresa')?.value  || undefined,
-      iddocpai: undefined,
+      iddocpai: documentoPai,
       tipodocumento: this.formulario.get('tpDocumento')?.value || undefined,
       restrito: this.formulario.get('docRegistro')?.value || false,
       numerodocumento: this.formulario.get('numeroDocumento')?.value || undefined,
@@ -133,6 +135,7 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
       docRegistro: [false],
       numeroDocumento:[''],
       filial:[''],
+      docPai: ['']
     })
     this.formulario.get('docRestrito')?.setValue(false)
   }
@@ -184,7 +187,6 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
         .toPromise()
         .then(response => {
         this.documentos = response.body;
-        console.log('documento --> ', this.documentos);
       })
       .catch((error) => {
         // Lida com erros, se necessário.
@@ -303,6 +305,20 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
 
   getBase64DocumentoCode(): string{
     return this.docBase64 as any
+  }
+
+  getDocumentoPai(){
+    this.serviceDocumento.findAllDOcumentoPai()
+        .pipe()
+        .toPromise()
+        .then(response => {
+        this.listaDocumentoPai = response.body;
+      })
+      .catch((error) => {
+        // Lida com erros, se necessário.
+        console.error('Erro na chamada:', error);
+        this.exibirMensagemErro('Ocorreu um erro ao realizar chamada', error.body.message)
+      })
   }
 
 }

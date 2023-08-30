@@ -43,16 +43,25 @@
           <mat-form-field>
             <mat-label>Data do Documento</mat-label>
             <input matInput [matDatepicker]="pickerDocumentoInicial" formControlName="dtDocumento">
-            <!-- <input matInput name="dtDocumento" mask="00/00/0000" formControlName="dtDocumento"> -->
             <mat-datepicker-toggle matSuffix [for]="pickerDocumentoInicial"></mat-datepicker-toggle>
             <mat-datepicker #pickerDocumentoInicial></mat-datepicker>
           </mat-form-field>
+
           <mat-form-field>
             <mat-label>Data do Documento Final</mat-label>
             <input matInput [matDatepicker]="pickerDocumentoFinal" formControlName="dtDocumentoFinal">
             <mat-datepicker-toggle matSuffix [for]="pickerDocumentoFinal"></mat-datepicker-toggle>
             <mat-datepicker #pickerDocumentoFinal></mat-datepicker>
-            <!-- <input matInput name="dtDocumentoFinal" mask="00/00/0000" formControlName="dtDocumentoFinal"> -->
+          </mat-form-field>
+
+          <mat-form-field  class="input-large">
+            <mat-label>Documento Pai</mat-label>
+            <mat-select formControlName="docPai" >
+              <mat-option *ngFor="let doc of listaDocumentoPai" [value]="doc.id">
+                {{doc.nome}}
+              </mat-option>
+              <mat-option *ngIf="documentos.length == 0" value="">Sem registros para exibir</mat-option>
+            </mat-select>
           </mat-form-field>
         </div>
         <div class="form-column">
