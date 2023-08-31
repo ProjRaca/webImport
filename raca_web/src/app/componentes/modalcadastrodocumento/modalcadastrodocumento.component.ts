@@ -76,15 +76,20 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
     this.exibirRestrito = this.usuarioService.isUsuarioAdmin;
     if(this.isCadastro()){
       this.criarFormulario();
-      this.filteredOptions = this.formularioModal.get('nomeResponsavel')!.valueChanges.pipe(
-        startWith(''),
-        map(value => ( value ? this._filterReponsavel(value || '') : this.responsaveis.slice())),
-      );
+      this.filterAutoComplete();
     }else if(this.isDetalhes()){
       this.carregarDadosDetalhes();
     } else if (this.isUpdate()){
       this.criarFormularioUpdate(this.documento);
+      this.filterAutoComplete();
     }
+  }
+
+  private filterAutoComplete() {
+    this.filteredOptions = this.formularioModal.get('nomeResponsavel')!.valueChanges.pipe(
+      startWith(''),
+      map(value => (value ? this._filterReponsavel(value || '') : this.responsaveis.slice()))
+    );
   }
 
   criarFormulario(){
