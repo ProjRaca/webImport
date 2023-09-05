@@ -61,6 +61,12 @@ public class DocumentoServiceImpl implements DocumentService {
                             documentoDTO.setNomefilial(x.getNome());
                         });
                     }
+                    if (document.getIdresponsavel() != null) {
+                        Optional<Responsavel> responsavel = responsavelService.getRsponsavelId(document.getIdresponsavel());
+                        responsavel.ifPresent(x -> {
+                            documentoDTO.setResponsavel(x.getNome());
+                        });
+                    }
                     documentoDTO.setEmissor(document.getEmissor());
                     documentoDTO.setDatadocumentesc(document.getDatadocumentesc());
                     documentoDTO.setDatavalidade(document.getDatavalidade());
@@ -69,7 +75,6 @@ public class DocumentoServiceImpl implements DocumentService {
                     documentoDTO.setIddocpai(document.getIddocpai());
                     documentoDTO.setNome(document.getNome());
                     documentoDTO.setRestrito(document.isRestrito());
-                    documentoDTO.setResponsavel(document.getResponsavel());
                     documentoDTO.setEmpresa(document.getEmpresa());
                     documentoDTO.setNumerodocumento(document.getNumerodocumento());
                     documentoDTO.setIdresponsavel(document.getIdresponsavel());
@@ -127,7 +132,6 @@ public class DocumentoServiceImpl implements DocumentService {
         documento.setRestrito(doc.isRestrito());
         documento.setId(doc.getId());
         documento.setEmpresa(doc.getEmpresa());
-        documento.setResponsavel(doc.getResponsavel());
         documento.setNumerodocumento(doc.getNumerodocumento());
         documento.setIdresponsavel(doc.getIdresponsavel());
         return documento;
@@ -140,6 +144,12 @@ public class DocumentoServiceImpl implements DocumentService {
         if(doc.getFilial() != null && !doc.getFilial().isEmpty()){
             responsavelService.getRsponsavelId(Integer.valueOf(doc.getFilial())).ifPresent( x->{
                 documento.setNomefilial(x.getNome());
+            });
+        }
+        if (doc.getIdresponsavel() != null) {
+            Optional<Responsavel> responsavel = responsavelService.getRsponsavelId(doc.getIdresponsavel());
+            responsavel.ifPresent(x -> {
+                documento.setResponsavel(x.getNome());
             });
         }
         documento.setFilial(doc.getFilial());
@@ -158,7 +168,6 @@ public class DocumentoServiceImpl implements DocumentService {
         documento.setNome(doc.getNome());
         documento.setRestrito(doc.isRestrito());
         documento.setEmpresa(doc.getEmpresa());
-        documento.setResponsavel(doc.getResponsavel());
         documento.setNumerodocumento(doc.getNumerodocumento());
         documento.setIdresponsavel(doc.getIdresponsavel());
         return documento;
