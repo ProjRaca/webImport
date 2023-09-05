@@ -100,6 +100,7 @@ export class ResponsavelComponent extends ScackBarCustomComponent implements OnI
     this.exibirDetalhes = false;
     this.exibirEditar = false;
     this.modalService.open('modalResponsavel');
+    console.log('isAdmin :>>', this.isAdmin);
   }
 
   save(){
@@ -112,7 +113,7 @@ export class ResponsavelComponent extends ScackBarCustomComponent implements OnI
       filial: this.formulario?.value.filial
     };
 
-    if(this.responsavelEditar.id != undefined && this.responsavelEditar.id){
+    if(this.responsavelEditar != undefined && this.responsavelEditar.id != undefined && this.responsavelEditar.id){
       Object.assign(responsavelAux,{id:this.responsavelEditar.id });
       this.responsavelService.update(responsavelAux).then( response => {
         if (!response.ok) {
