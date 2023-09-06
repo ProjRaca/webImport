@@ -250,8 +250,8 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
   private callDialogDetalhes(doc: DocumentoDTO) {
     const dialogRef = this.dialog.open(ModalcadastrodocumentoComponent,
       {
-        height: '60%',
-        width: '60%',
+        height: '75%',
+        width: '70%',
       });
     dialogRef.componentInstance.detalhes = true;
     dialogRef.componentInstance.update = false;
@@ -283,8 +283,8 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
   private callDialogEditar(doc: DocumentoDTO) {
     const dialogRef = this.dialog.open(ModalcadastrodocumentoComponent,
       {
-        height: '60%',
-        width: '60%',
+        height: '75%',
+        width: '70%',
       });
     dialogRef.componentInstance.detalhes = false;
     dialogRef.componentInstance.update = true;
