@@ -124,7 +124,7 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
   }
 
   getSizeModal(): string{
-    return Sizes.Middle.toString();
+    return Sizes.Large.toString();
   }
 
   criarFormulario(){
@@ -173,8 +173,8 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
   openNovo(){
     const dialogRef = this.dialog.open(ModalcadastrodocumentoComponent,
       {
-        height: '65%',
-        width: '60%',
+        height: '75%',
+        width: '70%',
       });
 
       dialogRef.afterClosed().subscribe(result => {
