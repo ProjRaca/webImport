@@ -64,7 +64,7 @@ public class DocumentoSpecifications {
                // predicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("iddocpai"), iddocpai));
           //  }
             if ( iddocpai != null) {
-                Predicate idPredicate = null; // Predicate para a condição id
+                Predicate idPredicate = criteriaBuilder.and(predicate, criteriaBuilder.equal(root.get("id"), iddocpai));; // Predicate para a condição id
                 Predicate iddocpaiPredicate = null; // Predicate para a condição iddocpai
                 iddocpaiPredicate = criteriaBuilder.equal(root.get("iddocpai"), iddocpai);
                 // Combine as condições com OR
