@@ -15,6 +15,7 @@ import { ScackBarCustomComponent } from '../scack-bar-custom/scack-bar-custom.co
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DataUtils } from 'src/app/utils/data.utils';
 import { HttpParams } from '@angular/common/http';
+import { UsuarioService } from 'src/app/service/usuario.service';
 
 @Component({
   selector: 'app-documentos',
@@ -31,7 +32,7 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
 
   responsavel!: string;
 
-  displayedColumns: string[] = ['id','Nome', 'Filial', 'Responsável','Tp Documento','Dt Documento','Dt Validade', 'Doc Restrito','Ações'];
+  displayedColumns: string[] = ['id','Nº Documento','Nome', 'Filial', 'Responsável','Tp Documento','Dt Documento','Dt Validade', 'Doc Restrito','Ações'];
   responsaveis: Responsavel[] = [];
   filiais: Responsavel[] = [];
 
@@ -39,6 +40,7 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
   listaDocumentoPai: DocumentoDTO[] = [];
   filteredOptions!: Observable<Responsavel[]>;
   empresaSelectedValue: string = '';
+  isAdmin: boolean = false;
 
   listaEmpresa  = [ { id:1, value: "Raça Distribuidora"}, { id:2, value: "Casa de Carnes" } ]
 
@@ -64,7 +66,8 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
     public dialog: MatDialog,
     snackBar: MatSnackBar,
     private responsavelService: ResponsavelService,
-    private serviceDocumento : DocumentoService) {
+    private serviceDocumento : DocumentoService,
+    public usuarioService: UsuarioService) {
       super(snackBar);
     }
 
@@ -78,6 +81,7 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
       map(value => ( value ? this._filterReponsavel(value || '') : this.responsaveis.slice())),
     );
     this.getDocumentos();
+    this.isAdmin = this.usuarioService.isUsuarioAdmin;
   }
 
   pesquisar(){
@@ -117,11 +121,10 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
       console.error('Erro na chamada:', error);
       this.exibirMensagemErro('Falha na autenticação', error.body.message)
     });
-    this.formulario.reset();
   }
 
   getSizeModal(): string{
-    return Sizes.Middle.toString();
+    return Sizes.Large.toString();
   }
 
   criarFormulario(){
@@ -170,8 +173,8 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
   openNovo(){
     const dialogRef = this.dialog.open(ModalcadastrodocumentoComponent,
       {
-        height: '65%',
-        width: '60%',
+        height: '75%',
+        width: '70%',
       });
 
       dialogRef.afterClosed().subscribe(result => {
@@ -247,8 +250,8 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
   private callDialogDetalhes(doc: DocumentoDTO) {
     const dialogRef = this.dialog.open(ModalcadastrodocumentoComponent,
       {
-        height: '60%',
-        width: '60%',
+        height: '75%',
+        width: '70%',
       });
     dialogRef.componentInstance.detalhes = true;
     dialogRef.componentInstance.update = false;
@@ -280,8 +283,8 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
   private callDialogEditar(doc: DocumentoDTO) {
     const dialogRef = this.dialog.open(ModalcadastrodocumentoComponent,
       {
-        height: '60%',
-        width: '60%',
+        height: '75%',
+        width: '70%',
       });
     dialogRef.componentInstance.detalhes = false;
     dialogRef.componentInstance.update = true;
@@ -322,4 +325,4 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
       })
   }
 
-}
+  }

@@ -4,5 +4,6 @@ export interface Responsavel {
   cpfcnpj: string;
   telefone?: string;
   email?: string;
-  filial?: boolean
+  filial?: boolean;
+  idresponsavel?: number;
 }

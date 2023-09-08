@@ -6,7 +6,7 @@
         <mat-label>Infome o nome</mat-label>
         <input matInput placeholder="Informe o nome do responsável"  [(ngModel)]="nomePesquisa">
       </mat-form-field>
-      <section class="checkbox">
+      <section class="checkbox" *ngIf="isAdmin">
         <mat-checkbox class="example-margin" name="filialPesquisa"  [(ngModel)]="filialPesquisa">Filial</mat-checkbox>
       </section>
       <button class="button" mat-raised-button color="primary" (click)="pesquisar()">Pesquisar</button>

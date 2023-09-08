@@ -76,15 +76,20 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
     this.exibirRestrito = this.usuarioService.isUsuarioAdmin;
     if(this.isCadastro()){
       this.criarFormulario();
-      this.filteredOptions = this.formularioModal.get('nomeResponsavel')!.valueChanges.pipe(
-        startWith(''),
-        map(value => ( value ? this._filterReponsavel(value || '') : this.responsaveis.slice())),
-      );
+      this.filterAutoComplete();
     }else if(this.isDetalhes()){
       this.carregarDadosDetalhes();
     } else if (this.isUpdate()){
       this.criarFormularioUpdate(this.documento);
+      this.filterAutoComplete();
     }
+  }
+
+  private filterAutoComplete() {
+    this.filteredOptions = this.formularioModal.get('nomeResponsavel')!.valueChanges.pipe(
+      startWith(''),
+      map(value => (value ? this._filterReponsavel(value || '') : this.responsaveis.slice()))
+    );
   }
 
   criarFormulario(){
@@ -169,6 +174,7 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
       nome: this.formularioModal.value?.nomeDocumento,
       numerodocumento : this.formularioModal.value?.numeroDocumento,
       responsavel: this.formularioModal.value?.nomeResponsavel,
+      idresponsavel: this.getIdResponsavel(this.formularioModal.value?.nomeResponsavel)
     };
     if(this.documento != undefined && this.documento.id != undefined){
       Object.assign(documentoInclusao,{id:this.documento.id });
@@ -295,6 +301,10 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
     return Number(value1) === Number(value2); //adicione sua logica aqui
   }
 
+  getIdResponsavel(nome: string): number{
+    return this.responsaveis.filter(emp => emp.nome === nome)[0].id as number;
+  }
+
 }
 
 export const toBase64 = (file: File) =>
@@ -308,4 +318,5 @@ export const toBase64 = (file: File) =>
   async function sleep(arg0: number) {
       await sleep(arg0);
   }
+
 
