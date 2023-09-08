@@ -24,8 +24,8 @@ CREATE TABLE raca.contas (
 );
 
 CREATE TABLE raca.historico (
-  idhistorico SERIAL PRIMARY KEY,
-  descricao VARCHAR(45) NOT NULL
+  id SERIAL PRIMARY KEY,
+  nome VARCHAR(45) NOT NULL
 );
 
 CREATE TABLE raca.movimentacao (

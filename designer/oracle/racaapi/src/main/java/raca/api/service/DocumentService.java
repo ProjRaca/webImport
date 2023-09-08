@@ -1,6 +1,7 @@
 package raca.api.service;
 
 import raca.api.rest.dto.DocumentoDTO;
+import raca.api.rest.dto.TipoDocumentoDTO;
 import raca.api.rest.filter.FilterDocumentDTO;
 
 import java.util.Date;
@@ -36,5 +37,7 @@ public interface DocumentService {
     DocumentoDTO getId(Integer id);
 
     List<DocumentoDTO> getAllMDocumentosPai();
+
+    List<TipoDocumentoDTO> getTipoDocumento();
 
 }

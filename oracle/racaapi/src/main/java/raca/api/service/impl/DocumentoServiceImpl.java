@@ -7,10 +7,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import raca.api.domain.entity.postgres.Documento;
+import raca.api.domain.entity.postgres.Historico;
 import raca.api.domain.entity.postgres.Responsavel;
 import raca.api.repository.postgres.DocumentRepository;
+import raca.api.repository.postgres.HistoricoRepository;
 import raca.api.repository.specifications.DocumentoSpecifications;
 import raca.api.rest.dto.DocumentoDTO;
+import raca.api.rest.dto.TipoDocumentoDTO;
 import raca.api.service.DocumentService;
 import raca.api.service.ResponsavelService;
 
@@ -25,6 +28,7 @@ public class DocumentoServiceImpl implements DocumentService {
 
     private final DocumentRepository documentRepository;
     private final ResponsavelService responsavelService;
+    private final HistoricoRepository historicoRepository;
 
 
     @Override
@@ -215,12 +219,27 @@ public class DocumentoServiceImpl implements DocumentService {
         List<Documento> findAll = documentRepository.findAll();
 
         List<Documento> all = documentRepository.getAllMDocumentosPai();
-        List<Documento> filteredDocuments = all.stream().map(x-> {
-           return findAll.stream().filter(a->a.getId().equals(x.getIddocpai())).findFirst().orElse(null);
-        }).collect(Collectors.toList());
-        if(filteredDocuments != null)
-            System.out.println("tamanho da lista" + filteredDocuments.size());
+
+        // Use distinct para remover elementos repetitivos de 'all'
+        List<Documento> distinctAll = all.stream().distinct().collect(Collectors.toList());
+
+        List<Documento> filteredDocuments = distinctAll.stream().map(x -> {
+            return findAll.stream().filter(a -> a.getId().equals(x.getIddocpai())).findFirst().orElse(null);
+        }).distinct()
+                .collect(Collectors.toList());
+
+        if (filteredDocuments != null)
+            System.out.println("Tamanho da lista: " + filteredDocuments.size());
+
         return getDocumentoDTOS(filteredDocuments);
+    }
+
+    @Override
+    public List<TipoDocumentoDTO> getTipoDocumento() {
+        return historicoRepository.findAll().stream()
+                .map(x -> new TipoDocumentoDTO(x.getId(), x.getNome()))
+                .collect(Collectors.toList());
+
     }
 
 

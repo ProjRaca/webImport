@@ -22,9 +22,8 @@ public class Historico {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-    @Column(name = "idhistorico")
-    private int idhistorico;
-    @Column(name = "descricao", length = 45)
-    private String descricao;
+
+    @Column(name = "nome", length = 45)
+    private String nome;
 
 }

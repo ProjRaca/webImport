@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import raca.api.rest.dto.DocumentoDTO;
+import raca.api.rest.dto.TipoDocumentoDTO;
 import raca.api.rest.filter.FilterDocumentDTO;
 import raca.api.service.DocumentService;
 
@@ -108,6 +109,16 @@ public class DocumentController {
     })
     public List<DocumentoDTO> getAllDocumentsPai() {
         return documentService.getAllMDocumentosPai();
+    }
+
+    @GetMapping("/tipodocumento")
+    @ApiOperation("Lista todos os tipos de documentos")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Listagem exibida com sucesso"),
+            @ApiResponse(code = 400, message = "Erro de validação")
+    })
+    public List<TipoDocumentoDTO> getTipoDocumento() {
+        return documentService.getTipoDocumento();
     }
 
 }
