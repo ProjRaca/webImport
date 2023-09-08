@@ -62,7 +62,7 @@ public class DocumentController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<DocumentoDTO> salvar(@RequestBody DocumentoDTO dto){
+    public ResponseEntity<DocumentoDTO> salvar(@RequestBody DocumentoDTO dto) {
         DocumentoDTO savedDocumento = documentService.salvar(dto);
         if (savedDocumento != null) {
             return ResponseEntity.ok(savedDocumento);
@@ -72,7 +72,7 @@ public class DocumentController {
     }
 
     @PutMapping
-    public ResponseEntity<DocumentoDTO> update(@RequestBody DocumentoDTO dto){
+    public ResponseEntity<DocumentoDTO> update(@RequestBody DocumentoDTO dto) {
         DocumentoDTO updatedDocumento = documentService.update(dto);
         if (updatedDocumento != null) {
             return ResponseEntity.ok(updatedDocumento);
@@ -82,7 +82,7 @@ public class DocumentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> excluir(@PathVariable Integer id){
+    public ResponseEntity<HttpStatus> excluir(@PathVariable Integer id) {
         boolean excluido = documentService.excluir(id);
 
         if (excluido) {
@@ -93,9 +93,9 @@ public class DocumentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DocumentoDTO> getId(@PathVariable Integer id){
+    public ResponseEntity<DocumentoDTO> getId(@PathVariable Integer id) {
         DocumentoDTO dto = documentService.getId(id);
-        if(dto != null){
+        if (dto != null) {
             return ResponseEntity.ok(dto);
         }
         return ResponseEntity.noContent().build();
@@ -121,4 +121,14 @@ public class DocumentController {
         return documentService.getTipoDocumento();
     }
 
+    @GetMapping("/pai/{nome}")
+    @ApiOperation("Lista todos os documentos pai por nome")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Listagem exibida com sucesso"),
+            @ApiResponse(code = 400, message = "Erro de validação")
+    })
+    public List<DocumentoDTO> encontrarDocPaiPorNome(@PathVariable String nome) {
+        return documentService.encontrarDocPaiPorNome(nome);
+
+    }
 }

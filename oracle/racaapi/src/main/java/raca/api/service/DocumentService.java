@@ -40,4 +40,6 @@ public interface DocumentService {
 
     List<TipoDocumentoDTO> getTipoDocumento();
 
+    List<DocumentoDTO> encontrarDocPaiPorNome(String nome);
+
 }

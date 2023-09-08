@@ -3,8 +3,10 @@ package raca.api.repository.postgres;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import raca.api.domain.entity.postgres.Documento;
 import raca.api.domain.entity.postgres.Movimentacao;
+import raca.api.domain.entity.postgres.Responsavel;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -21,8 +23,14 @@ public interface DocumentRepository extends JpaRepository<Documento, Integer > ,
     @Query(value = "SELECT * FROM raca.documento m WHERE m.restrito = 'false' order by m.id", nativeQuery = true)
     List<Documento> listDocNotRestrito();
 
-    @Query(value = "SELECT DISTINCT(iddocpai),id, filial, emissor, datadocumentesc, datavalidade, documento, tipodocumento, restrito, nome, numerodocumento, responsavel, empresa FROM raca.documento WHERE iddocpai is not null", nativeQuery = true)
+    @Query(value = "select * from raca.documento r where r.id in (select iddocpai from raca.documento)", nativeQuery = true)
     List<Documento> getAllMDocumentosPai();
+
+
+    @Query(value = "select * from raca.documento r where UPPER(r.nome) like '%' || :nome || '%'" +
+            " AND r.id in (select iddocpai from raca.documento)", nativeQuery = true)
+    List<Documento> encontrarDocPaiPorNome(@Param("nome") String nome );
+
 
 
 }

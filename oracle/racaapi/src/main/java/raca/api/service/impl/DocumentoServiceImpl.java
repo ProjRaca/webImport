@@ -216,22 +216,8 @@ public class DocumentoServiceImpl implements DocumentService {
 
     @Override
     public List<DocumentoDTO> getAllMDocumentosPai() {
-        List<Documento> findAll = documentRepository.findAll();
-
-        List<Documento> all = documentRepository.getAllMDocumentosPai();
-
-        // Use distinct para remover elementos repetitivos de 'all'
-        List<Documento> distinctAll = all.stream().distinct().collect(Collectors.toList());
-
-        List<Documento> filteredDocuments = distinctAll.stream().map(x -> {
-            return findAll.stream().filter(a -> a.getId().equals(x.getIddocpai())).findFirst().orElse(null);
-        }).distinct()
-                .collect(Collectors.toList());
-
-        if (filteredDocuments != null)
-            System.out.println("Tamanho da lista: " + filteredDocuments.size());
-
-        return getDocumentoDTOS(filteredDocuments);
+         List<Documento> all = documentRepository.getAllMDocumentosPai();
+        return getDocumentoDTOS(all);
     }
 
     @Override
@@ -240,6 +226,11 @@ public class DocumentoServiceImpl implements DocumentService {
                 .map(x -> new TipoDocumentoDTO(x.getId(), x.getNome()))
                 .collect(Collectors.toList());
 
+    }
+
+    public List<DocumentoDTO> encontrarDocPaiPorNome(String nome){
+        List<Documento> documentos = documentRepository.encontrarDocPaiPorNome(nome.toUpperCase());
+        return getDocumentoDTOS(documentos);
     }
 
 
