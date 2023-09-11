@@ -1,11 +1,10 @@
 import { Sizes } from './../../enums/sizes.enum';
-import { DocumentoInclusao } from './../../entity/documento-inclusao.entity';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { ModalService } from 'src/app/service/modalService.service';
 import { ResponsavelService } from 'src/app/service/responsavel.service';
 import { Responsavel } from 'src/app/entity/responsavel.entity';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Observable, finalize, map, startWith } from 'rxjs';
+import { Observable, map, startWith } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalcadastrodocumentoComponent } from '../modalcadastrodocumento/modalcadastrodocumento.component';
 import { DocumentoService } from 'src/app/service/documento.service';
@@ -14,8 +13,8 @@ import { DialogDeleteComponent } from '../dialogDelete/dialog-delete.component';
 import { ScackBarCustomComponent } from '../scack-bar-custom/scack-bar-custom.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DataUtils } from 'src/app/utils/data.utils';
-import { HttpParams } from '@angular/common/http';
 import { UsuarioService } from 'src/app/service/usuario.service';
+import { TipoDocumento } from 'src/app/entity/tipo-documento.entity';
 
 @Component({
   selector: 'app-documentos',
@@ -39,6 +38,7 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
   documentos: DocumentoDTO[] = [];
   listaDocumentoPai: DocumentoDTO[] = [];
   filteredOptions!: Observable<Responsavel[]>;
+  filteredOptionsDocumentoPai!: Observable<DocumentoDTO[]>;
   empresaSelectedValue: string = '';
   isAdmin: boolean = false;
 
@@ -60,6 +60,9 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
     page = 5;
     spreadMode: "off" | "even" | "odd" = "off";
 
+
+    listTipoDocumento: TipoDocumento[] = [];
+
   constructor(
     protected modalService: ModalService,
     private formBuilder: FormBuilder,
@@ -72,16 +75,32 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
     }
 
   ngOnInit() {
-    this.criarFormulario();
-    this.getAllResponsaveis();
-    this.getAllFiliais();
-    this.getDocumentoPai();
+    window.onload = () => {
+      // Tudo está carregado, agora você pode chamar window.print()
+        this.criarFormulario();
+        this.getAllResponsaveis();
+        this.getAllFiliais();
+        this.getDocumentoPai();
+        this.getTipoDocumentoList();
+        this.filterResponsavelAutocomplete();
+        this.filterDocumentoPaiAutocomplete();
+        this.getDocumentos();
+        this.isAdmin = this.usuarioService.isUsuarioAdmin;
+    };
+  }
+
+  private filterResponsavelAutocomplete() {
     this.filteredOptions = this.formulario.get('responsavel')!.valueChanges.pipe(
       startWith(''),
-      map(value => ( value ? this._filterReponsavel(value || '') : this.responsaveis.slice())),
+      map(value => (value ? this._filterReponsavel(value || '') : this.responsaveis.slice()))
     );
-    this.getDocumentos();
-    this.isAdmin = this.usuarioService.isUsuarioAdmin;
+  }
+
+  private filterDocumentoPaiAutocomplete() {
+    this.filteredOptionsDocumentoPai = this.formulario.get('docPai')!.valueChanges.pipe(
+      startWith(''),
+      map(value => (value ? this._filterDocumentoPai(value || '') : this.listaDocumentoPai.slice()))
+    );
   }
 
   pesquisar(){
@@ -93,8 +112,9 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
    let dtFimValidade = this.formulario.get('dtValidadeFinal')?.value != '' && this.formulario.get('dtValidadeFinal')?.value != undefined ? DataUtils.formatarDatetoUsFormat(this.formulario.get('dtValidadeFinal')?.value) : '';
    let nomeResponsavel = this.formulario.get('responsavel')?.value || undefined ;
    let idResponsavel = nomeResponsavel != undefined ? this.responsaveis.filter(respo => respo.nome === nomeResponsavel )[0].nome : ''
-   let documentoPai = this.formulario.get('docPai')?.value != '' && this.formulario.get('docPai')?.value != undefined ? this.formulario.get('docPai')?.value : '';
-    let filialFilter = this.formulario.get('filial')?.value || undefined ;
+   let documentoPaiNome = this.formulario.get('docPai')?.value || undefined;
+   let documentoPai = this.formulario.get('docPai')?.value != undefined  ? this.listaDocumentoPai.filter(respo => respo.nome === documentoPaiNome )[0].iddocpai : undefined;
+
     let filter: DocumentoDTO = {
       datadocumentesc: dtDocumento || undefined,
       datavalidade: dtValidade  || undefined,
@@ -153,7 +173,6 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
   getAllFiliais(){
     this.responsavelService.findAllFiliais().then(response => {
       this.filiais = response.body;
-      console.log('filiais =>> ',this.filiais)
     })
   }
 
@@ -167,6 +186,13 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
     return this.responsaveis
       .filter(resp => {
         return resp.nome.toString().toLocaleLowerCase().includes(value.toLocaleLowerCase())
+      });
+  }
+
+  private _filterDocumentoPai(value: string): any[] {
+    return this.listaDocumentoPai
+      .filter(resp => {
+        return resp.nome?.toString().toLocaleLowerCase().includes(value.toLocaleLowerCase())
       });
   }
 
@@ -317,6 +343,28 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
         .toPromise()
         .then(response => {
         this.listaDocumentoPai = response.body;
+      })
+      .catch((error) => {
+        // Lida com erros, se necessário.
+        console.error('Erro na chamada:', error);
+        this.exibirMensagemErro('Ocorreu um erro ao realizar chamada', error.body.message)
+      })
+  }
+
+  print(){
+    if (window.print) {
+      window.print();
+    } else {
+      console.error('Seu navegador não suporta a função de impressão.');
+    }
+  }
+
+  getTipoDocumentoList(){
+    this.serviceDocumento.findAllTipoDOcumento()
+        .pipe()
+        .toPromise()
+        .then(response => {
+        this.listTipoDocumento = response.body;
       })
       .catch((error) => {
         // Lida com erros, se necessário.

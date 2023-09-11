@@ -74,4 +74,9 @@ export class DocumentoService {
     const req = new HttpRequest('GET',`${apiUrl}/pai`);
     return this.http.request(req);
   }
+
+  findAllTipoDOcumento():Observable<any> {
+    const req = new HttpRequest('GET',`${apiUrl}/tipodocumento`);
+    return this.http.request(req);
+  }
 }

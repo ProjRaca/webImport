@@ -2,13 +2,23 @@
 
     <h1>Responsáveis</h1>
     <div class="form-fields">
-      <mat-form-field  class="input">
+      <form [formGroup]="formulario">
+      <mat-form-field  appearance="fill" class="input margen-min" style="width: 30em !important;">
         <mat-label>Infome o nome</mat-label>
-        <input matInput placeholder="Informe o nome do responsável"  [(ngModel)]="nomePesquisa">
+        <!-- <input matInput placeholder="Informe o nome do responsável"  [(ngModel)]="nomePesquisa"> -->
+        <input matInput formControlName="nomePesquisa" [matAutocomplete]="auto" >
+                  <mat-autocomplete #auto="matAutocomplete">
+                      <mat-option
+                        *ngFor="let item of filteredOptions | async"
+                        [value]="item.nome">
+                          {{item.nome}}
+                      </mat-option>
+                </mat-autocomplete>
       </mat-form-field>
       <section class="checkbox" *ngIf="isAdmin">
         <mat-checkbox class="example-margin" name="filialPesquisa"  [(ngModel)]="filialPesquisa">Filial</mat-checkbox>
       </section>
+    </form>
       <button class="button" mat-raised-button color="primary" (click)="pesquisar()">Pesquisar</button>
     </div>
 
