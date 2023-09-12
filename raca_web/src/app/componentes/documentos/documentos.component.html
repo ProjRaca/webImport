@@ -56,12 +56,16 @@
 
           <mat-form-field  class="input-large">
             <mat-label>Documento Pai</mat-label>
-            <mat-select formControlName="docPai" >
-              <mat-option *ngFor="let doc of listaDocumentoPai" [value]="doc.id">
-                {{doc.nome}}
-              </mat-option>
-              <mat-option *ngIf="documentos.length == 0" value="">Sem registros para exibir</mat-option>
-            </mat-select>
+            <input matInput
+                    formControlName="docPai"
+                    [matAutocomplete]="autoPai">
+                  <mat-autocomplete #autoPai="matAutocomplete">
+                      <mat-option
+                        *ngFor="let item of filteredOptionsDocumentoPai | async"
+                        [value]="item.nome">
+                          {{item.nome}}
+                      </mat-option>
+                </mat-autocomplete>
           </mat-form-field>
         </div>
         <div class="form-column">
@@ -82,8 +86,8 @@
           <mat-form-field>
             <mat-label>Tipo Documento</mat-label>
             <mat-select name="tpDocumento" formControlName="tpDocumento">
-              <mat-option *ngFor="let item of tipoDocumento" [value]="item.id">
-                {{item.value}}
+              <mat-option *ngFor="let item of listTipoDocumento" [value]="item.id">
+                {{item.nome}}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -106,7 +110,7 @@
   </mat-accordion>
   <mat-divider class="divider"></mat-divider>
   <button mat-raised-button style="margin-bottom: 2%;" (click)="openNovo()">Novo</button>
-  <button mat-raised-button  style="margin-bottom: 2%;margin-left: 2%;">
+  <button mat-raised-button  style="margin-bottom: 2%;margin-left: 2%;" (click)="print()">
     <mat-icon class="icon"  title="Imprimir">print</mat-icon>
   </button>
   <br>

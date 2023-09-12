@@ -6,9 +6,12 @@ import { Sizes } from 'src/app/enums/sizes.enum';
 import { ModalService } from 'src/app/service/modalService.service';
 import { ResponsavelService } from 'src/app/service/responsavel.service';
 import { ScackBarCustomComponent } from '../scack-bar-custom/scack-bar-custom.component';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { DialogDeleteComponent } from '../dialogDelete/dialog-delete.component';
 import { UsuarioService } from 'src/app/service/usuario.service';
+import { Observable } from 'rxjs/internal/Observable';
+import { startWith } from 'rxjs/internal/operators/startWith';
+import { map } from 'rxjs/internal/operators/map';
 
 @Component({
   selector: 'app-responsavel',
@@ -31,6 +34,8 @@ export class ResponsavelComponent extends ScackBarCustomComponent implements OnI
   isAdmin: boolean = false;
   exibirEditar: boolean = false;
 
+  filteredOptions!: Observable<Responsavel[]>;
+
   constructor(
     private formBuilder: FormBuilder,
     protected modalService: ModalService,
@@ -45,6 +50,10 @@ export class ResponsavelComponent extends ScackBarCustomComponent implements OnI
     this.criarFormulario();
     this.getAll();
     this.isAdmin = this.usuarioService.isUsuarioAdmin;
+    this.filteredOptions = this.formulario.get('nomePesquisa')!.valueChanges.pipe(
+      startWith(''),
+      map(value => ( value ? this._filterReponsavel(value || '') : this.responsaveis.slice())),
+    );
   }
 
   criarFormulario(){
@@ -54,17 +63,18 @@ export class ResponsavelComponent extends ScackBarCustomComponent implements OnI
       cpfCnpj: ['', [Validators.required]],
       filial:[false],
       telefone: [''],
+      nomePesquisa: ['']
     });
   }
 
   pesquisar(){
-    if (this.nomePesquisa.length == 0 && this.filialPesquisa == undefined){
+    if (this.formulario.get('nomePesquisa') == undefined && this.filialPesquisa == undefined){
       this.exibirMensagemErro('Falha na pesquisa','É necessário informar o nome ou filial para pesquisar.');
       return;
     }
 
     let filter = {
-      nome: this.nomePesquisa!= '' ? this.nomePesquisa : '',
+      nome: this.formulario.get('nomePesquisa')?.value != '' ? this.formulario.get('nomePesquisa')?.value : '',
       filial: this.filialPesquisa
     }
     this.responsavelService.findByFilter(filter)
@@ -193,6 +203,13 @@ export class ResponsavelComponent extends ScackBarCustomComponent implements OnI
       this.exibirEditar = true;
       this.modalService.open('modalResponsavel');
     });
+  }
+
+  private _filterReponsavel(value: string): any[] {
+    return this.responsaveis
+      .filter(resp => {
+        return resp.nome.toString().toLocaleLowerCase().includes(value.toLocaleLowerCase())
+      });
   }
 
 }

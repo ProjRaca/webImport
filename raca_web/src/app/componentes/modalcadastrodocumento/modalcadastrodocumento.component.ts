@@ -10,6 +10,7 @@ import { DataUtils } from 'src/app/utils/data.utils';
 import { ScackBarCustomComponent } from '../scack-bar-custom/scack-bar-custom.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UsuarioService } from 'src/app/service/usuario.service';
+import { TipoDocumento } from 'src/app/entity/tipo-documento.entity';
 
 @Component({
   selector: 'app-modalcadastrodocumento',
@@ -53,6 +54,8 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
     { id: 9, value: 'NFS_SE'}
   ]
 
+  listaTipoDocumento: TipoDocumento[] = [];
+
   currentFile?: File;
   base64File: string[] = [];
   detalhes: boolean = false;
@@ -73,6 +76,7 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
     this.getAllFiliais();
     this.getAllResponsaveis();
     this.getDocumentos();
+    this.getTipoDocumentoList();
     this.exibirRestrito = this.usuarioService.isUsuarioAdmin;
     if(this.isCadastro()){
       this.criarFormulario();
@@ -303,6 +307,20 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
 
   getIdResponsavel(nome: string): number{
     return this.responsaveis.filter(emp => emp.nome === nome)[0].id as number;
+  }
+
+  getTipoDocumentoList(){
+    this.serviceDocumento.findAllTipoDOcumento()
+        .pipe()
+        .toPromise()
+        .then(response => {
+        this.listaTipoDocumento = response.body;
+      })
+      .catch((error) => {
+        // Lida com erros, se necessário.
+        console.error('Erro na chamada:', error);
+        this.exibirMensagemErro('Ocorreu um erro ao realizar chamada', error.body.message)
+      })
   }
 
 }

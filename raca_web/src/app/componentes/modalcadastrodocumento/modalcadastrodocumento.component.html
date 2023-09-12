@@ -79,8 +79,8 @@
           <mat-form-field  class="input-modal" >
             <mat-label>Tipo Documento</mat-label>
             <mat-select formControlName="tpDocumento" name="tpDocumentoInsert" *ngIf="!detalhes" [compareWith] = "compareValues">
-              <mat-option *ngFor="let item of tipoDocumento" [value]="item.id">
-                {{item.value}}
+              <mat-option *ngFor="let item of listaTipoDocumento" [value]="item.id">
+                {{item.nome}}
               </mat-option>
             </mat-select>
           </mat-form-field>
