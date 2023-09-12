@@ -1,13 +1,14 @@
 package raca.api.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import raca.api.domain.entity.postgres.Documento;
-import raca.api.domain.entity.postgres.Historico;
 import raca.api.domain.entity.postgres.Responsavel;
 import raca.api.repository.postgres.DocumentRepository;
 import raca.api.repository.postgres.HistoricoRepository;
@@ -41,10 +42,10 @@ public class DocumentoServiceImpl implements DocumentService {
         try {
             boolean isAdmin = isAdmin();
             if (isAdmin) {
-                List<Documento> all = documentRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+                List<Documento> all = documentRepository.findAll().stream().limit(70).collect(Collectors.toList());
                 return getDocumentoDTOS(all);
             } else {
-                List<Documento> all = documentRepository.listDocNotRestrito();
+                List<Documento> all = documentRepository.listDocNotRestrito().stream().limit(70).collect(Collectors.toList());
                 return getDocumentoDTOS(all);
             }
         } catch (Exception e) {
