@@ -5,7 +5,7 @@
         <mat-panel-title></mat-panel-title>
         <mat-panel-description>Clique aqui para {{panelOpenState ? 'fechar' : 'abrir'}} o Formulário de pesquisa</mat-panel-description>
       </mat-expansion-panel-header>
-      <form [formGroup]="formulario">
+      <form [formGroup]="formulario" *ngIf="formulario">
         <h1>Documentos</h1>
         <div class="form-fields row">
           <div class="form-column">
@@ -110,9 +110,9 @@
   </mat-accordion>
   <mat-divider class="divider"></mat-divider>
   <button mat-raised-button style="margin-bottom: 2%;" (click)="openNovo()">Novo</button>
-  <button mat-raised-button  style="margin-bottom: 2%;margin-left: 2%;" (click)="print()">
+  <!-- <button mat-raised-button  style="margin-bottom: 2%;margin-left: 2%;" (click)="print()">
     <mat-icon class="icon"  title="Imprimir">print</mat-icon>
-  </button>
+  </button> -->
   <br>
   <label class="label"><i> Listagem de Documentos</i></label>
 

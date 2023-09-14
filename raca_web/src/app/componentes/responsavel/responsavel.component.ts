@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder,  FormGroup,  Validators } from '@angular/forms';
+import { FormBuilder,  FormControl,  FormGroup,  Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Responsavel } from 'src/app/entity/responsavel.entity';
 import { Sizes } from 'src/app/enums/sizes.enum';
@@ -47,7 +47,8 @@ export class ResponsavelComponent extends ScackBarCustomComponent implements OnI
     }
 
   ngOnInit() {
-    this.criarFormulario();
+    //this.criarFormulario();
+    this.criarFormularioPesquisa();
     this.getAll();
     this.isAdmin = this.usuarioService.isUsuarioAdmin;
     this.filteredOptions = this.formulario.get('nomePesquisa')!.valueChanges.pipe(
@@ -210,6 +211,17 @@ export class ResponsavelComponent extends ScackBarCustomComponent implements OnI
       .filter(resp => {
         return resp.nome.toString().toLocaleLowerCase().includes(value.toLocaleLowerCase())
       });
+  }
+
+  criarFormularioPesquisa(){
+    this.formulario = new FormGroup({
+      nome: new FormControl(),
+      email: new FormControl([Validators.email]),
+      cpfCnpj: new FormControl() ,
+      filial: new FormControl(false),
+      telefone: new FormControl(),
+      nomePesquisa: new FormControl()
+    });
   }
 
 }
