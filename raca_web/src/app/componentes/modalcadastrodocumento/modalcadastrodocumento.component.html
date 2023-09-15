@@ -14,12 +14,16 @@
           </mat-form-field>
           <mat-form-field  class="input-large">
             <mat-label>Documento Pai</mat-label>
-            <mat-select formControlName="docPai" >
-              <mat-option *ngFor="let doc of documentos" [value]="doc.id">
-                {{doc.nome}}
-              </mat-option>
-              <mat-option *ngIf="documentos.length == 0" value="">Sem registros para exibir</mat-option>
-            </mat-select>
+            <input matInput
+                    formControlName="docPai"
+                    [matAutocomplete]="autoPai">
+                  <mat-autocomplete #autoPai="matAutocomplete">
+                      <mat-option
+                        *ngFor="let item of filteredOptionsDocumentoPai | async"
+                        [value]="item.nome">
+                          {{item.nome}}
+                      </mat-option>
+                </mat-autocomplete>
           </mat-form-field>
           <mat-form-field  class="input margen-min">
             <mat-label>Filial</mat-label>
