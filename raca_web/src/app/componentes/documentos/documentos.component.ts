@@ -114,14 +114,14 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
    let nomeResponsavel = this.formulario.get('responsavel')?.value || undefined ;
    let idResponsavel = nomeResponsavel != undefined ? this.responsaveis.filter(respo => respo.nome === nomeResponsavel )[0].nome : ''
    let documentoPaiNome = this.formulario.get('docPai')?.value || undefined;
-   let documentoPai = this.formulario.get('docPai')?.value != undefined  ? this.listaDocumentoPai.filter(respo => respo.nome?.toLocaleUpperCase === documentoPaiNome.toLocaleUpperCase )[0].id : undefined;
+   let documentoPai = this.formulario.get('docPai')?.value != undefined  ? this.listaDocumentoPai.filter(respo => respo.nome?.toLocaleUpperCase() === documentoPaiNome.toLocaleUpperCase() ) : undefined;
 
-    let filter: DocumentoDTO = {
+   let filter: DocumentoDTO = {
       datadocumentesc: dtDocumento || undefined,
       datavalidade: dtValidade  || undefined,
       emissor: idResponsavel?.toString() ,
       empresa : this.formulario.get('empresa')?.value  || undefined,
-      iddocpai: documentoPai,
+      iddocpai:  documentoPai != undefined ?  documentoPai[0].id : undefined,
       tipodocumento: this.formulario.get('tpDocumento')?.value || undefined,
       restrito: this.formulario.get('docRegistro')?.value || false,
       numerodocumento: this.formulario.get('numeroDocumento')?.value || undefined,
