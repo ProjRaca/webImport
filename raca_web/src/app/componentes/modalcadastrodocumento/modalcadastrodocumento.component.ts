@@ -214,7 +214,7 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
   }
 
   getDocumentos(){
-    this.serviceDocumento.findAll()
+    this.serviceDocumento.findAllTotal()
       .pipe()
       .toPromise()
       .then(response => {
