@@ -62,7 +62,7 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
   update: boolean = false;
   exibirRestrito: boolean = false
   listaDocumentoPai: DocumentoDTO[] = [];
-  filteredOptionsDocumentoPai!: Observable<DocumentoDTO[]>;
+  filteredOptionsDocumentos!: Observable<DocumentoDTO[]>;
 
   constructor(
     @Inject(FormBuilder) public formBuilder: FormBuilder,
@@ -79,18 +79,17 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
     this.getAllResponsaveis();
     this.getDocumentos();
     this.getTipoDocumentoList();
-    this.getDocumentoPai();
     this.exibirRestrito = this.usuarioService.isUsuarioAdmin;
     if(this.isCadastro()){
       this.criarFormulario();
       this.filterAutoComplete();
-      this.filterDocumentoPaiAutocomplete();
+      this.filterDocumentoAutocomplete();
     }else if(this.isDetalhes()){
       this.carregarDadosDetalhes();
     } else if (this.isUpdate()){
       this.criarFormularioUpdate(this.documento);
       this.filterAutoComplete();
-      this.filterDocumentoPaiAutocomplete();
+      this.filterDocumentoAutocomplete();
     }
   }
 
@@ -101,10 +100,10 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
     );
   }
 
-  private filterDocumentoPaiAutocomplete() {
-    this.filteredOptionsDocumentoPai = this.formularioModal.get('docPai')!.valueChanges.pipe(
+  private filterDocumentoAutocomplete() {
+    this.filteredOptionsDocumentos = this.formularioModal.get('docPai')!.valueChanges.pipe(
       startWith(''),
-      map(value => (value ? this._filterDocumentoPai(value || '') : this.listaDocumentoPai.slice()))
+      map(value => (value ? this._filterDocumento(value || '') : this.documentos.slice()))
     );
   }
 
@@ -335,22 +334,8 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
       })
   }
 
-  getDocumentoPai(){
-    this.serviceDocumento.findAllDOcumentoPai()
-        .pipe()
-        .toPromise()
-        .then(response => {
-        this.listaDocumentoPai = response.body;
-      })
-      .catch((error) => {
-        // Lida com erros, se necessário.
-        console.error('Erro na chamada:', error);
-        this.exibirMensagemErro('Ocorreu um erro ao realizar chamada', error.body.message)
-      })
-  }
-
-  private _filterDocumentoPai(value: string): any[] {
-    return this.listaDocumentoPai
+  private _filterDocumento(value: string): any[] {
+    return this.documentos
       .filter(resp => {
         return resp.nome?.toString().toLocaleLowerCase().includes(value.toLocaleLowerCase())
       });
