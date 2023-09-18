@@ -23,12 +23,12 @@ public interface DocumentRepository extends JpaRepository<Documento, Integer > ,
     @Query(value = "SELECT * FROM raca.documento m WHERE m.restrito = 'false' order by m.id", nativeQuery = true)
     List<Documento> listDocNotRestrito();
 
-    @Query(value = "select * from raca.documento r where r.id in (select iddocpai from raca.documento)", nativeQuery = true)
+    @Query(value = "select * from raca.documento r where r.id in (select iddocpai from raca.documento WHERE iddocpai is not null)", nativeQuery = true)
     List<Documento> getAllMDocumentosPai();
 
 
     @Query(value = "select * from raca.documento r where UPPER(r.nome) like '%' || :nome || '%'" +
-            " AND r.id in (select iddocpai from raca.documento)", nativeQuery = true)
+            " AND r.id in (select iddocpai from raca.documento WHERE iddocpai is not null)", nativeQuery = true)
     List<Documento> encontrarDocPaiPorNome(@Param("nome") String nome );
 
 

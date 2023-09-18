@@ -13,6 +13,8 @@ public interface DocumentService {
 
     List<DocumentoDTO> getAllMDocumentos();
 
+    List<DocumentoDTO> getAllMDocumentosFull();
+
     List<DocumentoDTO> getFilterDocument(Integer id,
                                          String filial,
                                          String emissor,

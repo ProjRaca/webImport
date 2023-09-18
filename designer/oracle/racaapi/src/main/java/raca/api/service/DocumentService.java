@@ -42,4 +42,6 @@ public interface DocumentService {
 
     List<DocumentoDTO> encontrarDocPaiPorNome(String nome);
 
+    List<DocumentoDTO> getAllMDocumentosFull();
+
 }
