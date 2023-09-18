@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import raca.api.domain.entity.postgres.Documento;
+import raca.api.domain.entity.postgres.Historico;
 import raca.api.domain.entity.postgres.Responsavel;
 import raca.api.repository.postgres.DocumentRepository;
 import raca.api.repository.postgres.HistoricoRepository;
@@ -68,7 +69,12 @@ public class DocumentoServiceImpl implements DocumentService {
                     documentoDTO.setDatadocumentesc(document.getDatadocumentesc());
                     documentoDTO.setDatavalidade(document.getDatavalidade());
                     documentoDTO.setDocumento(document.getDocumento());
-                    documentoDTO.setTipodocumento(document.getTipodocumento());
+                    if(document.getTipodocumento() != null){
+                        Historico one = historicoRepository.getOne(Integer.valueOf(document.getTipodocumento().trim()));
+                        if(one != null){
+                            documentoDTO.setNometipodocumento(one.getNome());
+                        }
+                    }
                     documentoDTO.setIddocpai(document.getIddocpai());
                     documentoDTO.setNome(document.getNome());
                     documentoDTO.setRestrito(document.isRestrito());
@@ -150,7 +156,12 @@ public class DocumentoServiceImpl implements DocumentService {
         documento.setDatavalidade(doc.getDatavalidade());
         documento.setDatadocumentesc(doc.getDatadocumentesc());
         documento.setDocumento(doc.getDocumento());
-        documento.setTipodocumento(doc.getTipodocumento());
+        if(doc.getTipodocumento() != null){
+            Historico one = historicoRepository.getOne(Integer.valueOf(doc.getTipodocumento().trim()));
+            if(one != null){
+                documento.setNometipodocumento(one.getNome());
+            }
+        }
         if(doc.getIddocpai() != null){
             Optional<Documento> byId = documentRepository.findById(doc.getIddocpai());
             if(byId.isPresent()){

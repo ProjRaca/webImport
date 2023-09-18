@@ -30,6 +30,6 @@ public class DocumentoDTO extends ErroCode{
     private Integer numerodocumento;
     private Integer idresponsavel;
     private byte[] documento;
-
+    private String nometipodocumento;
 
 }

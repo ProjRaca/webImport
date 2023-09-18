@@ -91,7 +91,7 @@ public class DocumentoServiceImpl implements DocumentService {
                     if(document.getTipodocumento() != null){
                         Historico one = historicoRepository.getOne(Integer.valueOf(document.getTipodocumento().trim()));
                         if(one != null){
-                            documentoDTO.setTipodocumento(one.getNome());
+                            documentoDTO.setNometipodocumento(one.getNome());
                         }
                     }
                     documentoDTO.setEmissor(document.getEmissor());
@@ -153,12 +153,7 @@ public class DocumentoServiceImpl implements DocumentService {
         if(doc.getDatadocumentesc() != null)
             documento.setDatadocumentesc(doc.getDatadocumentesc());
         documento.setDocumento(doc.getDocumento());
-        if(doc.getTipodocumento() != null){
-            Historico one = historicoRepository.getOne(Integer.valueOf(doc.getTipodocumento().trim()));
-            if(one != null){
-                documento.setTipodocumento(one.getNome());
-            }
-        }
+        documento.setTipodocumento(doc.getTipodocumento());
         documento.setIddocpai(doc.getIddocpai());
         documento.setNome(doc.getNome());
         documento.setRestrito(doc.isRestrito());
@@ -192,7 +187,7 @@ public class DocumentoServiceImpl implements DocumentService {
         if(doc.getTipodocumento() != null){
             Historico one = historicoRepository.getOne(Integer.valueOf(doc.getTipodocumento().trim()));
             if(one != null){
-                documento.setTipodocumento(one.getNome());
+                documento.setNometipodocumento(one.getNome());
             }
         }
         if(doc.getIddocpai() != null){
