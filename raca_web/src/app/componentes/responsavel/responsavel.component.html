@@ -2,7 +2,7 @@
 
     <h1>Responsáveis</h1>
     <div class="form-fields">
-      <form [formGroup]="formulario">
+      <form [formGroup]="formulario" *ngIf="formulario">
       <mat-form-field  appearance="fill" class="input margen-min" style="width: 30em !important;">
         <mat-label>Infome o nome</mat-label>
         <!-- <input matInput placeholder="Informe o nome do responsável"  [(ngModel)]="nomePesquisa"> -->
@@ -80,7 +80,7 @@
 
  <modal id="modalResponsavel" [sizeType]="getSizeModal()">
     <mat-card class="modal">
-      <form [formGroup]="formulario">
+      <form [formGroup]="formulario"  *ngIf="formulario">
       <mat-card-header style="background-color: #1976d2; height: 40px;">
         <label style="color: white; text-align: center;margin-top: 1%;" *ngIf="!exibirDetalhes && !exibirEditar">Cadastro de Responsável</label>
         <label style="color: white; text-align: center;margin-top: 1%;" *ngIf="exibirDetalhes && !exibirEditar">Detalhes de Responsável</label>

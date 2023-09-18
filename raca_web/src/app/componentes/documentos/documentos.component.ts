@@ -3,7 +3,7 @@ import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/cor
 import { ModalService } from 'src/app/service/modalService.service';
 import { ResponsavelService } from 'src/app/service/responsavel.service';
 import { Responsavel } from 'src/app/entity/responsavel.entity';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Observable, map, startWith } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalcadastrodocumentoComponent } from '../modalcadastrodocumento/modalcadastrodocumento.component';
@@ -27,6 +27,7 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
 
   panelOpenState = false;
   formulario!: FormGroup;
+  formularioPesquisa!: FormGroup;
   docBase64: string[] = [];
 
   responsavel!: string;
@@ -77,7 +78,7 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
   ngOnInit() {
     window.onload = () => {
       // Tudo está carregado, agora você pode chamar window.print()
-        this.criarFormulario();
+        this.criarFormularioPesquisa();
         this.getAllResponsaveis();
         this.getAllFiliais();
         this.getDocumentoPai();
@@ -113,14 +114,14 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
    let nomeResponsavel = this.formulario.get('responsavel')?.value || undefined ;
    let idResponsavel = nomeResponsavel != undefined ? this.responsaveis.filter(respo => respo.nome === nomeResponsavel )[0].nome : ''
    let documentoPaiNome = this.formulario.get('docPai')?.value || undefined;
-   let documentoPai = this.formulario.get('docPai')?.value != undefined  ? this.listaDocumentoPai.filter(respo => respo.nome === documentoPaiNome )[0].iddocpai : undefined;
+   let documentoPai = this.formulario.get('docPai')?.value != undefined  ? this.listaDocumentoPai.filter(respo => respo.nome?.toLocaleUpperCase() === documentoPaiNome.toLocaleUpperCase() ) : undefined;
 
-    let filter: DocumentoDTO = {
+   let filter: DocumentoDTO = {
       datadocumentesc: dtDocumento || undefined,
       datavalidade: dtValidade  || undefined,
       emissor: idResponsavel?.toString() ,
       empresa : this.formulario.get('empresa')?.value  || undefined,
-      iddocpai: documentoPai,
+      iddocpai:  documentoPai != undefined ?  documentoPai[0].id : undefined,
       tipodocumento: this.formulario.get('tpDocumento')?.value || undefined,
       restrito: this.formulario.get('docRegistro')?.value || false,
       numerodocumento: this.formulario.get('numeroDocumento')?.value || undefined,
@@ -372,5 +373,24 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
         this.exibirMensagemErro('Ocorreu um erro ao realizar chamada', error.body.message)
       })
   }
+
+  criarFormularioPesquisa(){
+    this.formulario = new FormGroup({
+      empresa: new FormControl(),
+      dtDocumento:new FormControl(),
+    dtDocumentoFinal: new FormControl(),
+    dtValidade: new FormControl(),
+    dtValidadeFinal: new FormControl(),
+    responsavel: new FormControl(),
+    tpDocumento: new FormControl(),
+    docRegistro: new FormControl(),
+    numeroDocumento:new FormControl(),
+    filial:new FormControl(),
+    docPai: new FormControl()
+  });
+
+  this.formulario.get('docRestrito')?.setValue(false)
+  this.formulario.get('docRegistro')?.setValue(false)
+}
 
   }

@@ -61,6 +61,8 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
   detalhes: boolean = false;
   update: boolean = false;
   exibirRestrito: boolean = false
+  listaDocumentoPai: DocumentoDTO[] = [];
+  filteredOptionsDocumentos!: Observable<DocumentoDTO[]>;
 
   constructor(
     @Inject(FormBuilder) public formBuilder: FormBuilder,
@@ -81,11 +83,13 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
     if(this.isCadastro()){
       this.criarFormulario();
       this.filterAutoComplete();
+      this.filterDocumentoAutocomplete();
     }else if(this.isDetalhes()){
       this.carregarDadosDetalhes();
     } else if (this.isUpdate()){
       this.criarFormularioUpdate(this.documento);
       this.filterAutoComplete();
+      this.filterDocumentoAutocomplete();
     }
   }
 
@@ -93,6 +97,13 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
     this.filteredOptions = this.formularioModal.get('nomeResponsavel')!.valueChanges.pipe(
       startWith(''),
       map(value => (value ? this._filterReponsavel(value || '') : this.responsaveis.slice()))
+    );
+  }
+
+  private filterDocumentoAutocomplete() {
+    this.filteredOptionsDocumentos = this.formularioModal.get('docPai')!.valueChanges.pipe(
+      startWith(''),
+      map(value => (value ? this._filterDocumento(value || '') : this.documentos.slice()))
     );
   }
 
@@ -203,7 +214,7 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
   }
 
   getDocumentos(){
-    this.serviceDocumento.findAll()
+    this.serviceDocumento.findAllTotal()
       .pipe()
       .toPromise()
       .then(response => {
@@ -321,6 +332,13 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
         console.error('Erro na chamada:', error);
         this.exibirMensagemErro('Ocorreu um erro ao realizar chamada', error.body.message)
       })
+  }
+
+  private _filterDocumento(value: string): any[] {
+    return this.documentos
+      .filter(resp => {
+        return resp.nome?.toString().toLocaleLowerCase().includes(value.toLocaleLowerCase())
+      });
   }
 
 }
