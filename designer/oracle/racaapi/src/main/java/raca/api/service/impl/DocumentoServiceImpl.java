@@ -223,4 +223,21 @@ public class DocumentoServiceImpl implements DocumentService {
         return getDocumentoDTOS(documentos);
     }
 
+    @Override
+    public List<DocumentoDTO> getAllMDocumentosFull() {
+        try {
+            boolean isAdmin = isAdmin();
+            if (isAdmin) {
+                List<Documento> all = documentRepository.findAll().stream().collect(Collectors.toList());
+                return getDocumentoDTOS(all);
+            } else {
+                List<Documento> all = documentRepository.listDocNotRestrito().stream().collect(Collectors.toList());
+                return getDocumentoDTOS(all);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

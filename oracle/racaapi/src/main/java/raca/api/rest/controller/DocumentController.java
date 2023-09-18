@@ -131,4 +131,14 @@ public class DocumentController {
         return documentService.encontrarDocPaiPorNome(nome);
 
     }
+
+    @GetMapping("/all")
+    @ApiOperation("Lista todos os documentos full")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Listagem exibida com sucesso"),
+            @ApiResponse(code = 400, message = "Erro de validação")
+    })
+    public List<DocumentoDTO> getAllDocumentsFull() {
+        return documentService.getAllMDocumentosFull();
+    }
 }
