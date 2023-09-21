@@ -89,6 +89,7 @@ public class DocumentoServiceImpl implements DocumentService {
                         });
                     }
                     if(document.getTipodocumento() != null){
+                        documentoDTO.setTipodocumento(document.getTipodocumento());
                         Historico one = historicoRepository.getOne(Integer.valueOf(document.getTipodocumento().trim()));
                         if(one != null){
                             documentoDTO.setNometipodocumento(one.getNome());
@@ -98,8 +99,13 @@ public class DocumentoServiceImpl implements DocumentService {
                     documentoDTO.setDatadocumentesc(document.getDatadocumentesc());
                     documentoDTO.setDatavalidade(document.getDatavalidade());
                     documentoDTO.setDocumento(document.getDocumento());
-                    documentoDTO.setTipodocumento(document.getTipodocumento());
-                    documentoDTO.setIddocpai(document.getIddocpai());
+
+                    if(document.getIddocpai() != null){
+                        Optional<Documento> byId = documentRepository.findById(document.getIddocpai());
+                        if(byId.isPresent()){
+                            documentoDTO.setNomepai(byId.get().getNome());
+                        }
+                    }
                     documentoDTO.setNome(document.getNome());
                     documentoDTO.setRestrito(document.isRestrito());
                     documentoDTO.setEmpresa(document.getEmpresa());
@@ -110,12 +116,14 @@ public class DocumentoServiceImpl implements DocumentService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public DocumentoDTO salvar(DocumentoDTO doc) {
         Documento save = documentRepository.save(getDocument(doc));
         return getDocumentDTO(save);
     }
 
+    @Transactional
     @Override
     public DocumentoDTO update(DocumentoDTO doc) {
         Documento save = documentRepository.save(getDocument(doc));
