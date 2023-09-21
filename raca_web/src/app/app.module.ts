@@ -49,7 +49,6 @@ import { NgFor, AsyncPipe } from '@angular/common';
 import { AutocompleteResponsavelComponent } from './componentes/autocomplete-responsavel/autocomplete-responsavel.component';
 import { ModalcadastrodocumentoComponent } from './componentes/modalcadastrodocumento/modalcadastrodocumento.component';
 import { FilialPipe } from './pipes/tipo-filial.pipe';
-import { DocumentoPipe } from './pipes/tipo-documento.pipe';
 import { DocumentoRestritoPipe } from './pipes/documento-restrito.pipe';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
@@ -75,7 +74,6 @@ import { UsuarioPipe } from './pipes/tipo-usuario.pipe';
       CpfECnpjPipe,
       FilialPipe,
       UsuarioPipe,
-      DocumentoPipe,
       DocumentoRestritoPipe,
       MatriculaPipe,
       ScackBarCustomComponent,

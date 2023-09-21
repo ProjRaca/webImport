@@ -167,7 +167,7 @@
               <button mat-icon-button (click)="confirmDelete(item.id);" title="Exibir de documento">
               <mat-icon >delete_forever</mat-icon>
             </button>
-            <button mat-icon-button (click)="visualizarDocumento(item.id)" title="Exibir pdf do Documento">
+            <button mat-icon-button (click)="visualizarDocumento(item.id)" [title]="item.documento === '' ? 'Não ha documento cadastrado' : 'Exibir pdf do Documento'" [disabled]="item.documento === ''">
               <mat-icon class="icon">visibility</mat-icon>
             </button>
           </td>

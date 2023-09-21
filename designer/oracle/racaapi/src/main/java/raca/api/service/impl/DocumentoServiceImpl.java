@@ -178,6 +178,7 @@ public class DocumentoServiceImpl implements DocumentService {
             Historico one = historicoRepository.getOne(Integer.valueOf(doc.getTipodocumento().trim()));
             if(one != null){
                 documento.setNometipodocumento(one.getNome());
+                documento.setTipodocumento(one.getId().toString());
             }
         }
         if(doc.getIddocpai() != null){

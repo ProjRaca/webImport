@@ -42,17 +42,6 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
   filiais: Responsavel[] = [];
   documentos: DocumentoDTO[] = [];
   documento!: DocumentoDTO;
-  tipoDocumento = [
-    { id: 1, value: 'Boleto'},
-    { id: 2, value: 'Bordero'},
-    { id: 3, value: 'Carregamento'},
-    { id: 4, value: 'Cte'},
-    { id: 5, value: 'Contrato de Aluguel'},
-    { id: 6, value: 'Contrato de Servico'},
-    { id: 7, value: 'Mdfe'},
-    { id: 8, value: 'NF-e'},
-    { id: 9, value: 'NFS_SE'}
-  ]
 
   listaTipoDocumento: TipoDocumento[] = [];
 
@@ -61,7 +50,6 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
   detalhes: boolean = false;
   update: boolean = false;
   exibirRestrito: boolean = false
-  listaDocumentoPai: DocumentoDTO[] = [];
   filteredOptionsDocumentos!: Observable<DocumentoDTO[]>;
 
   constructor(
@@ -134,7 +122,7 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
         nomeResponsavel: [  documento.emissor],
         tpDocumento: [  documento.tipodocumento],
         docRestrito: [  documento.restrito],
-        docPai: [  documento.iddocpai],
+        docPai: [  documento.nomepai],
         nomeDocumento: [  documento.nome],
         numeroDocumento: [ documento.numerodocumento ],
         file: [  documento.documento],
@@ -177,7 +165,7 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
 
     if(this.formularioModal.status == 'INVALID') return;
     var documentoInclusao = {
-      iddocpai: this.formularioModal.value?.docPai,
+      iddocpai: this.getIdDocumento(this.formularioModal.value?.docPai),
       empresa: this.formularioModal.value?.empresaForm,
       filial: this.formularioModal.value?.filialForm,
       datadocumentesc: dataDocumento,
@@ -193,7 +181,7 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
     };
     if(this.documento != undefined && this.documento.id != undefined){
       Object.assign(documentoInclusao,{id:this.documento.id });
-
+      documentoInclusao.documento = this.documento.documento || []
       this.serviceDocumento.update(documentoInclusao).then( response =>{
         if (!response.ok) {
           this.exibirMensagemErro('Ocorreu um erro ao tentar atualizar movimentação', 'Verifique seus dados.')
@@ -291,7 +279,7 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
     this.nomeEmpresa = this.listaEmpresa.filter(emp => emp.id === Number(this.documento.empresa))[0].value;
     this.dataDocumentoDetalhes = DataUtils.formatarData(this.documento.datadocumentesc as string);
     this.dataValidadeDetalhes = DataUtils.formatarData(this.documento.datavalidade as string);
-    this.tipoDocumentoDesc = this.tipoDocumento.filter(tp => tp.id === Number(this.documento.tipodocumento))[0].value;
+    this.tipoDocumentoDesc = this.documento.nometipodocumento || '';
     this.documentoRestritoDesc = this.documento.restrito === true ? 'Sim' : 'Não';
     this.nomeDocumentoPai = this.documento.nomepai || '';
     this.documentoBase64 = this.documento.documento || [];
@@ -341,6 +329,17 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
       });
   }
 
+  getIdTipoDocumento(nome: string): string{
+    return new String( this.listaTipoDocumento.filter(doc => doc.nome === nome)[0].id).toString();
+  }
+
+  getIdDocumento(nome: string): number{
+    if (nome != undefined || nome != null){
+    return this.documentos.filter(doc => doc.nome === nome)[0].id as number;
+    }
+    else
+      return nome
+  }
 }
 
 export const toBase64 = (file: File) =>

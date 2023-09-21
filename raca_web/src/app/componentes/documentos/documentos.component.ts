@@ -35,34 +35,18 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
   displayedColumns: string[] = ['id','Nº Documento','Nome', 'Filial', 'Responsável','Tp Documento','Dt Documento','Dt Validade', 'Doc Restrito','Ações'];
   responsaveis: Responsavel[] = [];
   filiais: Responsavel[] = [];
-
+  listaEmpresa  = [ { id:1, value: "Raça Distribuidora"}, { id:2, value: "Casa de Carnes" } ]
+  listTipoDocumento: TipoDocumento[] = [];
   documentos: DocumentoDTO[] = [];
   listaDocumentoPai: DocumentoDTO[] = [];
+
   filteredOptions!: Observable<Responsavel[]>;
   filteredOptionsDocumentoPai!: Observable<DocumentoDTO[]>;
+
   empresaSelectedValue: string = '';
   isAdmin: boolean = false;
-
-  listaEmpresa  = [ { id:1, value: "Raça Distribuidora"}, { id:2, value: "Casa de Carnes" } ]
-
-
-  tipoDocumento = [
-    { id: 1, value: 'Boleto'},
-    { id: 2, value: 'Bordero'},
-    { id: 3, value: 'Carregamento'},
-    { id: 4, value: 'Cte'},
-    { id: 5, value: 'Contrato de Aluguel'},
-    { id: 6, value: 'Contrato de Servico'},
-    { id: 7, value: 'Mdfe'},
-    { id: 8, value: 'NF-e'},
-    { id: 9, value: 'NFS_SE'}
-    ]
-
-    page = 5;
-    spreadMode: "off" | "even" | "odd" = "off";
-
-
-    listTipoDocumento: TipoDocumento[] = [];
+  page = 5;
+  spreadMode: "off" | "even" | "odd" = "off";
 
   constructor(
     protected modalService: ModalService,
@@ -76,8 +60,6 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
     }
 
   ngOnInit() {
-    window.onload = () => {
-      // Tudo está carregado, agora você pode chamar window.print()
         this.criarFormularioPesquisa();
         this.getAllResponsaveis();
         this.getAllFiliais();
@@ -87,7 +69,6 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
         this.filterDocumentoPaiAutocomplete();
         this.getDocumentos();
         this.isAdmin = this.usuarioService.isUsuarioAdmin;
-    };
   }
 
   private filterResponsavelAutocomplete() {
