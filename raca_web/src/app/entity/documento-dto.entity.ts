@@ -15,5 +15,6 @@ export interface DocumentoDTO{
   datafim?: string,
   empresa?: string,
   responsavel?: string,
-  nomefilial?: string
+  nomefilial?: string,
+  nometipodocumento?: string
 }
