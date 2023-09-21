@@ -95,7 +95,7 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
    let nomeResponsavel = this.formulario.get('responsavel')?.value || undefined ;
    let idResponsavel = nomeResponsavel != undefined ? this.responsaveis.filter(respo => respo.nome === nomeResponsavel )[0].nome : ''
    let documentoPaiNome = this.formulario.get('docPai')?.value || undefined;
-   let documentoPai = this.formulario.get('docPai')?.value != undefined  ? this.listaDocumentoPai.filter(respo => respo.nome?.toLocaleUpperCase() === documentoPaiNome.toLocaleUpperCase() ) : undefined;
+   let documentoPai = this.formulario.get('docPai')?.value != ""  ? this.listaDocumentoPai.filter(respo => respo.nome?.toLocaleUpperCase() === documentoPaiNome.toLocaleUpperCase() ) : undefined;
 
    let filter: DocumentoDTO = {
       datadocumentesc: dtDocumento || undefined,
@@ -359,19 +359,24 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
     this.formulario = new FormGroup({
       empresa: new FormControl(),
       dtDocumento:new FormControl(),
-    dtDocumentoFinal: new FormControl(),
-    dtValidade: new FormControl(),
-    dtValidadeFinal: new FormControl(),
-    responsavel: new FormControl(),
-    tpDocumento: new FormControl(),
-    docRegistro: new FormControl(),
-    numeroDocumento:new FormControl(),
-    filial:new FormControl(),
-    docPai: new FormControl()
-  });
+      dtDocumentoFinal: new FormControl(),
+      dtValidade: new FormControl(),
+      dtValidadeFinal: new FormControl(),
+      responsavel: new FormControl(),
+      tpDocumento: new FormControl(),
+      docRegistro: new FormControl(),
+      numeroDocumento:new FormControl(),
+      filial:new FormControl(),
+      docPai: new FormControl()
+    });
 
-  this.formulario.get('docRestrito')?.setValue(false)
-  this.formulario.get('docRegistro')?.setValue(false)
-}
-
+    this.formulario.get('docRestrito')?.setValue(false)
+    this.formulario.get('docRegistro')?.setValue(false)
   }
+
+  resetFormulario(){
+    this.formulario.reset();
+    this.getDocumentos();
+  }
+
+}
