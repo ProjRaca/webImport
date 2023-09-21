@@ -192,8 +192,10 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
       this.serviceDocumento.save(documentoInclusao).then( response => {
       if (!response.ok) {
         this.exibirMensagemErro('Ocorreu um erro ao tentar atualizar movimentação', 'Verifique seus dados.')
-      }else
-      this.documento = response.body;
+      }else{
+        this.documento = response.body;
+        this.formularioModal.reset();
+      }
 
     })
   }
