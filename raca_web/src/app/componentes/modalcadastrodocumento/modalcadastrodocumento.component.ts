@@ -113,8 +113,8 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
   }
 
   criarFormularioUpdate(documento: DocumentoDTO){
-      let dataDocumento = DataUtils.formatarDatetoBrFormat(documento.datadocumentesc?.toString());
-      let dataValidade =  DataUtils.formatarDatetoBrFormat(documento.datavalidade?.toString());
+      let dataDocumento = DataUtils.formatarDatetoBrFormat(documento.datadocumentesc?.toString() as string);
+      let dataValidade =  DataUtils.formatarDatetoBrFormat(documento.datavalidade?.toString() as string);
       this.formularioModal = this.formBuilder.group({
         empresaForm: [documento.empresa],
         dtDocumento: [  dataDocumento],
@@ -336,7 +336,7 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
   }
 
   getIdDocumento(nome: string): number{
-    if (nome != "" ){
+    if (nome != null ){
     return this.documentos.filter(doc => doc.nome === nome)[0].id as number;
     }
     else
