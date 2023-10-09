@@ -1,12 +1,14 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import {FloatLabelType} from '@angular/material/form-field';
+import { FloatLabelType } from '@angular/material/form-field';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Usuario } from 'src/app/entity/usuario.entity';
 import { Sizes } from 'src/app/enums/sizes.enum';
 import { ModalService } from 'src/app/service/modalService.service';
 import { UsuarioService } from 'src/app/service/usuario.service';
 import { ScackBarCustomComponent } from '../scack-bar-custom/scack-bar-custom.component';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-usuario',
@@ -28,6 +30,11 @@ export class UsuarioComponent extends ScackBarCustomComponent implements OnInit 
   nomePesquisa: string = ''
   exibirAdm: boolean = false
   adminModel: boolean = false
+  dataSourceWithPageSize = new MatTableDataSource(this.usuarios);
+  @ViewChild('paginatorPageSize') paginatorPageSize!: MatPaginator;
+
+  pageSizes = [10,20,30,40,50];
+
   constructor( private formBuilder: FormBuilder,
     protected modalService: ModalService,
     private usuarioService: UsuarioService,
@@ -66,6 +73,8 @@ export class UsuarioComponent extends ScackBarCustomComponent implements OnInit 
           this.exibirMensagemErro('Falha na autenticação','Usuário ou senha incorretos.');
         }
         this.usuarios = response.body;
+        this.dataSourceWithPageSize = new MatTableDataSource(this.usuarios);
+        this.dataSourceWithPageSize.paginator = this.paginatorPageSize;
 
       });
     return [];

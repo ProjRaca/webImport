@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder,  FormControl,  FormGroup,  Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Responsavel } from 'src/app/entity/responsavel.entity';
@@ -12,6 +12,8 @@ import { UsuarioService } from 'src/app/service/usuario.service';
 import { Observable } from 'rxjs/internal/Observable';
 import { startWith } from 'rxjs/internal/operators/startWith';
 import { map } from 'rxjs/internal/operators/map';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-responsavel',
@@ -36,6 +38,12 @@ export class ResponsavelComponent extends ScackBarCustomComponent implements OnI
 
   filteredOptions!: Observable<Responsavel[]>;
 
+  dataSourceWithPageSize = new MatTableDataSource(this.responsaveis);
+
+  @ViewChild('paginatorPageSize') paginatorPageSize!: MatPaginator;
+
+  pageSizes = [10,20,30,40,50];
+
   constructor(
     private formBuilder: FormBuilder,
     protected modalService: ModalService,
@@ -47,7 +55,6 @@ export class ResponsavelComponent extends ScackBarCustomComponent implements OnI
     }
 
   ngOnInit() {
-    //this.criarFormulario();
     this.criarFormularioPesquisa();
     this.getAll();
     this.isAdmin = this.usuarioService.isUsuarioAdmin;
@@ -101,6 +108,8 @@ export class ResponsavelComponent extends ScackBarCustomComponent implements OnI
         this.exibirMensagemErro('Falha na autenticação','Usuário ou senha incorretos.');
       }
       this.responsaveis = response.body;
+      this.dataSourceWithPageSize = new MatTableDataSource(this.responsaveis);
+      this.dataSourceWithPageSize.paginator = this.paginatorPageSize;
 
     });
   return [];
@@ -111,7 +120,6 @@ export class ResponsavelComponent extends ScackBarCustomComponent implements OnI
     this.exibirDetalhes = false;
     this.exibirEditar = false;
     this.modalService.open('modalResponsavel');
-    console.log('isAdmin :>>', this.isAdmin);
   }
 
   save(){
