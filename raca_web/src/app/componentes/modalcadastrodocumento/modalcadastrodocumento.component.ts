@@ -336,7 +336,7 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
   }
 
   getIdDocumento(nome: string): number{
-    if (nome != null ){
+    if (nome != null && nome != "" ){
     return this.documentos.filter(doc => doc.nome === nome)[0].id as number;
     }
     else
