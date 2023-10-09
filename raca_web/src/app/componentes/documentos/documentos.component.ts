@@ -15,6 +15,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DataUtils } from 'src/app/utils/data.utils';
 import { UsuarioService } from 'src/app/service/usuario.service';
 import { TipoDocumento } from 'src/app/entity/tipo-documento.entity';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-documentos',
@@ -24,6 +26,7 @@ import { TipoDocumento } from 'src/app/entity/tipo-documento.entity';
 export class DocumentosComponent extends ScackBarCustomComponent  implements OnInit {
 
   @Output() documentBase64Emitter = new EventEmitter<string[]>();
+
 
   panelOpenState = false;
   formulario!: FormGroup;
@@ -47,6 +50,11 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
   isAdmin: boolean = false;
   page = 5;
   spreadMode: "off" | "even" | "odd" = "off";
+  dataSourceWithPageSize = new MatTableDataSource(this.documentos);
+
+  @ViewChild('paginatorPageSize') paginatorPageSize!: MatPaginator;
+
+  pageSizes = [10,20,30,40,50];
 
   constructor(
     protected modalService: ModalService,
@@ -58,6 +66,7 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
     public usuarioService: UsuarioService) {
       super(snackBar);
     }
+
 
   ngOnInit() {
         this.criarFormularioPesquisa();
@@ -187,9 +196,9 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
 
       dialogRef.afterClosed().subscribe(result => {
         if(result === true){
-          this.getDocumentos();
           this.exibirMensagemSucesso('O registro foi incluído com sucesso','');
         }
+        this.getDocumentos();
       });
   }
 
@@ -199,6 +208,8 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
         .toPromise()
         .then(response => {
         this.documentos = response.body;
+        this.dataSourceWithPageSize = new MatTableDataSource(this.documentos);
+        this.dataSourceWithPageSize.paginator = this.paginatorPageSize;
       })
       .catch((error) => {
         // Lida com erros, se necessário.
