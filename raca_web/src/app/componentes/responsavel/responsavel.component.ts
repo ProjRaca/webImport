@@ -93,7 +93,7 @@ export class ResponsavelComponent extends ScackBarCustomComponent implements OnI
         this.exibirMensagemErro('Falha na autenticação','Usuário ou senha incorretos.');
       }
       this.responsaveis = response.body;
-
+      this.setPaginatorValue(this.responsaveis)
     });
   return [];
   }
@@ -108,8 +108,7 @@ export class ResponsavelComponent extends ScackBarCustomComponent implements OnI
         this.exibirMensagemErro('Falha na autenticação','Usuário ou senha incorretos.');
       }
       this.responsaveis = response.body;
-      this.dataSourceWithPageSize = new MatTableDataSource(this.responsaveis);
-      this.dataSourceWithPageSize.paginator = this.paginatorPageSize;
+      this.setPaginatorValue(this.responsaveis)
 
     });
   return [];
@@ -230,6 +229,11 @@ export class ResponsavelComponent extends ScackBarCustomComponent implements OnI
       telefone: new FormControl(),
       nomePesquisa: new FormControl()
     });
+  }
+
+  setPaginatorValue(responsaveis: Responsavel[]) {
+    this.dataSourceWithPageSize = new MatTableDataSource(responsaveis);
+      this.dataSourceWithPageSize.paginator = this.paginatorPageSize;
   }
 
 }

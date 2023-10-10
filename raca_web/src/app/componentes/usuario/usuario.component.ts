@@ -60,7 +60,18 @@ export class UsuarioComponent extends ScackBarCustomComponent implements OnInit 
   }
 
   pesquisar(){
-    if (this.nomePesquisa.length == 0) return
+    if (this.nomePesquisa.length == 0)
+    this.getAll()
+
+    this,this.usuarioService.findbyName(this.nomePesquisa).then( response => {
+      if (!response.ok) {
+        this.exibirMensagemErro('Ocorreu um erro na requisição','Verifique os dados informados.');
+      }else{
+        this.usuarios = response.body;
+        this.setPaginatorValue(this.usuarios);
+      }
+
+    });
    }
 
   getSizeModal(): string{
@@ -73,8 +84,7 @@ export class UsuarioComponent extends ScackBarCustomComponent implements OnInit 
           this.exibirMensagemErro('Falha na autenticação','Usuário ou senha incorretos.');
         }
         this.usuarios = response.body;
-        this.dataSourceWithPageSize = new MatTableDataSource(this.usuarios);
-        this.dataSourceWithPageSize.paginator = this.paginatorPageSize;
+        this.setPaginatorValue(this.usuarios);
 
       });
     return [];
@@ -156,6 +166,11 @@ export class UsuarioComponent extends ScackBarCustomComponent implements OnInit 
       this.exibirEditar = true;
       this.modalService.open('modalUsuario');
     });
+  }
+
+  setPaginatorValue(usuarios: Usuario[]) {
+    this.dataSourceWithPageSize = new MatTableDataSource(usuarios);
+    this.dataSourceWithPageSize.paginator = this.paginatorPageSize;
   }
 
 }

@@ -126,6 +126,7 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
     .toPromise()
     .then((resposta) => {
       this.documentos = resposta.body
+      this.setPaginatorValue(this.documentos);
     })
     .catch((error) => {
       // Lida com erros, se necessário.
@@ -208,8 +209,7 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
         .toPromise()
         .then(response => {
         this.documentos = response.body;
-        this.dataSourceWithPageSize = new MatTableDataSource(this.documentos);
-        this.dataSourceWithPageSize.paginator = this.paginatorPageSize;
+        this.setPaginatorValue(this.documentos);
       })
       .catch((error) => {
         // Lida com erros, se necessário.
@@ -217,6 +217,8 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
         this.exibirMensagemErro('Ocorreu um erro ao realizar chamada', error.body.message)
       })
   }
+
+
 
   remover(id: any){
     this.serviceDocumento.delete(id).then( response => {
@@ -388,6 +390,11 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
   resetFormulario(){
     this.formulario.reset();
     this.getDocumentos();
+  }
+
+  setPaginatorValue(documentos: DocumentoDTO[]) {
+    this.dataSourceWithPageSize = new MatTableDataSource(documentos);
+    this.dataSourceWithPageSize.paginator = this.paginatorPageSize;
   }
 
 }
