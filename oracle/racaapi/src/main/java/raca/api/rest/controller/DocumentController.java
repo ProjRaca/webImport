@@ -108,7 +108,8 @@ public class DocumentController {
             @ApiResponse(code = 400, message = "Erro de validação")
     })
     public List<DocumentoDTO> getAllDocumentsPai() {
-        return documentService.getAllMDocumentosPai();
+        List<DocumentoDTO> allMDocumentosPai = documentService.getAllMDocumentosPai();
+        return allMDocumentosPai;
     }
 
     @GetMapping("/tipodocumento")

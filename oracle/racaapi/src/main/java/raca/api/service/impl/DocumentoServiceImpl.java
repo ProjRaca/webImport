@@ -5,7 +5,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import raca.api.domain.entity.postgres.Documento;
 import raca.api.domain.entity.postgres.Historico;
 import raca.api.domain.entity.postgres.Responsavel;
@@ -41,7 +40,8 @@ public class DocumentoServiceImpl implements DocumentService {
         try {
             boolean isAdmin = isAdmin();
             if (isAdmin) {
-                List<Documento> all = documentRepository.findAll().stream().limit(70).collect(Collectors.toList());
+                List<Documento> all = documentRepository.listDocTelaInicalAdm();
+                //List<Documento> all = documentRepository.findAll().stream().limit(70).collect(Collectors.toList());
                 return getDocumentoDTOS(all);
             } else {
                 List<Documento> all = documentRepository.listDocNotRestrito().stream().limit(70).collect(Collectors.toList());
@@ -116,20 +116,19 @@ public class DocumentoServiceImpl implements DocumentService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
     @Override
     public DocumentoDTO salvar(DocumentoDTO doc) {
         Documento save = documentRepository.save(getDocument(doc));
         return getDocumentDTO(save);
     }
 
-    @Transactional
+
     @Override
     public DocumentoDTO update(DocumentoDTO doc) {
         Documento save = documentRepository.save(getDocument(doc));
         return getDocumentDTO(save);
     }
-    @Transactional
+
     @Override
     public boolean excluir(Integer id) {
         try {
@@ -196,8 +195,10 @@ public class DocumentoServiceImpl implements DocumentService {
             Historico one = historicoRepository.getOne(Integer.valueOf(doc.getTipodocumento().trim()));
             if(one != null){
                 documento.setNometipodocumento(one.getNome());
+                documento.setTipodocumento(doc.getTipodocumento());
             }
         }
+        /*
         if(doc.getIddocpai() != null){
             Optional<Documento> byId = documentRepository.findById(doc.getIddocpai());
             if(byId.isPresent()){
@@ -205,6 +206,11 @@ public class DocumentoServiceImpl implements DocumentService {
                 documento.setNomepai(byId.get().getNome());
             }
         }
+
+         */
+
+        documento.setIddocpai(doc.getIddocpai());
+        documento.setNomepai("");
         documento.setNome(doc.getNome());
         documento.setRestrito(doc.isRestrito());
         documento.setEmpresa(doc.getEmpresa());
@@ -253,7 +259,7 @@ public class DocumentoServiceImpl implements DocumentService {
     @Override
     public List<DocumentoDTO> getAllMDocumentosPai() {
          List<Documento> all = documentRepository.getAllMDocumentosPai();
-        return getDocumentoDTOS(all);
+        return getDocumentoDTOSPai(all);
     }
 
     @Override
@@ -265,8 +271,32 @@ public class DocumentoServiceImpl implements DocumentService {
     }
 
     public List<DocumentoDTO> encontrarDocPaiPorNome(String nome){
-        List<Documento> documentos = documentRepository.encontrarDocPaiPorNome(nome.toUpperCase());
-        return getDocumentoDTOS(documentos);
+        List<Documento> documentos = documentRepository.encontrarDocPorNome(nome.toUpperCase());
+        return getDocumentoDTOSPai(documentos);
+    }
+
+    private List<DocumentoDTO> getDocumentoDTOSPai(List<Documento> documentsByFilter) {
+        return documentsByFilter.stream()
+                .map(document -> {
+                    DocumentoDTO documentoDTO = new DocumentoDTO();
+                    documentoDTO.setId(document.getId());
+                    documentoDTO.setFilial(document.getFilial());
+                    documentoDTO.setNomefilial("");
+                    documentoDTO.setResponsavel("");
+                    documentoDTO.setNometipodocumento("");
+                    documentoDTO.setEmissor(document.getEmissor());
+                    documentoDTO.setDatadocumentesc(document.getDatadocumentesc());
+                    documentoDTO.setDatavalidade(document.getDatavalidade());
+                    documentoDTO.setDocumento(document.getDocumento());
+                    documentoDTO.setNomepai(document.getNome());
+                    documentoDTO.setNome(document.getNome());
+                    documentoDTO.setRestrito(document.isRestrito());
+                    documentoDTO.setEmpresa(document.getEmpresa());
+                    documentoDTO.setNumerodocumento(document.getNumerodocumento());
+                    documentoDTO.setIdresponsavel(document.getIdresponsavel());
+                    return documentoDTO;
+                })
+                .collect(Collectors.toList());
     }
 
 

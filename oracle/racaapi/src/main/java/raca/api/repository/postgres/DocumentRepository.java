@@ -20,7 +20,7 @@ public interface DocumentRepository extends JpaRepository<Documento, Integer > ,
             "AND m.status = 'P'", nativeQuery = true)
     List<Documento> filter(String cpfFuncionario, String historico, LocalDate competencia, String cnpjEmpresa);
 
-    @Query(value = "SELECT * FROM raca.documento m WHERE m.restrito = 'false' order by m.id", nativeQuery = true)
+    @Query(value = "SELECT * FROM raca.documento m WHERE m.restrito = 'false' order by m.id LIMIT 10", nativeQuery = true)
     List<Documento> listDocNotRestrito();
 
     @Query(value = "select * from raca.documento r where r.id in (select iddocpai from raca.documento WHERE iddocpai is not null)", nativeQuery = true)
@@ -31,6 +31,13 @@ public interface DocumentRepository extends JpaRepository<Documento, Integer > ,
             " AND r.id in (select iddocpai from raca.documento WHERE iddocpai is not null)", nativeQuery = true)
     List<Documento> encontrarDocPaiPorNome(@Param("nome") String nome );
 
+    @Query(value = "select * from raca.documento r where UPPER(r.nome) like '%' || :nome || '%'", nativeQuery = true)
+    List<Documento> encontrarDocPorNome(@Param("nome") String nome );
 
+    @Query(value = "SELECT * FROM raca.documento m WHERE m.restrito = :restrito order by m.id desc LIMIT 10 ", nativeQuery = true)
+    List<Documento> listDocTelaInical(String restrito);
+
+    @Query(value = "SELECT * FROM raca.documento m order by m.id desc LIMIT 10 ", nativeQuery = true)
+    List<Documento> listDocTelaInicalAdm();
 
 }

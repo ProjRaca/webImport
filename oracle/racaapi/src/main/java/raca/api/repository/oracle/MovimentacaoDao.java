@@ -82,9 +82,10 @@ public class MovimentacaoDao {
                      SimpleDateFormat dateFormatConsulta = new SimpleDateFormat("yyyy-MM-dd");
                      String dataCompetenciaConsulta = x.getCompetencia().toString();
                      String dataSistema =  dateFormatConsulta.format(data);
+
                      String oSql = getSql(x, numreg, x.getVencimento().toString(), x.getCompetencia().toString(), dataSistema);
                      if(!validaInsert( x.getCodigofilial(), x.getNota().replace("/",""),
-                             dataCompetenciaConsulta,x.getIdfuncionario(), x.getContacorrente())){
+                             dataCompetenciaConsulta,x.getIdfuncionario(), x.getContacorrente(),x.getTipoparceiro() )){
                          if(x.getTipoparceiro() != null){
                              insertOracle(connOracle, numreg, oSql);
                              listMovimentacaoProcessada.add(x);
@@ -120,7 +121,7 @@ public class MovimentacaoDao {
         return oSql;
     }
 
-    public boolean validaInsert(String codFilial, String numNota, String dataCompetencia, int codFornec, String codConta) throws Exception {
+    public boolean validaInsert(String codFilial, String numNota, String dataCompetencia, int codFornec, String codConta, String tipoparceiro ) throws Exception {
         String sSql = getSqlConsultaValidaInsert();
 
         Connection connOracle;
@@ -136,7 +137,7 @@ public class MovimentacaoDao {
             pstmtO.setString(3, dataCompetencia);
             pstmtO.setInt(4, codFornec);
             pstmtO.setString(5, codConta);
-
+            pstmtO.setString(6, tipoparceiro);
             rs = pstmtO.executeQuery();
             while (rs.next()) {
                 rs.getString("CODCONTA");
@@ -171,17 +172,18 @@ public class MovimentacaoDao {
         }
     }
 
-    private String getSqlConsultaValidaInsert(String codFilial, String numNota, String dataCompetencia, int codFornec, String codConta){
+    private String getSqlConsultaValidaInsert(String codFilial, String numNota, String dataCompetencia, int codFornec, String codConta, String tipoparceiro ){
         String sSql = "SELECT * FROM PCLANC WHERE CODFILIAL = " + codFilial +
                 " AND NUMNOTA = " +  numNota +
                 " AND DTCOMPETENCIA = '" + dataCompetencia +
                 "' AND CODFORNEC = " + codFornec +
-                " AND CODCONTA = " + codConta;
+                " AND CODCONTA = " + codConta +
+                " AND TIPOPARCEIRO" + tipoparceiro;
         return sSql;
     }
 
     private String getSqlConsultaValidaInsert() {
-        String sSql = "SELECT * FROM PCLANC WHERE CODFILIAL = ? AND NUMNOTA = ? AND DTCOMPETENCIA = TO_DATE(?, 'YYYY-MM-DD') AND CODFORNEC = ? AND CODCONTA = ?";
+        String sSql = "SELECT * FROM PCLANC WHERE CODFILIAL = ? AND NUMNOTA = ? AND DTCOMPETENCIA = TO_DATE(?, 'YYYY-MM-DD') AND CODFORNEC = ? AND CODCONTA = ? AND TIPOPARCEIRO = ? ";
         return sSql;
     }
 

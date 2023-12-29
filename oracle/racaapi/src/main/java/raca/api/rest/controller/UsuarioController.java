@@ -24,8 +24,8 @@ import raca.api.service.impl.UsuarioServiceImpl;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
-
-@CrossOrigin("*")
+//@CrossOrigin(origins = {"http://131.0.226.57:4200", "http://186.233.108.246:4200"})//
+@CrossOrigin(origins = {"*"})
 @RestController
 @RequestMapping("/api/usuarios")
 @RequiredArgsConstructor

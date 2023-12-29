@@ -417,3 +417,4 @@ ALTER TABLE raca.responsavel ADD COLUMN filial boolean;
 ALTER TABLE raca.documento ADD COLUMN responsavel varchar(120);
 ALTER TABLE raca.documento ADD COLUMN idresponsavel integer;
 
+CREATE INDEX idx_nome ON raca.documento (nome);
