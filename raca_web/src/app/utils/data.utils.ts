@@ -25,7 +25,7 @@ export class DataUtils {
   }
 
   public static formatarData(dataOriginal: string){
-    const dataObj = new Date(dataOriginal);
+    const dataObj = this.formatarDatetoBrFormat(dataOriginal) as Date;
     return format(dataObj, 'dd/MM/yyyy');
   }
 
@@ -58,10 +58,15 @@ export class DataUtils {
      * @param dataOriginal Recebe um date e retorna uma string no formato yyyy/MM/dd
      * @returns
      */
-     public static formatarDatetoBrFormat(dataOriginal: string | undefined): Date | 'undefined'{
+     public static formatarDatetoBrFormat(dataOriginal: string) {
       if (dataOriginal != undefined){
-        return  new Date(dataOriginal);
-        //return format(dataObj, 'dd-MM-yyyy');
+        const dataObj = new Date();
+        dataObj.setMonth(Number.parseInt(dataOriginal.substr(5,2)) -1 )
+        dataObj.setDate(Number.parseInt(dataOriginal.substr(8,2)))
+        dataObj.setFullYear(Number.parseInt(dataOriginal.substr(0,4)))
+
+        dataObj.setHours(0,0,0,0)
+        return dataObj;
       }else
       return 'undefined'
     }

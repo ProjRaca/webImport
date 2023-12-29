@@ -113,8 +113,8 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
   }
 
   criarFormularioUpdate(documento: DocumentoDTO){
-      let dataDocumento = DataUtils.formatarDatetoBrFormat(documento.datadocumentesc?.toString());
-      let dataValidade =  DataUtils.formatarDatetoBrFormat(documento.datavalidade?.toString());
+      let dataDocumento = DataUtils.formatarDatetoBrFormat(documento.datadocumentesc?.toString() as string);
+      let dataValidade =  DataUtils.formatarDatetoBrFormat(documento.datavalidade?.toString() as string);
       this.formularioModal = this.formBuilder.group({
         empresaForm: [documento.empresa],
         dtDocumento: [  dataDocumento],
@@ -192,8 +192,10 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
       this.serviceDocumento.save(documentoInclusao).then( response => {
       if (!response.ok) {
         this.exibirMensagemErro('Ocorreu um erro ao tentar atualizar movimentação', 'Verifique seus dados.')
-      }else
-      this.documento = response.body;
+      }else{
+        this.documento = response.body;
+        this.formularioModal.reset();
+      }
 
     })
   }
@@ -334,11 +336,11 @@ export class ModalcadastrodocumentoComponent extends ScackBarCustomComponent imp
   }
 
   getIdDocumento(nome: string): number{
-    if (nome != undefined || nome != null){
+    if (nome != null && nome != "" ){
     return this.documentos.filter(doc => doc.nome === nome)[0].id as number;
     }
     else
-      return nome
+      return 0;
   }
 }
 

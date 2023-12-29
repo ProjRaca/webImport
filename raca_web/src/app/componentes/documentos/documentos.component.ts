@@ -15,6 +15,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { DataUtils } from 'src/app/utils/data.utils';
 import { UsuarioService } from 'src/app/service/usuario.service';
 import { TipoDocumento } from 'src/app/entity/tipo-documento.entity';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-documentos',
@@ -24,6 +26,7 @@ import { TipoDocumento } from 'src/app/entity/tipo-documento.entity';
 export class DocumentosComponent extends ScackBarCustomComponent  implements OnInit {
 
   @Output() documentBase64Emitter = new EventEmitter<string[]>();
+
 
   panelOpenState = false;
   formulario!: FormGroup;
@@ -47,6 +50,11 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
   isAdmin: boolean = false;
   page = 5;
   spreadMode: "off" | "even" | "odd" = "off";
+  dataSourceWithPageSize = new MatTableDataSource(this.documentos);
+
+  @ViewChild('paginatorPageSize') paginatorPageSize!: MatPaginator;
+
+  pageSizes = [10,20,30,40,50];
 
   constructor(
     protected modalService: ModalService,
@@ -58,6 +66,7 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
     public usuarioService: UsuarioService) {
       super(snackBar);
     }
+
 
   ngOnInit() {
         this.criarFormularioPesquisa();
@@ -95,7 +104,7 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
    let nomeResponsavel = this.formulario.get('responsavel')?.value || undefined ;
    let idResponsavel = nomeResponsavel != undefined ? this.responsaveis.filter(respo => respo.nome === nomeResponsavel )[0].nome : ''
    let documentoPaiNome = this.formulario.get('docPai')?.value || undefined;
-   let documentoPai = this.formulario.get('docPai')?.value != undefined  ? this.listaDocumentoPai.filter(respo => respo.nome?.toLocaleUpperCase() === documentoPaiNome.toLocaleUpperCase() ) : undefined;
+   let documentoPai = this.formulario.get('docPai')?.value != "" && this.formulario.get('docPai')?.value != null  ? this.listaDocumentoPai.filter(respo => respo.nome?.toLocaleUpperCase() === documentoPaiNome.toLocaleUpperCase() ) : undefined;
 
    let filter: DocumentoDTO = {
       datadocumentesc: dtDocumento || undefined,
@@ -117,6 +126,7 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
     .toPromise()
     .then((resposta) => {
       this.documentos = resposta.body
+      this.setPaginatorValue(this.documentos);
     })
     .catch((error) => {
       // Lida com erros, se necessário.
@@ -187,9 +197,9 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
 
       dialogRef.afterClosed().subscribe(result => {
         if(result === true){
-          this.getDocumentos();
           this.exibirMensagemSucesso('O registro foi incluído com sucesso','');
         }
+        this.getDocumentos();
       });
   }
 
@@ -199,6 +209,7 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
         .toPromise()
         .then(response => {
         this.documentos = response.body;
+        this.setPaginatorValue(this.documentos);
       })
       .catch((error) => {
         // Lida com erros, se necessário.
@@ -206,6 +217,8 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
         this.exibirMensagemErro('Ocorreu um erro ao realizar chamada', error.body.message)
       })
   }
+
+
 
   remover(id: any){
     this.serviceDocumento.delete(id).then( response => {
@@ -359,19 +372,29 @@ export class DocumentosComponent extends ScackBarCustomComponent  implements OnI
     this.formulario = new FormGroup({
       empresa: new FormControl(),
       dtDocumento:new FormControl(),
-    dtDocumentoFinal: new FormControl(),
-    dtValidade: new FormControl(),
-    dtValidadeFinal: new FormControl(),
-    responsavel: new FormControl(),
-    tpDocumento: new FormControl(),
-    docRegistro: new FormControl(),
-    numeroDocumento:new FormControl(),
-    filial:new FormControl(),
-    docPai: new FormControl()
-  });
+      dtDocumentoFinal: new FormControl(),
+      dtValidade: new FormControl(),
+      dtValidadeFinal: new FormControl(),
+      responsavel: new FormControl(),
+      tpDocumento: new FormControl(),
+      docRegistro: new FormControl(),
+      numeroDocumento:new FormControl(),
+      filial:new FormControl(),
+      docPai: new FormControl()
+    });
 
-  this.formulario.get('docRestrito')?.setValue(false)
-  this.formulario.get('docRegistro')?.setValue(false)
-}
-
+    this.formulario.get('docRestrito')?.setValue(false)
+    this.formulario.get('docRegistro')?.setValue(false)
   }
+
+  resetFormulario(){
+    this.formulario.reset();
+    this.getDocumentos();
+  }
+
+  setPaginatorValue(documentos: DocumentoDTO[]) {
+    this.dataSourceWithPageSize = new MatTableDataSource(documentos);
+    this.dataSourceWithPageSize.paginator = this.paginatorPageSize;
+  }
+
+}

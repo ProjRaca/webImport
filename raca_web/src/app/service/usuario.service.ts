@@ -64,8 +64,8 @@ export class UsuarioService {
     return await this.http.request(req).toPromise();
   }
 
-  async findbyNane(nome: string):Promise<any>{
-    const req = new HttpRequest('GET',`${apiUrlUsuario}/find?nome=${nome}`, this.getHeader());
+  async findbyName(nome: string):Promise<any>{
+    const req = new HttpRequest('GET',`${apiUrlUsuario}/nome/${nome}`, this.getHeader());
     return await this.http.request(req).toPromise();
   }
 
