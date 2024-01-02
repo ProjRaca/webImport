@@ -17,17 +17,17 @@ public class MinhaConnectionOracle {
     
    private static final String DRIVER = "oracle.jdbc.OracleDriver";
     
-   private static final String USER = "RACA";
+   //private static final String USER = "RACA";
 
-   private static final String PASSWORD = "R4CAP3BANC0";
+   //private static final String PASSWORD = "R4CAP3BANC0";
        
-   private static final String URL = "jdbc:oracle:thin:@192.168.1.1:1521:WINT";
+   //private static final String URL = "jdbc:oracle:thin:@192.168.1.1:1521:WINT";
 
-    //private static final String USER = "TESTE";
+    private static final String USER = "TESTE";
 
-    //private static final String PASSWORD = "TESTE";
+    private static final String PASSWORD = "TESTE";
 
-    //private static final String URL = "jdbc:oracle:thin:@192.168.1.210:1521:TESTE";
+    private static final String URL = "jdbc:oracle:thin:@192.168.1.210:1521:TESTE";
 
     //Cria a Conexão com o banco de dados
     public Connection createConnectionToOracle() throws Exception{

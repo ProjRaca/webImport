@@ -418,3 +418,64 @@ ALTER TABLE raca.documento ADD COLUMN responsavel varchar(120);
 ALTER TABLE raca.documento ADD COLUMN idresponsavel integer;
 
 CREATE INDEX idx_nome ON raca.documento (nome);
+
+CREATE TABLE permissoes (
+    id SERIAL PRIMARY KEY,
+    descricao VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE permissoesUsuarios (
+    id SERIAL PRIMARY KEY,
+    usuario_id INTEGER REFERENCES raca.usuario(id) ON DELETE CASCADE,
+    permissao_id INTEGER REFERENCES permissoes(id) ON DELETE CASCADE
+)
+
+CREATE TABLE departamentos (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL
+);
+
+-- Criação da tabela permissoesDepartamentos
+CREATE TABLE permissoesDepartamentos (
+    id SERIAL PRIMARY KEY,
+    departamento_id INTEGER REFERENCES departamentos(id) ON DELETE CASCADE,
+    permissao_id INTEGER REFERENCES permissoes(id) ON DELETE CASCADE
+);
+
+-- Criação da tabela usuariosDepartamentos
+CREATE TABLE usuariosDepartamentos (
+    id SERIAL PRIMARY KEY,
+    departamento_id INTEGER REFERENCES departamentos(id) ON DELETE CASCADE,
+    usuario_id INTEGER REFERENCES permissoes(id) ON DELETE CASCADE
+);
+
+-- Inserir o departamento "Financeiro"
+INSERT INTO departamentos (nome) VALUES ('Financeiro');
+
+-- Inserir o departamento "Responsáveis"
+INSERT INTO departamentos (nome) VALUES ('Responsaveis');
+
+-- Inserir permissões na tabela permissoes
+INSERT INTO permissoes (descricao) VALUES ('Inserir_Financeiro');
+INSERT INTO permissoes (descricao) VALUES ('Alterar_Financeiro');
+INSERT INTO permissoes (descricao) VALUES ('Excluir_Financeiro');
+INSERT INTO permissoes (descricao) VALUES ('Consultar_Financeiro');
+INSERT INTO permissoes (descricao) VALUES ('Inserir_Responsaveis');
+INSERT INTO permissoes (descricao) VALUES ('Alterar_Responsaveis');
+INSERT INTO permissoes (descricao) VALUES ('Excluir_Responsaveis');
+INSERT INTO permissoes (descricao) VALUES ('Consultar_Responsaveis');
+
+-- Associar permissões aos departamentos
+-- Para o departamento "Financeiro"
+INSERT INTO permissoesDepartamentos (departamento_id, permissao_id)
+VALUES ((SELECT id FROM departamentos WHERE nome = 'Financeiro'), 1),  -- Inserir
+       ((SELECT id FROM departamentos WHERE nome = 'Financeiro'), 2),  -- Alterar
+       ((SELECT id FROM departamentos WHERE nome = 'Financeiro'), 3),  -- Excluir
+       ((SELECT id FROM departamentos WHERE nome = 'Financeiro'), 4);  -- Consultar
+
+-- Para o departamento "Responsáveis"
+INSERT INTO permissoesDepartamentos (departamento_id, permissao_id)
+VALUES ((SELECT id FROM departamentos WHERE nome = 'Responsáveis'), 1),  -- Inserir
+       ((SELECT id FROM departamentos WHERE nome = 'Responsáveis'), 2),  -- Alterar
+       ((SELECT id FROM departamentos WHERE nome = 'Responsáveis'), 3),  -- Excluir
+       ((SELECT id FROM departamentos WHERE nome = 'Responsáveis'), 4);  -- Consultar
